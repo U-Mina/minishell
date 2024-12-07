@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/06 11:31:37 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/07 11:28:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	main(void)
 {
-	char	*command;
+	char	*input;
 
 	//Display a prompt when waiting for a new command
-	command = readline("Prompt>");
+	input = readline("Prompt>");
 	//Have a working history 
-	add_history(command);
+	add_history(input);
 	//parse command (have lexing into account?). Save the parsed command into structure?
-	parsing(command);
+	parsing(input);
 	//execute the command saved into structure?
 	//depending on the type of command: 
 	//1. search in files and exec the program
