@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/09 12:37:03 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/09 13:00:25 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_token	*tokenizer(char *input)
 		if (*input == '|')
 			tokens[current_token] = create_token(PIPE, "|");
 		else if (*input == '$')
-			tokens[current_token] = create_token(ENV_VAR, get_env_var(input));
+			tokens[current_token] = create_token(ENV_VAR, get_word(input));//extracts the name of the environmental variable, still pending of extending the value of the env_variable
 		else if (*input == '>' || *input == '<')
 			tokens[current_token] = create_token(REDIRECTION, get_word(input));
 		else if (*input == '\"' || *input == '\'')
@@ -115,26 +115,6 @@ char	*get_quote(char *input, char symbol)
 		return (NULL);
 	ft_strlcpy(quote, input, quote_len + 1);
 	return (quote);
-}
-
-//extends the value of the env_variable
-char	*get_env_var(char *input)
-{
-	char	*env_var;
-	int		value_len;
-	char	*value;
-
-	env_var = get_word(input + 1);
-	if (!env_var)
-		return (NULL);
-	//need to export from bash???
-	value_len = ft_strlen(getenv(env_var));
-	value = malloc((value_len + 1) * sizeof(char));
-	if (!value)
-		return (NULL);
-	ft_strlcpy(value, getenv(env_var), value_len + 1);
-	free(env_var);
-	return (value);
 }
 
 //to use after tokens have been used. Frees each allocated value in the token structure array and frees the whole array

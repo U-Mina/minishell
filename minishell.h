@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:58 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/09 12:35:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:57:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,11 @@ typedef struct s_token
 }	t_token;
 
 //lexer
-t_token		*tokenizer(char *input);
-int			count_token_max(char *input);
-t_token		create_token(t_tokentype type, char *value);
-char		*get_word(char *input);
-char		*get_quote(char *input, char symbol);
-char		*get_env_var(char *input);
-void		free_tokens(t_token **tokens);
-int			ft_isspace(char c);
+t_token	*tokenizer(char *input);
+int		count_token_max(char *input);
+t_token	create_token(t_tokentype type, char *value);
+char	*get_word(char *input);
+char	*get_quote(char *input, char symbol);
+void	free_tokens(t_token **tokens);
+int		ft_isspace(char c);
 #endif
