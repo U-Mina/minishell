@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/09 13:00:25 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:42:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ t_token	*tokenizer(char *input)
 			input++;
 		if (*input == '|')
 			tokens[current_token] = create_token(PIPE, "|");
-		else if (*input == '$')
+		else if (*input == '$') // Pending of somehow handling $?
 			tokens[current_token] = create_token(ENV_VAR, get_word(input));//extracts the name of the environmental variable, still pending of extending the value of the env_variable
 		else if (*input == '>' || *input == '<')
 			tokens[current_token] = create_token(REDIRECTION, get_word(input));
 		else if (*input == '\"' || *input == '\'')
 			tokens[current_token] = create_token(QUOTE, get_quote(input, *input));
-		else	//if (ft_isalpha(*input))
+		else//if (ft_isalpha(*input))
 			tokens[current_token] = create_token(WORD, get_word(input));
 		//check that really all the cases which are not the previous are words (commands, arguments or textfiles)
 		input = input + ft_strlen(tokens[current_token].value);
@@ -87,7 +87,7 @@ char	*get_word(char *input)
 
 	word_len = 0;
 	while (!ft_isspace(input[word_len]) && input[word_len] != '\0')
-		word_len++; 
+		word_len++;
 	word = malloc((word_len + 1) * sizeof(char));
 	if (!word)
 		return (NULL);
