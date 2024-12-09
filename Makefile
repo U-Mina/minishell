@@ -2,8 +2,8 @@ NAME = minishell
 
 CFLAGS = -Wall -Wextra -Werror
 
-SOURCES = 	minishell. c\
-			parse.c
+SOURCES = 	minishell.c\
+			lexer.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADER = minishell.h
 
@@ -13,7 +13,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 all : $(NAME)
 
 $(NAME) : $(OBJECTS) $(LIBFT)
-	cc $(CFLAGS) $(OBJECTS) -L$(LIBFT_DIR) -lft -o $(NAME)
+	cc $(CFLAGS) $(OBJECTS) -L$(LIBFT_DIR) -lft -lreadline -o $(NAME)
 
 %.o: %.c $(HEADER)
 	cc $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@

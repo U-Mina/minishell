@@ -6,72 +6,43 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/08 13:50:04 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:37:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-//TO MOVE TO HEADER FILE
-
-typedef enum e_tokentype
-{
-	WORD, //Will be disambiguated to Command_builtin, Command_binary, argument or filename in the parser
-	COMMAND_BUILTIN,
-	COMMAND_BINARY,
-	ARGUMENT,
-	REDIRECTION,
-	PIPE,
-	ENV_VAR,
-	QUOTE,
-	FILENAME,
-	EOF
-}	t_tokentype
-
-typedef	struct s_token
-{
-	t_tokentype	type;
-	char		*value;
-	//next token??!!??! as a linked list (or no need because it is an array)
-}			t_token
-
-
-
-
-
 //lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself. 
-t_tokens*	tokenizer(char *input)
+t_token	*tokenizer(char *input)
 {
-	int			max_token_num;
-	int			current_token;
-	t_tokens	*tokens;
+	int		max_token_num;
+	int		current_token;
+	t_token	*tokens;
 
 	max_token_num = count_token_max(input);
 	tokens = (t_token *)malloc((max_token_num + 1) * sizeof(t_token));
 	if (!tokens)
 		return (NULL);
 	current_token = 0;
-	while (input)
+	while (*input != '\0')
 	{
 		while (ft_isspace(*input))
 			input++;
-		if (ft_isalpha(*input))
-			tokens[current_token] = create_token(WORD, get_word(input));
-		else if (*input == '|')
+		if (*input == '|')
 			tokens[current_token] = create_token(PIPE, "|");
 		else if (*input == '$')
-			tokens[current_token] = create_token(ENV_VAR, get_word(input));
+			tokens[current_token] = create_token(ENV_VAR, get_env_var(input));
 		else if (*input == '>' || *input == '<')
 			tokens[current_token] = create_token(REDIRECTION, get_word(input));
 		else if (*input == '\"' || *input == '\'')
 			tokens[current_token] = create_token(QUOTE, get_quote(input, *input));
-		else
-		// what to do if nothing is accomplished?? Handle error??
-		current_token++;
+		else	//if (ft_isalpha(*input))
+			tokens[current_token] = create_token(WORD, get_word(input));
+		//check that really all the cases which are not the previous are words (commands, arguments or textfiles)
 		input = input + ft_strlen(tokens[current_token].value);
+		current_token++;
 	}
-	tokens[current_token] =create_token(EOF, NULL);
+	tokens[current_token] = create_token(TOKEN_EOF, NULL);
 	return (tokens);
 }
 
@@ -93,11 +64,17 @@ int	count_token_max(char *input)
 }
 
 //creates a token and assigns the type and the value as set by the arguments. Returns the token.
-t_tokens	create_token(t_tokentype type, char *value)
+t_token	create_token(t_tokentype type, char *value)
 {
 	t_token	token;
-	
+
 	token.type = type;
+	//handle error when value is NULL(but it is not EOF) -> free previously allocated tokens and t
+	// if (!value && type != EOF)
+	// {
+	// 	handle_error ();
+	// 	return ();
+	// }
 	token.value = value;
 	return (token);
 }
@@ -109,9 +86,11 @@ char	*get_word(char *input)
 	int		word_len;
 
 	word_len = 0;
-	while (!ft_isspace(input[word_len]))
+	while (!ft_isspace(input[word_len]) && input[word_len] != '\0')
 		word_len++; 
 	word = malloc((word_len + 1) * sizeof(char));
+	if (!word)
+		return (NULL);
 	ft_strlcpy(word, input, word_len + 1);
 	return (word);
 }
@@ -124,28 +103,53 @@ char	*get_quote(char *input, char symbol)
 	int		quote_len;
 
 	quote_len = 0;
+	quote_len++;
 	while (input[quote_len] != symbol && input[quote_len] != '\0')
 		quote_len++;
+	quote_len++;
 	//handle unclosed quotes here, as errors?!?!?
-	if (input[quote_len] != symbol)
-		handle_error();
+	// if (input[quote_len] != symbol)
+	// 	handle_error();
 	quote = malloc((quote_len + 1) * sizeof(char));
+	if (!quote)
+		return (NULL);
 	ft_strlcpy(quote, input, quote_len + 1);
 	return (quote);
 }
 
-//to use after tokens have been used. Frees each allocated value in the token structure array and frees the whole array
-void	free_tokens(t_token *tokens)
+//extends the value of the env_variable
+char	*get_env_var(char *input)
 {
-	int	i
+	char	*env_var;
+	int		value_len;
+	char	*value;
 
-	while (tokens[i]->type != EOF)
+	env_var = get_word(input + 1);
+	if (!env_var)
+		return (NULL);
+	//need to export from bash???
+	value_len = ft_strlen(getenv(env_var));
+	value = malloc((value_len + 1) * sizeof(char));
+	if (!value)
+		return (NULL);
+	ft_strlcpy(value, getenv(env_var), value_len + 1);
+	free(env_var);
+	return (value);
+}
+
+//to use after tokens have been used. Frees each allocated value in the token structure array and frees the whole array
+void	free_tokens(t_token **tokens)
+{
+	int	i;
+
+	i = 0;
+	while ((*tokens)[i].type != TOKEN_EOF)
 	{
-		if (tokens[i]->type != PIPE)
-			free(token);
+		if ((*tokens)[i].type != PIPE)
+			free((*tokens)[i].value);
 		i++;
 	}
-	free(tokens);
+	free(*tokens);
 }
 
 //include this function in libft??
