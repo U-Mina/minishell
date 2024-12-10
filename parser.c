@@ -6,76 +6,146 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/09 17:41:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:22:52 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.c"
 
 //TO MOVE TO HEADER FILE
+//create a union to have different types of data depending on the type of node when including redirections and pipes
 typedef struct s_astnode
 {
 	t_token		*token;
 	t_astnode	*right;
 	t_astnode	*left;
+	t_astnode	**arguments;
+	int			arg_count;
 }	t_astnode;
+
+//PENDING:
+//Include env variables!! Where??
+//Handle multiple pipes in a row
+//Handle parenthesis priorizing redirections
 
 
 //parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
 t_astnode	*parse(t_token *tokens)
 {
-	t_astnode	root;
+	t_astnode	*root;
 	char		**builtins;
+	int			current_token;
 
 	builtins = check_builtins();
-	root = parse_pipe(tokens, builtins);
+	current_token = 0;
+	root = parse_command(tokens, builtins, &current_token);
+	while (tokens[current_token].type != EOF)
+	{
+		if (tokens[current_token].type == PIPE)
+			root = parse_pipe(tokens, builtins, &current_token, root);
+	}
 	return (root);
 }
 
-t_astnode parse_pipe(tokens, builtins)
+//parses the pipe, assigning the previous left part to the left node and the right part to the next command
+t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_ndoe)
 {
-	left_command = parse_command
-	if (pipe)
-		create pipe node
-		process right command = parse_command
-		return (pipe node)
+	t_astnode	*pipe_node;
+	t_astnode	*right_command;
+
+	if (tokens[*current_token].type == PIPE)
+	{
+		pipe_node = create_astnode(&tokens[*current_token]);
+		(*current_token)++;
+		pipe_node->left = left_node;
+		pipe_node->right = parse_command(tokens, builtins, current_token);
+		return (pipe node);
+	}
 	else
 		return (left_node);
 }
 
 //creates AST nodes for commands and their descending nodes arguments
-t_astnode	*parse_command(t_token *tokens, char **builtins)
+t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 {
 	t_astnode	*command_node;
+	t_astnode	*arg_node;
 
-	if (tokens->type == WORD)
+	if (tokens[*current_token].type == WORD)
 	{
-		token->type = get_command_type(tokens->value, builtins);
-		command_node = create_astnode(tokens);
-		tokens++;
-		while (tokens->type == WORD)
+		tokens[*current_token].type = get_command_type(tokens[*current_token].value, builtins);
+		command_node = create_astnode(&tokens[*current_token]);
+		//if (!command_node)
+		//	handle_error(malloc fail);
+		(*current_token)++;
+		while (tokens[*current_token].type == WORD)
 		{
-			token->type = ARGUMENT;
-			//include each argument as a children node of command
-			command_node->child= create_astnode()
-			tokens++;
+			tokens[*current_token].type = ARGUMENT;
+			arg_node = create_astnode(&tokens[*current_token]);
+			//if (!arg_node)
+			//	handle_error(malloc fail);
+			add_arg_node(command_node, arg_node);
+			(*current_token)++;
 		}
 		if (tokens->type == REDIRECTION)
-			parse_redirection(); --> right part will be a destination file (environmental variables?!?!)
-			include command as left part of redirection
-			return (redirection_node);
+			return (parse_redirection(tokens, command_node));
 	}
 	return (command_node);
+}
+
+//adds an argument node as part of the children nodes of a command node
+void	add_arg_node(t_astnode *command_node, t_astnode *arg_node)
+{
+	command_node->arguments[command_node->arg_count] = arg_node;
+	command_node->arg_count++;
+}
+
+//parses redirection when present, creating a redirection node, being the left node the command node and the right node the filename
+t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *current_token)
+{
+	t_astnode	*redirection_node;
+	t_astnode	*file_node;
+
+	redirection_node = create_astnode(&tokens[*current_token]);
+	file_node = NULL;
+	// if (!redirection_node)
+	// 	handle_error(malloc fail);
+	redirection_node->left = command_node;
+	(*current_token)++;
+	if (tokens[*current_token].type == WORD)
+	{
+		tokens[*current_token].type = FILENAME;
+		file_node = create_astnode(&tokens[*current_token]);
+		// if (!file_node)
+		// 	hande_error(malloc fail);
+		redirection_node->right = file_node;
+		(*current_token)++;
+	}
 }
 
 //creates a new node for the AST (Abstract Syntax Tree)
 t_astnode	*create_astnode(t_token *token)
 {
-	t_astnode	new_node;
+	t_astnode	*new_node;
 
-	new_node.token = token;
-	new_node.right = NULL;
-	new_node.left = NULL;
+	new_node = (t_astnode *)malloc(sizeof(t_astnode));
+	// if (!new_node)
+	// {
+	//  	handle_error(malloc fail);
+	// 	return (NULL);
+	// }
+	new_node->token = token;
+	if (new_node->token.type == PIPE || new_node->token.type == REDIRECTION)
+	{
+		new_node->right = NULL;
+		new_node->left = NULL;
+	}
+	else
+	{
+		new_node->arguments = NULL;
+		new_node->arg_count = 0;
+	}
+	return (new_node);
 }
 
 //find a better way to create the array of strings accessible here (maybe somewhere defined in the main that can be passed here)
