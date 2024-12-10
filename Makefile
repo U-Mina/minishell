@@ -3,7 +3,8 @@ NAME = minishell
 CFLAGS = -Wall -Wextra -Werror
 
 SOURCES = 	minishell.c\
-			lexer.c
+			lexer.c\
+			parser.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADER = minishell.h
 

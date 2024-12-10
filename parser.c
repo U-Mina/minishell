@@ -6,28 +6,16 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/10 12:22:52 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:49:56 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.c"
-
-//TO MOVE TO HEADER FILE
-//create a union to have different types of data depending on the type of node when including redirections and pipes
-typedef struct s_astnode
-{
-	t_token		*token;
-	t_astnode	*right;
-	t_astnode	*left;
-	t_astnode	**arguments;
-	int			arg_count;
-}	t_astnode;
+#include "minishell.h"
 
 //PENDING:
 //Include env variables!! Where??
 //Handle multiple pipes in a row
 //Handle parenthesis priorizing redirections
-
 
 //parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
 t_astnode	*parse(t_token *tokens)
@@ -39,30 +27,12 @@ t_astnode	*parse(t_token *tokens)
 	builtins = check_builtins();
 	current_token = 0;
 	root = parse_command(tokens, builtins, &current_token);
-	while (tokens[current_token].type != EOF)
+	while (tokens[current_token].type != TOKEN_EOF)
 	{
 		if (tokens[current_token].type == PIPE)
 			root = parse_pipe(tokens, builtins, &current_token, root);
 	}
 	return (root);
-}
-
-//parses the pipe, assigning the previous left part to the left node and the right part to the next command
-t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_ndoe)
-{
-	t_astnode	*pipe_node;
-	t_astnode	*right_command;
-
-	if (tokens[*current_token].type == PIPE)
-	{
-		pipe_node = create_astnode(&tokens[*current_token]);
-		(*current_token)++;
-		pipe_node->left = left_node;
-		pipe_node->right = parse_command(tokens, builtins, current_token);
-		return (pipe node);
-	}
-	else
-		return (left_node);
 }
 
 //creates AST nodes for commands and their descending nodes arguments
@@ -71,6 +41,8 @@ t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 	t_astnode	*command_node;
 	t_astnode	*arg_node;
 
+	command_node = NULL;
+	arg_node = NULL;
 	if (tokens[*current_token].type == WORD)
 	{
 		tokens[*current_token].type = get_command_type(tokens[*current_token].value, builtins);
@@ -82,13 +54,15 @@ t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 		{
 			tokens[*current_token].type = ARGUMENT;
 			arg_node = create_astnode(&tokens[*current_token]);
+			printf("arg count: %i\n", command_node->arg_count);
 			//if (!arg_node)
 			//	handle_error(malloc fail);
 			add_arg_node(command_node, arg_node);
+			printf("check\n");
 			(*current_token)++;
 		}
-		if (tokens->type == REDIRECTION)
-			return (parse_redirection(tokens, command_node));
+		if (tokens[*current_token].type == REDIRECTION)
+			return (parse_redirection(tokens, command_node, current_token));
 	}
 	return (command_node);
 }
@@ -97,6 +71,7 @@ t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 void	add_arg_node(t_astnode *command_node, t_astnode *arg_node)
 {
 	command_node->arguments[command_node->arg_count] = arg_node;
+	printf("check\n");
 	command_node->arg_count++;
 }
 
@@ -121,6 +96,24 @@ t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *curr
 		redirection_node->right = file_node;
 		(*current_token)++;
 	}
+	return (redirection_node);
+}
+
+//parses the pipe, assigning the previous left part to the left node and the right part to the next command
+t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_node)
+{
+	t_astnode	*pipe_node;
+
+	if (tokens[*current_token].type == PIPE)
+	{
+		pipe_node = create_astnode(&tokens[*current_token]);
+		(*current_token)++;
+		pipe_node->left = left_node;
+		pipe_node->right = parse_command(tokens, builtins, current_token);
+		return (pipe_node);
+	}
+	else
+		return (left_node);
 }
 
 //creates a new node for the AST (Abstract Syntax Tree)
@@ -135,7 +128,7 @@ t_astnode	*create_astnode(t_token *token)
 	// 	return (NULL);
 	// }
 	new_node->token = token;
-	if (new_node->token.type == PIPE || new_node->token.type == REDIRECTION)
+	if (new_node->token->type == PIPE || new_node->token->type == REDIRECTION)
 	{
 		new_node->right = NULL;
 		new_node->left = NULL;
@@ -196,3 +189,8 @@ void	free_double_pointer(char **str)
 	}
 	free(str);
 }
+
+// void	free_ast(t_astnode *root);
+// {
+	
+// }
