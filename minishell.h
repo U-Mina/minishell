@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:58 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/10 14:47:53 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:51:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ typedef struct s_astnode
 	t_token				*token;
 	struct s_astnode	*right;
 	struct s_astnode	*left;
-	struct s_astnode	*argument;
-	int					arg_count;
+	struct s_astnode	*next_arg;
 }	t_astnode;
 
 //comprovations

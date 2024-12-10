@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/10 14:49:56 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:22:35 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_astnode	*parse(t_token *tokens)
 		if (tokens[current_token].type == PIPE)
 			root = parse_pipe(tokens, builtins, &current_token, root);
 	}
+	free_double_pointer(builtins);
 	return (root);
 }
 
@@ -54,11 +55,9 @@ t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 		{
 			tokens[*current_token].type = ARGUMENT;
 			arg_node = create_astnode(&tokens[*current_token]);
-			printf("arg count: %i\n", command_node->arg_count);
 			//if (!arg_node)
 			//	handle_error(malloc fail);
 			add_arg_node(command_node, arg_node);
-			printf("check\n");
 			(*current_token)++;
 		}
 		if (tokens[*current_token].type == REDIRECTION)
@@ -70,9 +69,12 @@ t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 //adds an argument node as part of the children nodes of a command node
 void	add_arg_node(t_astnode *command_node, t_astnode *arg_node)
 {
-	command_node->arguments[command_node->arg_count] = arg_node;
-	printf("check\n");
-	command_node->arg_count++;
+	t_astnode	*last_arg;
+
+	last_arg = command_node;
+	while (last_arg->next_arg)
+		last_arg = last_arg->next_arg;
+	last_arg->next_arg = arg_node;
 }
 
 //parses redirection when present, creating a redirection node, being the left node the command node and the right node the filename
@@ -135,8 +137,7 @@ t_astnode	*create_astnode(t_token *token)
 	}
 	else
 	{
-		new_node->arguments = NULL;
-		new_node->arg_count = 0;
+		new_node->next_arg = NULL;
 	}
 	return (new_node);
 }
@@ -160,7 +161,6 @@ t_tokentype	get_command_type(char *command, char **builtins)
 		else
 			i++;
 	}
-	free_double_pointer(builtins);
 	return (command_type);
 }
 

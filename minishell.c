@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/10 13:16:16 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:38:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	main(void)
 		print_tokens(tokens);
 		//Create AST with hierarchized tokens
 		ast_root = parse(tokens);
-		printf("check parse\n");
 		//check parser
 		print_ast(ast_root, 0);
 		//free allocated memory
@@ -46,7 +45,6 @@ int	main(void)
 	}
 	return (0);
 }
-
 
 //COMPROVATIONS
 //check lexer
@@ -65,22 +63,29 @@ void	print_tokens(t_token *tokens)
 //check parser
 void	print_ast(t_astnode* ast_node, int level)
 {
-	int	i;
+	int		i;
 
-	printf("%i:	type:%i\n	value: %s\n\n", level, ast_node->token->type, ast_node->token->value);
+	i = 0;
+	while(i++ < level)
+		printf("	");
+	printf("%s (%i)\n", ast_node->token->value, ast_node->token->type);
 	if (ast_node->token->type == PIPE || ast_node->token->type == REDIRECTION)
 	{
-		print_ast(ast_node->left, level++);
-		print_ast(ast_node->right, level++);
+		print_ast(ast_node->left, level + 1);
+		print_ast(ast_node->right, level + 1);
 	}
 	else if (ast_node->token->type == COMMAND_BINARY || ast_node->token->type == COMMAND_BUILTIN)
 	{
-		i = 0;
-		while (ast_node->arg_count != 0)
+		while (ast_node->next_arg)
 		{
-			printf("%i:	type:%i\n	value: %s\n\n", level++, ast_node->arguments[i - 1]->token->type, ast_node->arguments[i - 1]->token->value);
-			i++;
-			ast_node->arg_count--;
+			i = 0;
+			while(i < level + 1)
+			{
+				printf("	");
+				i++;
+			}
+			printf("%s (%i)\n", ast_node->next_arg->token->value, ast_node->next_arg->token->type);
+			ast_node = ast_node->next_arg;
 		}
 	}
 }
