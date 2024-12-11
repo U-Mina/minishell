@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/10 15:22:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:42:59 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 //PENDING:
 //Include env variables!! Where??
-//Handle multiple pipes in a row
 //Handle parenthesis priorizing redirections
+//check if all types of redirections are properly managed
 
 //parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
 t_astnode	*parse(t_token *tokens)
@@ -142,7 +142,7 @@ t_astnode	*create_astnode(t_token *token)
 	return (new_node);
 }
 
-//find a better way to create the array of strings accessible here (maybe somewhere defined in the main that can be passed here)
+//find a better way to create the array of strings accessible here?
 //disambiguates the tokentype, being a command (binary or builtin)
 t_tokentype	get_command_type(char *command, char **builtins)
 {
