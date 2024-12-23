@@ -5,6 +5,7 @@ CFLAG =
 INC = 
 
 SRC = 
+OBJ = outer
 
 $(NAME):
 
