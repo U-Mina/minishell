@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/27 06:45:21 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/27 08:11:38 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,32 @@ int			ft_env(t_env *cpenv);
 void		ft_exit(char **args, int *exit_status);
 void		ft_echo(char **args, int *exit_status);
 int			ft_cd(char **args, t_env **cpenv, int *exit_status);
+int ft_unset(char **args, t_env **cpenv, int *exit_status);
 
 // cd helper
 static char	*cur_path(void); // check or int* exit_status as arg?
 void		cd_dir(t_env *cpenv, int flag);
 char		*cd_home(t_env *cpenv, int *exit_status);
 
+//unset hpler
+bool valid_input(const char *arg);
+int unset_env(t_env **cpenv, char *arg);
+
 // env helper ft
 int			varlen(char **env);
 char		**cpy_env(char **envp);
 t_env		*init_env(char **envp);
 int			find_cpenv_var(t_env *cpenv, const char *key);
-void		update_cpenv_val(t_env *cpenv, char *key, char *val);
-void		mod_cpenv_var(t_env *cpenv, char *key, char *val);
+char *create_var(const char *key, char *val);
+void		update_val(t_env *cpenv, char *key, char *val);
+void		mod_var(t_env *cpenv, char *key, char *val);
 // void		mod_cpenv_value(t_env *cpenv, char *key, char *val);
-void		del_cpenv_var(t_env *cpenv, char *key, char *val);
+void		del_var(t_env *cpenv, char *key);
 // void		del_cpenv_value(t_env *cpenv, char *key, char *val);
 void		sort_cpenv_var(t_env *cpenv);
 char		*env_value(t_env *cpenv, const char *key);
+
+
 
 // general hlper n' wrapper
 char		*safe_join(char *s1, char *s2);

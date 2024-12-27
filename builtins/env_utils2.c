@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/27 04:41:51 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/27 07:42:06 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ char	*create_var(const char *key, char *val)
 }
 
 //idea: exist, modify var & value
+//debug: malloc and mempry need to be checked!
 void	mod_var(t_env *cpenv, char *new_val, int pos)
 {
 	char	*var;
@@ -104,7 +105,7 @@ void	mod_var(t_env *cpenv, char *new_val, int pos)
 	cpenv->envar[pos] = var;
 }
 
-void	del_var(t_env *cpenv, const char *key)
+void	del_var(t_env *cpenv, char *key)
 {
 	int i;
 	int pos;
