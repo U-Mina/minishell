@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/23 10:05:38 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/27 04:24:26 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ char	*safe_join(char *s1, char *s2)
 	size_t	l2;
 	char	*res;
 
-	if (!s1 || !s2)
-		return (NULL);
+	// if (!s1 || !s2)
+	// 	return (NULL);
 	l1 = ft_strlen(s1);
 	l2 = ft_strlen(s2);
 	res = safe_malloc(sizeof(char) * (l1 + l2 + 1));

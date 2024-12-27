@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/23 16:09:05 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/27 03:44:42 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 /**
  * @args: array of passed args, based on pasrsing
 */
+
 //check: handle 'args[1]:' print, or ft_exit_status?
 void ft_exit(char **args, int *exit_status)
 {

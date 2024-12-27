@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/23 08:27:21 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/27 04:41:51 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
  */
 
 //check does a var exist or not
+//idea: this is the case with value & '=' sign?
 int	find_cpenv_var(t_env *cpenv, const char *key)
 {
 	int	i;
@@ -37,7 +38,7 @@ int	find_cpenv_var(t_env *cpenv, const char *key)
 	len = ft_strlen(key);
 	while (i < cpenv->var_nb)
 	{
-		if (cpenv->envar[i] && ft_strncmp(cpenv->envar[i], key, ft_strlen(key))
+		if (cpenv->envar[i] && ft_strncmp(cpenv->envar[i], key, ft_strlen(key)) == 0
 			&& (cpenv->envar[i][len] == '=' || cpenv->envar[i][len] == '\0'))
 			return (i);
 		i++;
@@ -79,17 +80,22 @@ char	*create_var(const char *key, char *val)
 	char	*tmp;
 	char	*n_var;
 
-	tmp = safe_join(key, "=");
-	n_var = safe_join(tmp, val);
-	free(tmp);
+	if (val == NULL) //export cmd without '='/value
+		n_var = ft_strdup(key);
+	else
+	{
+		tmp = safe_join(key, "=");
+		n_var = safe_join(tmp, val);
+		free(tmp);
+	}
 	return (n_var);
 }
 
-//idea: exist, modify var
+//idea: exist, modify var & value
 void	mod_var(t_env *cpenv, char *new_val, int pos)
 {
 	char	*var;
-	char	*tmp;
+	//char	*tmp;
 
 	var = create_var(cpenv->envar[pos], new_val);
 	if (!var)
