@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/11 12:42:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/28 10:26:17 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
 		//if (!command_node)
 		//	handle_error(malloc fail);
 		(*current_token)++;
-		while (tokens[*current_token].type == WORD)
+		while (tokens[*current_token].type == WORD || tokens[*current_token].type == QUOTE)
 		{
 			tokens[*current_token].type = ARGUMENT;
 			arg_node = create_astnode(&tokens[*current_token]);
