@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/27 08:11:02 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/30 07:15:35 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,18 @@ bool valid_input(const char *arg)
 	return (true);
 }
 
-int unset_env(t_env **cpenv, char *arg)
+int unset_env(char ***env, char *arg)
 {
 	int i;
 
 	i = 0;
 	if (valid_input(arg) == false)
 		return (1);
-	while ((*cpenv)->envar[i])
+	while ((*env)[i])
 	{
-		if (ft_strncmp((*cpenv)->envar[i], arg, ft_strlen(arg)) == 0)
+		if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0)
 		{
-			del_var(*cpenv, arg);
+			del_var(env, arg);
 			break ;
 		}
 		i++;
@@ -58,21 +58,17 @@ int unset_env(t_env **cpenv, char *arg)
 	return (0);
 }
 
-int ft_unset(char **args, t_env **cpenv, int *exit_status)
+int ft_unset(char **args, char ***env)
 {
 	int i;
 
 	i = 1;
-	if (args_nbr(args) == 1 || !cpenv || !(*cpenv)->envar[0])
+	if (args_nbr(args) == 1 || !env || !(*env)[0])
 		return (1);
-	*exit_status = 0;
 	while (i < args_nbr(args))
 	{
-		if (unset_env(cpenv, args[i]))
-		{
-			*exit_status = 1;
+		if (unset_env(*env, args[i]))
 			return (1);
-		}
 		i++;
 	}
 	return (0);

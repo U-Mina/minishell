@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/20 13:01:12 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/30 06:44:12 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
  * @sort_env: export cmd
  */
 
-// count len of original env, and allocate space according for cpy_env
-int varlen(char **env)
+// count len of original env, and allocate space accordingly for cpy_env
+size_t varlen(char **env)
 {
 	int i;
 
@@ -30,24 +30,18 @@ int varlen(char **env)
 }
 
 // hard cp envp vars to **cpenv
-char **cpy_env(char **envp)
+char **cpy_env(char **env)
 {
-	int i;
-	int len;
+	size_t i;
+	size_t len;
 	char **cpenv;
 
-	len = varlen(envp);
-	cpenv = safe_malloc(sizeof(char *) * (len + 1));
-	// cpenv = (char **)malloc(sizeof(char *) * (len + 1));
-	// if (cpenv == NULL)
-	// {
-	// 	perror("malloc: ");
-	// 	return (-1);//todo: or use exit_status flag (1)? (mimic how bash works)
-	// }
 	i = 0;
+	len = varlen(env);
+	cpenv = safe_malloc(sizeof(char *) * (len + 1));
 	while (i < len)//todo: or make coustomize strdup to check inside??
 	{
-		cpenv[i] = ft_strdup(envp[i]);
+		cpenv[i] = ft_strdup(env[i]);
 		if (!cpenv[i]) //safe check
 		{
 			while (i-- > 0)
@@ -60,18 +54,19 @@ char **cpy_env(char **envp)
 	return (cpenv);
 }
 
-//ini the struct of t_env
-//env = copy of original result of 'env' cmd, and then modify
-t_env *init_env(char **envp)
+void env_shl(char ***env, char *key)
 {
-	t_env *cpenv;
+	char *val;
+	int pos;
 
-	cpenv = safe_malloc(sizeof(t_env));
-	cpenv->envar = cpy_env(envp);
-	cpenv->var_nb = varlen(envp);
-	return (cpenv);
+	pos = find_env_var(*env, key);
+	free((*env)[pos]);
+	val = ft_itoa(ft_atoi(env_value(*env, key) + 1));
+	(*env)[pos] = safe_join("SHLVL=", val);//check: is a ;var_create funtion necessary?
+	free(val);
 }
 
+void chge_pwd(char *oldpwd)
 //alphabetical order
 void sort_cpenv_var(t_env *cpenv)
 {
@@ -90,3 +85,17 @@ void sort_cpenv_var(t_env *cpenv)
 		
 	}
 }
+
+//ini the struct of t_env, maybe move to *main.c/init.c*
+//env = copy of original result of 'env' cmd, and then modify
+// t_env *init_cpenv(char **env)
+// {
+// 	t_env *cpenv;
+// 	char **tmp;
+// 	size_t i;
+
+// 	i = varlen(env);
+// 	cpenv->var_nb = i;
+// 	cpenv->envar = cpy_env(env);
+// 	return (cpenv);
+// }

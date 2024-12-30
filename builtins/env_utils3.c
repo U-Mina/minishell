@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/27 05:04:46 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/30 06:40:55 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,62 @@
  * get the value of env var
  */
 
-char *env_value(t_env *cpenv, const char *key)
+char *env_value(char **env, const char *key)
 {
 	int i;
 	int len;
 	
-	if (!cpenv || !key)
-	return (NULL);
+	if (!env || !key)
+		return (NULL);
 	i = 0;
 	len = ft_strlen(key);
-	while (i < cpenv->var_nb)
+	while (env[i])
 	{
-		if (cpenv->envar[i] && ft_strncmp(cpenv->envar[i], key, ft_strlen(key)) == 0
-			&& (cpenv->envar[i][len] == '='))
-			return (cpenv->envar[i] + len + 1);
+		if (ft_strncmp(env[i], key, len) == 0
+			&& (env[i][len] == '='))
+			return (env[i] + len + 1);
 		i++;
 	}
 	return (NULL);
+}
+
+void del_val(char **env, char *key)
+{
+	int i;
+	size_t len;
+
+	i = 0;
+	len = ft_strlen(key);
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
+		{
+			free(env[i]);
+			env[i] = ft_strdup(key);//check: null check for env[i] or not?
+			break ;
+		}
+		i++;
+	}
+}
+
+void mod_val(char **env, char *key, char *val)
+{
+	int i;
+	size_t len;
+	char *tmp;
+
+	i = 0;
+	len = ft_strlen(key);
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
+		{
+			free(env[i]);
+			tmp = safe_join(key, "=");
+			env[i] = safe_join(tmp, val);
+			free(tmp);
+			return ;
+		}
+		i++;
+	}
 }

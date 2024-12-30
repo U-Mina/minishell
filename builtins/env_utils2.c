@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/27 07:42:06 by ewu              ###   ########.fr       */
+/*   Updated: 2024/12/30 06:25:10 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,57 +25,28 @@
  * -> if not->add to array (alloc mem)
  */
 
-//check does a var exist or not
-//idea: this is the case with value & '=' sign?
-int	find_cpenv_var(t_env *cpenv, const char *key)
+/**
+ * check does a var exist or not
+ //idea: to find a var (with/without val)
+ */
+int	find_env_var(char **env, const char *key)
 {
 	int	i;
 	int	len;
 
-	if (!cpenv || !key)
-		return (-1);
 	i = 0;
 	len = ft_strlen(key);
-	while (i < cpenv->var_nb)
+	while (env[i])
 	{
-		if (cpenv->envar[i] && ft_strncmp(cpenv->envar[i], key, ft_strlen(key)) == 0
-			&& (cpenv->envar[i][len] == '=' || cpenv->envar[i][len] == '\0'))
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 		i++;
 	}
 	return (-1);
 }
 
-//idea: update t_env (add or modify or delete)
-void	update_cpenv(t_env *cpenv, const char *key, char *val)
-{
-	int		pos;
-	char	*new_var;
-
-	if (!cpenv || !key || !val)
-		return ;
-	pos = find_cpenv_var(cpenv, key);
-	if (pos >= 0)
-		mod_var(cpenv, val, pos);
-	else // var doesnt exist
-	{
-		new_var = create_var(key, val);
-		if (!new_var)
-			return ;
-		cpenv->envar = ft_realloc(cpenv->envar, sizeof(char *) * (cpenv->var_nb
-					+ 1), sizeof(char *) * (cpenv->var_nb + 2));
-		if (!cpenv->envar)//
-		{
-			free(new_var);
-			return ;
-		}
-		cpenv->envar[cpenv->var_nb] = new_var;
-		cpenv->envar[++cpenv->var_nb] = NULL;
-	}
-}
-
-//idea: not exist, create new var
-char	*create_var(const char *key, char *val)
+//idea: not exist, create new var and update env
+char *create_newvar(const char *key, char *val)
 {
 	char	*tmp;
 	char	*n_var;
@@ -91,42 +62,71 @@ char	*create_var(const char *key, char *val)
 	return (n_var);
 }
 
-//idea: exist, modify var & value
-//debug: malloc and mempry need to be checked!
-void	mod_var(t_env *cpenv, char *new_val, int pos)
+void update_env(char ***env, char *n_var)
 {
-	char	*var;
-	//char	*tmp;
-
-	var = create_var(cpenv->envar[pos], new_val);
-	if (!var)
-		return (NULL);
-	free(cpenv->envar[pos]);
-	cpenv->envar[pos] = var;
+	size_t i;
+	char **n_env;
+	
+	i = varlen(*env);
+	n_env = ft_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
+	if (!n_env)
+	{
+		free(n_env);
+		return ;
+	}
+	n_env[i] = n_var;
+	n_env[i + 1] = NULL;
+	*env = n_env;
 }
 
-void	del_var(t_env *cpenv, char *key)
+void	del_var(char ***env, char *key)
 {
 	int i;
 	int pos;
+	size_t len;
 	
-	if (!cpenv || !key)
-		return ;
-	pos = find_cpenv_var(cpenv, key);
+	pos = find_env_var(*env, key);
 	if (pos < 0)
 		return ; // no such var
-	free(cpenv->envar[pos]);
+	free((*env)[pos]);
+	len = varlen(*env);
 	i = pos;
-	while (i < cpenv->var_nb - 1)
+	while (i < len - 1)
 	{
-		cpenv->envar[i] = cpenv->envar[i + 1]; //overwrite envar[i]
+		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
 		i++;
-	}
-	cpenv->envar = ft_realloc(cpenv->envar, sizeof(char *) * (cpenv->var_nb
-					+ 1), sizeof(char *) * (cpenv->var_nb));
-	cpenv->var_nb--;
-	//todo: check is it necessary to call update_env after del!
+	}(*env)[len - 1] = NULL;
+	*env = ft_realloc(*env, sizeof(char *) * (len
+					+ 1), sizeof(char *) * len);
 }
+
+//idea: update t_env (add or modify or delete)
+// void	update_cpenv(t_env *cpenv, const char *key, char *val)
+// {
+// 	int		pos;
+// 	char	*new_var;
+
+// 	if (!cpenv || !key || !val)
+// 		return ;
+// 	pos = find_cpenv_var(cpenv, key);
+// 	if (pos >= 0)
+// 		mod_var(cpenv, val, pos);
+// 	else // var doesnt exist
+// 	{
+// 		new_var = create_var(key, val);
+// 		if (!new_var)
+// 			return ;
+// 		cpenv->envar = ft_realloc(cpenv->envar, sizeof(char *) * (cpenv->var_nb
+// 					+ 1), sizeof(char *) * (cpenv->var_nb + 2));
+// 		if (!cpenv->envar)//
+// 		{
+// 			free(new_var);
+// 			return ;
+// 		}
+// 		cpenv->envar[cpenv->var_nb] = new_var;
+// 		cpenv->envar[++cpenv->var_nb] = NULL;
+// 	}
+// }
 
 // void	mod_cpenv_value(t_env *cpenv, char *key, char *val)
 // {
