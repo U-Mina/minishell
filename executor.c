@@ -6,12 +6,11 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/11 13:13:58 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:45:10 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 //think properly how to proceed. This is just a copy of the logic of AST printing, that should be adapted to executing
 void	exec_ast(t_astnode *ast_node)

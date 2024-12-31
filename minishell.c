@@ -6,19 +6,24 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/11 12:56:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:29:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//include all allocated elements in gc_list (using gc_malloc and handle mallocated in other functions ex. ft_split)
 int	main(void)
 {
 	char		*input;
 	t_token		*tokens;
 	t_astnode	*ast_root;
+	t_gc_list	*gc_list;
 
-	// //Add signal handling
+	//initiate gc_list
+	gc_list = NULL;
+	gc_list = gc_list_init(gc_list);
+	//Add signal handling
 	while (1)
 	{
 		//Display a prompt when waiting for a new command
@@ -26,18 +31,18 @@ int	main(void)
 		//Have a working history 
 		add_history(input);
 		//Split into categorized tokens
-		tokens = tokenizer(input);
+		tokens = tokenizer(input, gc_list);
 		free(input);
 		//check lexer
 		print_tokens(tokens);
 		//Create AST with hierarchized tokens
-		ast_root = parse(tokens);
+		ast_root = parse(tokens, gc_list);
 		//check parser
 		print_ast(ast_root, 0);
 		//execution
 		//exec_ast(ast_root);
 		//free allocated memory
-		free_tokens(&tokens);
+		free_tokens(tokens, gc_list);
 		//pending of free ast
 
 		// //execute the command saved into ast

@@ -4,7 +4,9 @@ CFLAGS = -Wall -Wextra -Werror
 
 SOURCES = 	minishell.c\
 			lexer.c\
-			parser.c
+			parser.c\
+			handle_error.c\
+			garbage_collector.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADER = minishell.h
 
