@@ -17,3 +17,11 @@ think about *exit_code (necessary or not??? //not required by subject)
 - export cmd with args 
 - export with val & withoit val
 - go back to prev finished builtin to modify to match new struct
+
+0101
+- finished builtin
+
+0102
+- command exe
+- redirection 
+- pipes

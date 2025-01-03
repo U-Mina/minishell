@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/30 07:15:35 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/01 19:39:55 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * del the var/val added by 'export', update *cpenv
  */
 
-bool valid_input(const char *arg)
+bool valid_unset(const char *arg)
 {
 	int i;
 	
@@ -44,7 +44,7 @@ int unset_env(char ***env, char *arg)
 	int i;
 
 	i = 0;
-	if (valid_input(arg) == false)
+	if (valid_unset(arg) == false)
 		return (1);
 	while ((*env)[i])
 	{

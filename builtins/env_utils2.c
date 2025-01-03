@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/30 06:25:10 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/01 17:56:25 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char *create_newvar(const char *key, char *val)
 	return (n_var);
 }
 
-void update_env(char ***env, char *n_var)
+void put_var(char ***env, char *n_var)
 {
 	size_t i;
 	char **n_env;
@@ -100,7 +100,30 @@ void	del_var(char ***env, char *key)
 					+ 1), sizeof(char *) * len);
 }
 
-//idea: update t_env (add or modify or delete)
+int update_env (char ***env, const char *key, char *val, bool flg)
+{
+	int pos;
+	char *n_var;
+
+	pos = find_env_var(*env, key);
+	n_var = create_newvar(key, val);//allocate mem for var
+	if (n_var == NULL)
+		return (-1);
+	if (pos >= 0)//key doesnt exist
+	{
+		if (flg == true)
+		{
+			free((*env)[pos]);
+			(*env)[pos] = n_var;
+		}
+		else
+			free(n_var);
+		return (0);
+	}
+	put_var(env, n_var);
+	return (0);
+}
+
 // void	update_cpenv(t_env *cpenv, const char *key, char *val)
 // {
 // 	int		pos;
@@ -127,8 +150,3 @@ void	del_var(char ***env, char *key)
 // 		cpenv->envar[++cpenv->var_nb] = NULL;
 // 	}
 // }
-
-// void	mod_cpenv_value(t_env *cpenv, char *key, char *val)
-// {
-// }
-// void	del_cpenv_value(t_env *cpenv, char *key, char *val)

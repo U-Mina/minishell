@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/30 06:44:12 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/01 16:50:39 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,24 +67,7 @@ void env_shl(char ***env, char *key)
 }
 
 void chge_pwd(char *oldpwd)
-//alphabetical order
-void sort_cpenv_var(t_env *cpenv)
-{
-	int i;
-	int j;
-	char *tmp;
-
-	i = 0;
-	while (i < cpenv->var_nb - 1)
-	{
-		j = 0;
-		while (j < (cpenv->var_nb - i - 1))
-		{
-			if (ft_strncmp())
-		}
-		
-	}
-}
+{}
 
 //ini the struct of t_env, maybe move to *main.c/init.c*
 //env = copy of original result of 'env' cmd, and then modify
@@ -98,4 +81,3 @@ void sort_cpenv_var(t_env *cpenv)
 // 	cpenv->var_nb = i;
 // 	cpenv->envar = cpy_env(env);
 // 	return (cpenv);
-// }

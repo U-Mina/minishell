@@ -6,12 +6,15 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 09:38:20 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/20 15:02:34 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/01 20:33:53 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * based on how we deal with parsing
+ */
 int builtins_match(char *args)
 {
 	

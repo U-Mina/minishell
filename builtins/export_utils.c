@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/30 08:52:42 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/01 17:14:35 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * export =; =val; +=val; =""
- * @1: create cp of env @2: sort cp
+ * @fn: export cmd without argument, only print
  */
  
-char *cheapest(char **tmp)
+char *smallest(char **tmp)
 {
 	int i;
 	int pos;
@@ -92,9 +91,36 @@ char **sort_env(char **env)
 	tmp = nonull_cpy(env, var_nb);
 	while (i < var_nb)
 	{
-		sorted[i] = cheapest(tmp);
+		sorted[i] = smallest(tmp);
 		i++;	
 	}
 	free(tmp);
 	return (sorted);
+}
+
+void exp_only(char **env)
+{
+	int i;
+	char **sorted;
+	char *sign;
+
+	i = 0;
+	sorted = sort_env(env);
+	if (!sort_env)
+		return ;
+	while (sorted[i])
+	{
+		sign = ft_strchr(sorted[i], '=');
+		if (sign)
+		{
+			*sign = '\0';
+			printf("declare -x %s=\"%s\"\n", sorted[i], sign + 1);
+			*sign = '=';
+		}
+		else
+			printf("declare -x %s\n", sorted[i]);
+		free(sorted[i]);
+		i++;
+	}
+	free(sorted);
 }
