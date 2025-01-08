@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/31 10:45:10 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:17:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,30 @@ void	exec_ast(t_astnode *ast_node)
 void	create_pipe(t_astnode *pipe_node)
 {
 	int		fd[2];
-	pid_t	pid;
 	char	buffer[size?!];//which size to give to the pipe buffer?
 
-	if (pipe(f) == -1)
+	if (pipe(fd) == -1)
 	{
 		//handle_error(pipe fail);
 		exit (1);
 	}
-	pid = fork();
-	if (pid < 0)
-	{
-		//handle_error(fork fail);
-		exit (1);
-	}
-	else if (pid > 0) //parent process will perform the left part
+	if (fork() == 0) //first child process will perform the left part
 	{
 		close fd[0];
+		dup2(fd[1], STDOUT_FILENO);
 		exec_ast(pipe_node->left);
-		write(fd[1], ) //how to get the return value and write to pipe
+		write(fd[1], ) //how to get the return value and write to pipe??
 		close fd[1];
+		return ();
 	}
-	else if (pid == 0) // child process will perform the right part
+	if (fork() == 0) // second child process will perform the right part
 	{
 		close fd[1];
+		dup2(fd[0], STDIN_FILENO);
 		exec_ast(pipe_node->right); 
 		bytes_read = read(fd[0], buffer, sizeof(buffer)); //how to read the output of parent?
 		close fd[0];
 	}
+	close(fd[0]);
+	close(fd[1]);
 }

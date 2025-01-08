@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/31 11:29:32 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:23:07 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ int	main(void)
 		//check parser
 		print_ast(ast_root, 0);
 		//execution
-		//exec_ast(ast_root);
+		exec_ast(ast_root);
 		//free allocated memory
 		free_tokens(tokens, gc_list);
 		//pending of free ast
-
 		// //execute the command saved into ast
 		// //depending on the type of command: 
 		// //1. search in files and exec the program
