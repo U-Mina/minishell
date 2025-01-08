@@ -3,94 +3,149 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 11:31:58 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/31 11:21:54 by ipuig-pa         ###   ########.fr       */
+/*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
+/*   Updated: 2025/01/08 13:38:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <libft.h>
+# include "../libft/libft.h"
+# include <errno.h>
+# include <fcntl.h> // for read()
+# include <limits.h>
+# include <readline/history.h> //readline()
 # include <readline/readline.h>
-# include <readline/history.h>
+# include <signal.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
-//gc_list
-typedef struct s_gc_list
-{
-	void				*allocated;
-	struct s_gc_list	*next;
-}	t_gc_list;
-
-//lexer
 typedef enum e_tokentype
 {
-	WORD, //Will be disambiguated to Command_builtin, Command_binary, argument or filename in the parser
-	COMMAND_BUILTIN,
-	COMMAND_BINARY,
-	ARGUMENT,
 	REDIRECTION,
 	PIPE,
-	ENV_VAR,
-	QUOTE,
+	INPUT,
+	OUTPUT,
 	FILENAME,
-	TOKEN_EOF
-}	t_tokentype;
+	HEREDOC,
+	APPEND
+}						t_tokentype;
 
 typedef struct s_token
 {
-	t_tokentype	type;
-	char		*value;
-}	t_token;
+	t_tokentype			type;
+	char				*value;
+}						t_token;
 
-//parser: AST building
-//create a union to have different types of data depending on the type of node when including redirections and pipes
 typedef struct s_astnode
 {
+	int fd[2];
 	t_token				*token;
 	struct s_astnode	*right;
 	struct s_astnode	*left;
 	struct s_astnode	*next_arg;
-}	t_astnode;
+	t_redir				*redirect
+}						t_astnode;
 
-//comprovations
-void		print_tokens(t_token *tokens);
-void		print_ast(t_astnode* ast_node, int level);
+typedef struct s_redir
+{
+	int					fd;
+	t_token				*token;
+	t_redir			*right;
+	t_redir			*left;
 
-//handle error
-void		handle_error(t_gc_list *gc_list);
+}						t_redir;
+// typedef struct s_cmd
+// {
+// }			t_cmd;
 
-//garbage collector
-t_gc_list	*gc_list_init(t_gc_list *gc_list);
-void		*gc_malloc(size_t size, t_gc_list *gc_list);
-void		*add_gc_list(void *new_alloc, t_gc_list *gc_list);
-void		gc_free(void *free_ptr, t_gc_list *gc_list);
-void		gc_clean(t_gc_list *gc_list);
+// todo: init t_table in *init.c*
+typedef struct s_table
+{
+	// char				*cmd;
+	// char				**cmd_array;
+	char				*path;
+	int					arg_nb;
+	int					*exit_status;
 
-//lexer
-t_token		*tokenizer(char *input, t_gc_list *gc_list);
-int			count_token_max(char *input);
-t_token		create_token(t_tokentype type, char *value, t_gc_list *gc_list);
-char		*get_word(char *input, t_gc_list *gc_list);
-char		*get_quote(char *input, char symbol, t_gc_list *gc_list);
-void		free_tokens(t_token *tokens, t_gc_list *gc_list); //think if it can be done just with gc_clean
-int			ft_isspace(char c);
+}						t_table;
 
-//parser
-t_astnode	*parse(t_token *tokens, t_gc_list *gc_list);
-t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token, t_gc_list *gc_list);
-void		add_arg_node(t_astnode *command_node, t_astnode *arg_node);
-t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *current_token,  t_gc_list *gc_list);
-t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_node, t_gc_list *gc_list);
-t_astnode	*create_astnode(t_token *token, t_gc_list *gc_list);
-t_tokentype	get_command_type(char *command, char **builtins);
-char		**check_builtins(t_gc_list *gc_list);
-void		free_double_pointer(char **str);
-//void		free_ast(t_astnode *root);
+// typedef struct s_env // todo: necessary or not?
+// {
+// 	char **envar;
+// 	char *shlv; // not sure
+// 	int var_nb;
+
+// }			t_env;
+
+// builtin ft
+void ft_echo(char **args, int* exit_status);
+int ft_cd(char **args, char ***env, int *exit_status);
+void					ft_pwd(int* exit_status);
+int						ft_export(char ***env, char **args, int *exit_status);
+int ft_unset(char **args, char ***env, int *exit_status);
+int						ft_env(char **env, int *exit_status);
+void					ft_exit(char **args, int *exit_status);
+
+// cd helper
+static char	*cur_path(void);
+void					ch_pwd_oldpwd(char **env, int flag, int *exit_status);
+char					*cd_home(char **env, int *exit_status);
+
+// env helper ft
+size_t					varlen(char **env);
+char					**cpy_env(char **env);
+void					env_shl(char ***env, char *key);
+int						find_env_var(char **env, const char *key);
+char					*create_var(const char *key, char *val);
+void					put_var(char ***env, char *n_var);
+int						update_env(char ***env, const char *key, char *val,
+							bool flg);
+void					mod_val(char **env, char *key, char *val);
+void					del_var(char ***env, char *key);
+void					del_val(char **env, char *key);
+char					*env_value(char **env, const char *key);
+
+// export hlper
+char					*smallest(char **tmp);
+size_t					nonull_varlen(char **env);
+char					**nonull_cpy(char **env, size_t len);
+char					**sort_env(char **env);
+int					exp_only(char **env, int *exit_status);
+int						exp_arg(char ***env, char *arg);
+int						withsigh(char ***env, char *arg, char *sign);
+int						nosign(char ***env, char *arg);
+bool					valid_exp(const char *arg);
+
+// unset hpler
+bool					valid_unset(const char *arg);
+int						unset_env(char ***env, char *arg);
+
+// general hlper n' wrapper
+char					*safe_join(char *s1, char *s2);
+void					*safe_malloc(size_t size);
+void					*ft_realloc(void *ptr, size_t old, size_t new);
+size_t					args_nbr(char **arr);
+
+// error, free, exit
+//void					ft_exit_status(int exit_code);
+void					print_err(char *s1, char *s2, char *s3);
+
+// redirect
+int exec_redirect(t_astnode *astnode, int *exit_status);
+int ft_out(t_astnode *astnode, int *exit_status);
+int ft_in(t_astnode *astnode, int *exit_status);
+int here_doc(char *de, int *exit_status);
+
+
+// temporary prototype
+// char *ft_strchr(char *s, char c);
+// int ft_strncmp(char *s1, char *s2);
+// char *ft_strdup(char *s);
 
 #endif
