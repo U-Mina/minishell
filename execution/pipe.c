@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 14:14:36 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/08 17:26:10 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,34 @@ void	add_arg_node(t_astnode *command_node, t_astnode *arg_node);
 t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *current_token);
 t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_node);
 
+//copied from executor, maybe it is useful here
+void	create_pipe(t_astnode *pipe_node)
+{
+	int		fd[2];
+	char	buffer[size?!];//which size to give to the pipe buffer?
 
+	if (pipe(fd) == -1)
+	{
+		//handle_error(pipe fail);
+		exit (1);
+	}
+	if (fork() == 0) //first child process will perform the left part
+	{
+		close fd[0];
+		dup2(fd[1], STDOUT_FILENO);
+		exec_ast(pipe_node->left);
+		write(fd[1], ) //how to get the return value and write to pipe??
+		close fd[1];
+		return ();
+	}
+	if (fork() == 0) // second child process will perform the right part
+	{
+		close fd[1];
+		dup2(fd[0], STDIN_FILENO);
+		exec_ast(pipe_node->right); 
+		bytes_read = read(fd[0], buffer, sizeof(buffer)); //how to read the output of parent?
+		close fd[0];
+	}
+	close(fd[0]);
+	close(fd[1]);
+}
