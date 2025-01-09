@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 12:08:07 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:11:42 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ typedef enum e_tokentype
 	COMMAND_BUILTIN,
 	COMMAND_BINARY,
 	ARGUMENT,
-	REDIRECTION,
+	REDIRECTION, //Will be disambiguated to input, output, append or heredoc
 	PIPE,
 	INPUT,
 	OUTPUT,
 	FILENAME,
 	HEREDOC,
+	DELIMITER,
 	APPEND,
 	TOKEN_EOF
 }						t_tokentype;
