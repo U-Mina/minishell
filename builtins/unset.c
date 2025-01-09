@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/01 19:39:55 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/08 12:39:07 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,22 @@ int unset_env(char ***env, char *arg)
 	return (0);
 }
 
-int ft_unset(char **args, char ***env)
+//or make the check-condition == -1 evertime error occurs?
+int ft_unset(char **args, char ***env, int *exit_status)
 {
 	int i;
 
 	i = 1;
 	if (args_nbr(args) == 1 || !env || !(*env)[0])
 		return (1);
+	*exit_status = 0;
 	while (i < args_nbr(args))
 	{
 		if (unset_env(*env, args[i]))
+		{
+			*exit_status = 1;
 			return (1);
+		}
 		i++;
 	}
 	return (0);

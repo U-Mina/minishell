@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/01 17:14:35 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/08 13:32:19 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char **sort_env(char **env)
 	return (sorted);
 }
 
-void exp_only(char **env)
+int exp_only(char **env, int *exit_status)
 {
 	int i;
 	char **sorted;
@@ -107,7 +107,11 @@ void exp_only(char **env)
 	i = 0;
 	sorted = sort_env(env);
 	if (!sort_env)
-		return ;
+	{
+		perror("malloc");
+		*exit_status = 1;
+		return (1);
+	}
 	while (sorted[i])
 	{
 		sign = ft_strchr(sorted[i], '=');
@@ -123,4 +127,6 @@ void exp_only(char **env)
 		i++;
 	}
 	free(sorted);
+	*exit_status = 0;
+	return (0);
 }

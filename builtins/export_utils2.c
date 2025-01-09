@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/02 11:46:07 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/08 13:33:04 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ bool valid_exp(const char *arg)
 /**
  * @fn: export with args & values
  */
-
 //wrap fn for case choose
 int exp_arg(char ***env, char *arg)
 {

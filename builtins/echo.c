@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:23:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/01 20:01:52 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/08 12:45:26 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool check_flag(char *arg)
 	return (true);
 }
 
-void ft_echo(char **args)
+void ft_echo(char **args, int* exit_status)
 {
 	bool flag;
 	
@@ -40,10 +40,11 @@ void ft_echo(char **args)
 	}
 	while (*args)
 	{
-		printf("%s", args++);
+		printf("%s", *args++);
 		if (*args)
 		printf(" ");
 	}
 	if (flag == false)
 		printf("\n");
+	*exit_status = 0;
 }
