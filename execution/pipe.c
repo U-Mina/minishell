@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 14:02:00 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 15:06:45 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,22 @@
  * - create pipi
  * - redirct and connect pipe
  * - close and clean
-//parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
-t_astnode	*parse(t_token *tokens)
-//creates AST nodes for commands and their descending nodes arguments
-t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token)
-//adds an argument node as part of the children nodes of a command node
-void	add_arg_node(t_astnode *command_node, t_astnode *arg_node)
-//parses redirection when present, creating a redirection node, being the left node the command node and the right node the filename
-t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *current_token)
-//parses the pipe, assigning the previous left part to the left node and the right part to the next command
-t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_node)
  */
 
-/* prototype */
-t_astnode	*parse(t_token *tokens);
-t_astnode	*parse_command(t_token *tokens, char **builtins, int *current_token);
-void	add_arg_node(t_astnode *command_node, t_astnode *arg_node);
-t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *current_token);
-t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_node);
-
+//to do fork_err() or just print_err()?
+static pid_t fork_err(pid_t id, int fd[2], int *exit_status)
+{
+	id = fork();
+	if (id < 0)
+	{
+		print_err("fork", NULL, strerror(errno));
+		*exit_status = 1;
+		close(fd[0]);
+		close(fd[1]);
+		exit(*exit_status);
+	}
+	return (id);
+}
 int create_pip(int fd[2], int *exit_status)
 {
 	int pip;
@@ -50,30 +47,63 @@ int create_pip(int fd[2], int *exit_status)
 	return -1;
 }
 
-static int pipe_err(); 
-// to do *exit_status assign and perror and close(fd)
-
 int left_node(t_astnode *pipe_node, int fd[2], int *exit_status)
 {
 	pid_t left;
 	
-	left = fork();
+	left = fork_err(left, fd, exit_status);
 	if (left == -1)
-		pipe_err();
+		return -1;
 	if (left == 0)
 	{
 		cloe(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		exec_ast(pipe_node->left, exit_status);
+		exec_ast(pipe_node, exit_status); 
+//now: pass pipe_node, and specify in exec_pipe 
+//or specify here exec_ast(pipe_node->left, exit_status); 
+		exit(*exit_status);
 	}
-
+	return (left);
 }
 
-
-int exec_pipe(t_astnode *astnode, int *exit_status)
+int right_node(t_astnode *pipe_node, int fd[2], int *exit_status)
 {
+	pid_t right;
+
+	right = fork_err(right, fd, exit_status);
+	if (right == -1)
+		return -1;
+	if (right == 0)
+	{
+		cloe(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		exec_ast(pipe_node, exit_status);
+		exit(*exit_status);
+	}
+	return (right);
 }
+
+int exec_pipe(t_astnode *pipe_node, int *exit_status)
+{
+	int fd[2];
+	pid_t left;
+	pid_t right;
+	
+	if (create_pip(fd, exit_status) < 0)
+		return -1;
+	left = left_node(pipe_node->left, fd, exit_status);
+	if (left < 0)
+		return -1;
+	right = right_node(pipe_node->right, fd, exit_status);
+	if (right < 0)
+		return -1;
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(left, exit_status, 0);
+	waitpid(right, exit_status, 0);
+	return 0; //exit(*exit_status);
 }
 
 //too many lines, split into several fts

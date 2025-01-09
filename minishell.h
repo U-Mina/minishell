@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 14:01:18 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 14:52:09 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,10 @@ int here_doc(char *de, int *exit_status);
 
 // pipe
 int create_pip(int fd[2], int *exit_status);
+int left_node(t_astnode *pipe_node, int fd[2], int *exit_status);
+int right_node(t_astnode *pipe_node, int fd[2], int *exit_status);
+int exec_pipe(t_astnode *pipe_node, int *exit_status);
+
 // temporary prototype
 // char *ft_strchr(char *s, char c);
 // int ft_strncmp(char *s1, char *s2);
