@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 13:53:44 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 15:19:32 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 // static int create_pip(int fd[2], int *exit_status)
 // {
 // 	int pip;
-	
 // 	pip = pipe(fd);
 // 	if (pip == 0)
 // 	{

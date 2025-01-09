@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 14:52:09 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 16:57:02 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,24 @@ typedef struct s_token
 	char				*value;
 }						t_token;
 
+// todo: necessary or not?
+typedef struct s_env
+{
+	char **env;
+	int var_nb;
+}			t_env;
+
+// todo: init t_table in *init.c*
+typedef struct s_table
+{
+	// char				*cmd;
+	// char				**cmd_array;
+	char				*path;
+	int					arg_nb;
+	int					*exit_status;
+
+}						t_table;
+
 typedef struct s_astnode
 {
 	int fd[2];
@@ -56,7 +74,9 @@ typedef struct s_astnode
 	struct s_astnode	*left;
 	struct s_astnode	*next_arg;
 	int					args_nbr;
-	t_redir				*redirect
+	int					*exit_status;
+	t_redir				*redirect;
+	t_env				*env;
 }						t_astnode;
 
 typedef struct s_redir
@@ -71,27 +91,13 @@ typedef struct s_redir
 // {
 // }			t_cmd;
 
-// todo: init t_table in *init.c*
-typedef struct s_table
-{
-	// char				*cmd;
-	// char				**cmd_array;
-	char				*path;
-	int					arg_nb;
-	int					*exit_status;
 
-}						t_table;
-
-// typedef struct s_env // todo: necessary or not?
-// {
-// 	char **envar;
-// 	char *shlv; // not sure
-// 	int var_nb;
-
-// }			t_env;
 
 //organize ft
 void	exec_ast(t_astnode *ast_node, int *exit_status);
+char	**get_command_args(t_astnode *command_node);
+int exec_command(t_astnode *astnode, int *exit_status);
+int exec_builtins(t_astnode *cmd_node, int *exit_status);
 
 // builtin ft
 void ft_echo(char **args, int* exit_status);

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 15:06:45 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 15:24:11 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static pid_t fork_err(pid_t id, int fd[2], int *exit_status)
 	}
 	return (id);
 }
+
 int create_pip(int fd[2], int *exit_status)
 {
 	int pip;
@@ -112,7 +113,6 @@ int exec_pipe(t_astnode *pipe_node, int *exit_status)
 // {
 // 	int		fd[2];
 // 	char	buffer[size?!];//which size to give to the pipe buffer?
-
 // 	if (pipe(fd) == -1)
 // 	{
 // 		//handle_error(pipe fail);
