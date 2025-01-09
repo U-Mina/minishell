@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/12/31 11:09:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 10:19:48 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	add_arg_node(t_astnode *command_node, t_astnode *arg_node)
 	while (last_arg->next_arg)
 		last_arg = last_arg->next_arg;
 	last_arg->next_arg = arg_node;
+	command_node->args_nbr++;
 }
 
 //parses redirection when present, creating a redirection node, being the left node the command node and the right node the filename
@@ -135,7 +136,10 @@ t_astnode	*create_astnode(t_token *token, t_gc_list *gc_list)
 		new_node->left = NULL;
 	}
 	else
+	{
 		new_node->next_arg = NULL;
+		new_node->args_nbr = 0;
+	}
 	return (new_node);
 }
 
