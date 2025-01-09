@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 13:46:33 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 14:49:51 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,23 @@ builtin_case_match();
 binary_path_find();
 exec_child();
 
+//returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
 char	**get_command_args(t_astnode *command_node)
 {
-	char		**args;
+	char		**argv;
 	t_astnode	*arg_node;
 	int			i;
 
-	args = (char **)gc_malloc((command_node->args_nbr) * sizeof(char *));
+	argv = (char **)gc_malloc((command_node->args_nbr + 2) * sizeof(char *));
 	arg_node = command_node->next_arg;
-	args[0] = command_node->token->value;
+	argv[0] = command_node->token->value;
 	i = 1;
 	while (arg_node)
 	{
-		args[i] = arg_node->token->value;
+		argv[i] = arg_node->token->value;
 		arg_node = arg_node->next_arg;
 		i++;
 	}
-	args[i] = NULL;
-	return (args);
+	argv[i] = NULL;
+	return (argv);
 }
-

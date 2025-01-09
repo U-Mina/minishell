@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/08 15:23:07 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:10:41 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(void)
 	t_token		*tokens;
 	t_astnode	*ast_root;
 	t_gc_list	*gc_list;
+	int			exit_status;
 
 	//initiate gc_list
 	gc_list = NULL;
@@ -40,7 +41,7 @@ int	main(void)
 		//check parser
 		print_ast(ast_root, 0);
 		//execution
-		exec_ast(ast_root);
+		exec_ast(ast_root, &exit_status);
 		//free allocated memory
 		free_tokens(tokens, gc_list);
 		//pending of free ast
