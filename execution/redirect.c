@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 14:19:13 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 12:30:02 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int exec_redirect(t_astnode *astnode, int *exit_status)
 	{
 		if (redir->token->type == HEREDOC)
 		{
-			redir->fd = here_doc(redir->token->value, exit_status);
+			redir->fd = here_doc(redir->token->value, exit_status); //redir->token->value shouc be change to redir->right->token->value ???
 			if (redir->fd < 0)
 				return -1;
 		}
