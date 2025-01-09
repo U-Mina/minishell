@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 12:44:36 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:46:33 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//todo: 
+exec_cmd();
+builtin_case_match();
+binary_path_find();
+exec_child();
 
 char	**get_command_args(t_astnode *command_node)
 {
@@ -31,3 +37,4 @@ char	**get_command_args(t_astnode *command_node)
 	args[i] = NULL;
 	return (args);
 }
+

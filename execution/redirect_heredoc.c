@@ -6,26 +6,27 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/07 00:20:39 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 13:53:44 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int create_pip(int fd[2], int *exit_status)
-{
-	int pip;
+//changed to non-static
+// static int create_pip(int fd[2], int *exit_status)
+// {
+// 	int pip;
 	
-	pip = pipe(fd);
-	if (pip == 0)
-	{
-		*exit_status = 0;
-		return 0;
-	}
-	print_err("pipe", NULL, strerror(errno));
-	*exit_status = 1;
-	return -1;
-}
+// 	pip = pipe(fd);
+// 	if (pip == 0)
+// 	{
+// 		*exit_status = 0;
+// 		return 0;
+// 	}
+// 	print_err("pipe", NULL, strerror(errno));
+// 	*exit_status = 1;
+// 	return -1;
+// }
 
 static int read_here(char *de, char **content, int *exit_status)
 {

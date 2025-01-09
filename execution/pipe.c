@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 11:38:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:02:00 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../builtins/minishell.h"
+#include "../minishell.h"
 
 /**
  * - create pipi
@@ -35,34 +35,76 @@ void	add_arg_node(t_astnode *command_node, t_astnode *arg_node);
 t_astnode	*parse_redirection(t_token *tokens, t_astnode *command_node, int *current_token);
 t_astnode	*parse_pipe(t_token *tokens, char **builtins, int *current_token, t_astnode *left_node);
 
-//copied from executor, maybe it is useful here
-void	create_pipe(t_astnode *pipe_node)
+int create_pip(int fd[2], int *exit_status)
 {
-	int		fd[2];
-	char	buffer[size?!];//which size to give to the pipe buffer?
-
-	if (pipe(fd) == -1)
+	int pip;
+	
+	pip = pipe(fd);
+	if (pip == 0)
 	{
-		//handle_error(pipe fail);
-		exit (1);
+		*exit_status = 0;
+		return 0;
 	}
-	if (fork() == 0) //first child process will perform the left part
-	{
-		close fd[0];
-		dup2(fd[1], STDOUT_FILENO);
-		exec_ast(pipe_node->left);
-		write(fd[1], ) //how to get the return value and write to pipe??
-		close fd[1];
-		return ();
-	}
-	if (fork() == 0) // second child process will perform the right part
-	{
-		close fd[1];
-		dup2(fd[0], STDIN_FILENO);
-		exec_ast(pipe_node->right); 
-		bytes_read = read(fd[0], buffer, sizeof(buffer)); //how to read the output of parent?
-		close fd[0];
-	}
-	close(fd[0]);
-	close(fd[1]);
+	print_err("pipe", NULL, strerror(errno));
+	*exit_status = 1;
+	return -1;
 }
+
+static int pipe_err(); 
+// to do *exit_status assign and perror and close(fd)
+
+int left_node(t_astnode *pipe_node, int fd[2], int *exit_status)
+{
+	pid_t left;
+	
+	left = fork();
+	if (left == -1)
+		pipe_err();
+	if (left == 0)
+	{
+		cloe(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		exec_ast(pipe_node->left, exit_status);
+	}
+
+}
+
+
+int exec_pipe(t_astnode *astnode, int *exit_status)
+{
+}
+}
+
+//too many lines, split into several fts
+//copied from executor, maybe it is useful here
+// void	create_pipe(t_astnode *pipe_node)
+// {
+// 	int		fd[2];
+// 	char	buffer[size?!];//which size to give to the pipe buffer?
+
+// 	if (pipe(fd) == -1)
+// 	{
+// 		//handle_error(pipe fail);
+// 		exit (1);
+// 	}
+// 	if (fork() == 0) //first child process will perform the left part
+// 	{
+// 		close fd[0];
+// 		dup2(fd[1], STDOUT_FILENO);
+// 		exec_ast(pipe_node->left);
+// 		write(fd[1], ) //how to get the return value and write to pipe??
+// 		close fd[1];
+// 		return ();
+// 	}
+// 	if (fork() == 0) // second child process will perform the right part
+// 	{
+// 		close fd[1];
+// 		dup2(fd[0], STDIN_FILENO);
+// 		exec_ast(pipe_node->right); 
+// 		bytes_read = read(fd[0], buffer, sizeof(buffer)); //how to read the output of parent?
+// 		close fd[0];
+// 	}
+// 	close(fd[0]);
+// 	close(fd[1]);
+// }

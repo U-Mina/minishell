@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 13:11:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:01:18 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ typedef struct s_table
 
 // }			t_env;
 
+//organize ft
+void	exec_ast(t_astnode *ast_node, int *exit_status);
+
 // builtin ft
 void ft_echo(char **args, int* exit_status);
 int ft_cd(char **args, char ***env, int *exit_status);
@@ -149,7 +152,8 @@ int ft_out(t_astnode *astnode, int *exit_status);
 int ft_in(t_astnode *astnode, int *exit_status);
 int here_doc(char *de, int *exit_status);
 
-
+// pipe
+int create_pip(int fd[2], int *exit_status);
 // temporary prototype
 // char *ft_strchr(char *s, char c);
 // int ft_strncmp(char *s1, char *s2);

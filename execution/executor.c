@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 13:16:32 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/09 13:46:47 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 //think properly how to proceed. This is just a copy of the logic of AST printing, that should be adapted to executing
 void	exec_ast(t_astnode *ast_node)
+//exec_ast(t_astnode *ast_node, int *exit_status)
 {
 	if (ast_node->token->type == PIPE || ast_node->token->type == REDIRECTION)
-	// if (PIPE) -> exe_pip(node, exit_status); **
+	// if (PIPE) -> exec_pip(node, exit_status) **
 	//if (REDIR) -> exec_redir(astnode, exit_status)
 	{
 		create_pipe(ast_node);
