@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 10:20:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:08:07 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,18 @@
 
 typedef enum e_tokentype
 {
+	WORD, //Will be disambiguated to Command_builtin, Command_binary, argument or filename in the parser
+	COMMAND_BUILTIN,
+	COMMAND_BINARY,
+	ARGUMENT,
 	REDIRECTION,
 	PIPE,
 	INPUT,
 	OUTPUT,
 	FILENAME,
 	HEREDOC,
-	APPEND
+	APPEND,
+	TOKEN_EOF
 }						t_tokentype;
 
 typedef struct s_token
