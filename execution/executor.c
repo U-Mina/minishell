@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/08 17:17:04 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:16:32 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 void	exec_ast(t_astnode *ast_node)
 {
 	if (ast_node->token->type == PIPE || ast_node->token->type == REDIRECTION)
+	// if (PIPE) -> exe_pip(node, exit_status); **
+	//if (REDIR) -> exec_redir(astnode, exit_status)
 	{
 		create_pipe(ast_node);
 	}
 	if (ast_node->token->type == COMMAND_BINARY || ast_node->token->type == COMMAND_BUILTIN)
 	{
+		//if (BIN) -> execve (search path)
+		//if (BUIL) -> case_match (direct to seperate) **
 		//search in paths etc or in the same files and execute the command
 		while (ast_node->next_arg)
 		{
