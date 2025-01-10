@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/01 16:50:39 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/10 12:41:07 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,34 @@
  * @copy_env: 'env' cmd
  * @sort_env: export cmd
  */
+
+//if no env var is passed, create a var list for it
+//HOME, PWD, OLDPWD, SHLVL, _=, NULL
+//check: ?? to add executable path
+char **create_env(void)
+{
+	char **env;
+	char *_cwd;
+	char *usr;
+	char *exec_path;
+	
+	env = safe_malloc(sizeof(char *) * 6);
+	_cwd = getcwd(NULL, 0);
+	if (_cwd == NULL)
+		return NULL;
+	usr = getenv("HOME");
+	if (!usr)
+		usr = "/";
+	env[0] = safe_join("HOME=", usr);
+	env[1] = safe_join("PWD=", _cwd);
+	env[2] = ft_strdup("OLDPWD"); //empty at the begining
+	env[3] = safe_join("SHLVL=", "1");
+	exec_path = safe_join("_=", _cwd);
+	env[4] = safe_join(exec_path, "/./minishell");
+	env[5] = NULL;
+	free(_cwd);
+	return (env);
+}
 
 // count len of original env, and allocate space accordingly for cpy_env
 size_t varlen(char **env)
@@ -54,20 +82,26 @@ char **cpy_env(char **env)
 	return (cpenv);
 }
 
-void env_shl(char ***env, char *key)
+//key1->"SHLVL", key2->"OLDPWD"
+void change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 {
 	char *val;
-	int pos;
+	char *var_pwd;
+	int pos1;
+	int pos2;
 
-	pos = find_env_var(*env, key);
-	free((*env)[pos]);
-	val = ft_itoa(ft_atoi(env_value(*env, key) + 1));
-	(*env)[pos] = safe_join("SHLVL=", val);//check: is a ;var_create funtion necessary?
+	var_pwd = NULL;
+	pos1 = find_env_var(*env, key1);
+	// if (pos1 < 0) ??
+	//check: the error check necesary or not? just created above
+	free((*env)[pos1]);
+	val = ft_itoa(ft_atoi(env_value(*env, key1) + 1));
+	(*env)[pos1] = safe_join("SHLVL=", val);//check: is a ;var_create funtion necessary?
 	free(val);
+	pos2 = find_env_var(*env, key2);
+	free((*env)[pos2]);
+	(*env)[pos2] = ft_strdup(key2);
 }
-
-void chge_pwd(char *oldpwd)
-{}
 
 //ini the struct of t_env, maybe move to *main.c/init.c*
 //env = copy of original result of 'env' cmd, and then modify

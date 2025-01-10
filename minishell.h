@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/10 16:08:18 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:56:01 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct s_cmd
 	char		**argv;
 	char		*path;
 	int			*exit_status;
+	char		*cmd;//???
+	char		**cmd_array;//???
 	char		**env; //or wherever it is
 }				t_cmd;
 
@@ -115,6 +117,9 @@ typedef struct s_gc_list
 	struct s_gc_list	*next;
 }	t_gc_list;
 
+// main and init
+void init_env(char **envp, t_cmd *cmd, int *exit_status);
+
 //organize ft
 void	exec_ast(t_astnode *ast_node, int *exit_status);
 char	**get_command_args(t_astnode *command_node);
@@ -136,9 +141,10 @@ void					ch_pwd_oldpwd(char **env, int flag, int *exit_status);
 char					*cd_home(char **env, int *exit_status);
 
 // env helper ft
+char **create_env(void);
 size_t					varlen(char **env);
 char					**cpy_env(char **env);
-void					env_shl(char ***env, char *key);
+void change_shlvl_oldpwd(char ***env, char *key1, char *key2);
 int						find_env_var(char **env, const char *key);
 char					*create_var(const char *key, char *val);
 void					put_var(char ***env, char *n_var);
@@ -170,9 +176,10 @@ void					*safe_malloc(size_t size);
 void					*ft_realloc(void *ptr, size_t old, size_t new);
 size_t					args_nbr(char **arr);
 
-// error, free, exit
+// error, free, clean, exit 
 //void					ft_exit_status(int exit_code);
 void					print_err(char *s1, char *s2, char *s3);
+void free_env(char **env);
 t_gc_list				*gc_list_init(t_gc_list *gc_list);
 void					*gc_malloc(size_t size, t_gc_list *gc_list);
 void					*add_gc_list(void *new_alloc, t_gc_list *gc_list);
