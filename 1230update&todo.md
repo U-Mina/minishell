@@ -2,6 +2,12 @@ check the function about env (find/add/mod/del)
 debug unset & cd!!! (make sure the PWD function works!!!)
 think about *exit_code (necessary or not??? //not required by subject)
 
+check new implementation of AST -> AST printing check, and take into account redirect execution
+gc change all the variables used for a gc_handle with static pointer to list initial
+gc implement helper functions gc_split and gc_join, etc (out of the library)
+change execution according to new AST structures
+test execution
+signals
 
 *1230update*
 - remove exit_code(not required and currently no uasge)

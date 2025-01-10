@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/10 17:56:01 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:15:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	t_cmdtype	type;
-	int			args_nbr;
+	int			arg_nb;
 	char		**argv;
 	char		*path;
 	int			*exit_status;
-	char		*cmd;//???
-	char		**cmd_array;//???
+	//char		*cmd;//???
+	//char		**cmd_array;//???
 	char		**env; //or wherever it is
 }				t_cmd;
 

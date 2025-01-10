@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/10 17:37:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:49:56 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ char	**get_command_args(t_astnode *command_node, t_token *tokens, int *current_t
 	t_cmd		*cmd;
 	int			i;
 
+	command_node->node_type.cmd->arg_nb = 0;
 	cmd = command_node->node_type.cmd;
-	cmd->args_nbr = 0;
-	while (tokens[*current_token + cmd->args_nbr].type == WORD \
-			|| tokens[*current_token + cmd->args_nbr].type == QUOTE)
-		(cmd->args_nbr)++;
-	argv = (char **)gc_malloc((cmd->args_nbr + 2) * sizeof(char *), gc_list);
+	while (tokens[*current_token + cmd->arg_nb].type == WORD \
+			|| tokens[*current_token + cmd->arg_nb].type == QUOTE)
+		(cmd->arg_nb)++;
+	argv = (char **)gc_malloc((cmd->arg_nb + 2) * sizeof(char *), gc_list);
 	if (!argv)
 		return (handle_error(gc_list));
 	argv[0] = command_node->token->value;
@@ -79,7 +79,7 @@ t_cmdtype	get_command_type(char *command)
 	ft_strlcpy(builtins[6], "exit", 7);
 	command_type = COMMAND_BINARY;
 	i = 0;
-	while (builtins[i])
+	while (i <= 6)
 	{
 		if (ft_strncmp(command, builtins[i], ft_strlen(command)) == 0)
 		{

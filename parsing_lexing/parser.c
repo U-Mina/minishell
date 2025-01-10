@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/10 16:13:07 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:02:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,24 @@ t_astnode	*create_astnode(t_token *token, t_gc_list *gc_list)
 	if (!new_node)
 		return(handle_error(gc_list));
 	new_node->token = token;
+	if (new_node->token->type == COMMAND)
+	{
+		new_node->node_type.cmd = gc_malloc(sizeof(t_cmd), gc_list);
+		if (!new_node->node_type.cmd)
+			return (handle_error(gc_list));
+	}
+	if (new_node->token->type == PIPE)
+	{
+		new_node->node_type.pipe = gc_malloc(sizeof(t_pipe), gc_list);
+		if (!new_node->node_type.pipe)
+			return (handle_error(gc_list));
+	}
+	if (new_node->token->type == REDIRECTION)
+	{
+		new_node->node_type.redirect = gc_malloc(sizeof(t_redir), gc_list);
+		if (!new_node->node_type.redirect)
+			return (handle_error(gc_list));
+	}
 	return (new_node);
 }
 
