@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 14:10:41 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:45:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	main(void)
 	t_token		*tokens;
 	t_astnode	*ast_root;
 	t_gc_list	*gc_list;
-	int			exit_status;
 
 	//initiate gc_list
 	gc_list = NULL;
@@ -41,7 +40,7 @@ int	main(void)
 		//check parser
 		print_ast(ast_root, 0);
 		//execution
-		exec_ast(ast_root, &exit_status);
+		//exec_ast(ast_root);
 		//free allocated memory
 		free_tokens(tokens, gc_list);
 		//pending of free ast
@@ -72,20 +71,27 @@ void	print_tokens(t_token *tokens)
 //check parser
 void	print_ast(t_astnode* ast_node, int level)
 {
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
 	while(i++ < level)
 		printf("	");
 	printf("%s (%i)\n", ast_node->token->value, ast_node->token->type);
-	if (ast_node->token->type == PIPE || ast_node->token->type == REDIRECTION)
+	if (ast_node->token->type == PIPE)
 	{
-		print_ast(ast_node->left, level + 1);
-		print_ast(ast_node->right, level + 1);
+		print_ast(ast_node->node_type.pipe->left, level + 1);
+		print_ast(ast_node->node_type.pipe->right, level + 1);
 	}
-	else if (ast_node->token->type == COMMAND_BINARY || ast_node->token->type == COMMAND_BUILTIN)
+	else if (ast_node->token->type == REDIRECTION)
 	{
-		while (ast_node->next_arg)
+		print_ast(ast_node->node_type.redirect->left, level + 1);
+		print_ast(ast_node->node_type.redirect->right, level + 1);
+	}
+	else if (ast_node->token->type == COMMAND)
+	{
+		j = 1;
+		while (j <= ast_node->node_type.cmd->args_nbr)
 		{
 			i = 0;
 			while(i < level + 1)
@@ -93,8 +99,8 @@ void	print_ast(t_astnode* ast_node, int level)
 				printf("	");
 				i++;
 			}
-			printf("%s (%i)\n", ast_node->next_arg->token->value, ast_node->next_arg->token->type);
-			ast_node = ast_node->next_arg;
+			printf("arg %i: %s\n", j, ast_node->node_type.cmd->argv[j]);
+			j++;
 		}
 	}
 }

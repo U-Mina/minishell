@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 17:32:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:55:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	get_path(t_astnode *ast_node, int *exit_status)
 		{
 			ast_node->cmd->path = ft_strdup(cmd); //need to allocate somehow, change strdup or gc_malloc somehow???
 			ast_node->token->value = get_binary_name(cmd, '/');
+			ast_node->node_type.cmd->argv[0] = ast_node->token->value;
 		}
 		else
 		{

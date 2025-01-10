@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/10 11:48:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:13:07 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_astnode	*parse(t_token *tokens, t_gc_list *gc_list)
 	{
 		if (tokens[current_token].type == PIPE)
 			root = parse_pipe(tokens, &current_token, root, gc_list);
+		if (tokens[current_token].type == REDIRECTION)
+			root = parse_redirection(tokens, &current_token, root, gc_list);
 	}
 	return (root);
 }
