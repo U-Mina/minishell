@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 14:10:41 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:43:20 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //include all allocated elements in gc_list (using gc_malloc and handle mallocated in other functions ex. ft_split)
+//todo: char **envp need to be passed as para in main to get the env from sys 
 int	main(void)
 {
 	char		*input;
@@ -96,5 +97,29 @@ void	print_ast(t_astnode* ast_node, int level)
 			printf("%s (%i)\n", ast_node->next_arg->token->value, ast_node->next_arg->token->type);
 			ast_node = ast_node->next_arg;
 		}
+	}
+}
+
+/** init and pass env to t_cmd */
+void init_env(char **envp, t_cmd *cmd, int *exit_status)
+{
+	if (!envp[0])
+	{
+		cmd->env = create_env();
+		if (cmd->env == NULL)
+		{
+			*exit_status = 1;
+			exit(1);			
+		}
+	}
+	else
+	{
+		cmd->env = cpy_env(envp);
+		if (cmd->env == NULL)
+		{
+			*exit_status = 1;
+			exit(1);			
+		}
+		change_shlvl_oldpwd(&cmd->env, "SHLVL", "OLDPWD");
 	}
 }

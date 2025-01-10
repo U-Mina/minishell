@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 16:57:02 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/10 12:43:04 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,31 @@ typedef struct s_token
 }						t_token;
 
 // todo: necessary or not?
-typedef struct s_env
-{
-	char **env;
-	int var_nb;
-}			t_env;
+// typedef struct s_env
+// {
+// 	int var_nb;
+// }			t_env;
 
 // todo: init t_table in *init.c*
-typedef struct s_table
+// typedef struct s_table
+// {
+// 	// char				*cmd;
+// 	// char				**cmd_array;
+// 	char				*path;
+// 	int					arg_nb;
+// 	int					*exit_status;
+
+// }						t_table;
+
+typedef struct s_cmd
 {
-	// char				*cmd;
-	// char				**cmd_array;
+	char **env;
+	char				*cmd;
+	char				**cmd_array;
 	char				*path;
 	int					arg_nb;
 	int					*exit_status;
-
-}						t_table;
+}			t_cmd;
 
 typedef struct s_astnode
 {
@@ -87,11 +96,10 @@ typedef struct s_redir
 	t_redir			*left;
 
 }						t_redir;
-// typedef struct s_cmd
-// {
-// }			t_cmd;
 
 
+// main and init
+void init_env(char **envp, t_cmd *cmd, int *exit_status);
 
 //organize ft
 void	exec_ast(t_astnode *ast_node, int *exit_status);
@@ -114,9 +122,10 @@ void					ch_pwd_oldpwd(char **env, int flag, int *exit_status);
 char					*cd_home(char **env, int *exit_status);
 
 // env helper ft
+char **create_env(void);
 size_t					varlen(char **env);
 char					**cpy_env(char **env);
-void					env_shl(char ***env, char *key);
+void change_shlvl_oldpwd(char ***env, char *key1, char *key2);
 int						find_env_var(char **env, const char *key);
 char					*create_var(const char *key, char *val);
 void					put_var(char ***env, char *n_var);
@@ -148,9 +157,10 @@ void					*safe_malloc(size_t size);
 void					*ft_realloc(void *ptr, size_t old, size_t new);
 size_t					args_nbr(char **arr);
 
-// error, free, exit
+// error, free, clean, exit 
 //void					ft_exit_status(int exit_code);
 void					print_err(char *s1, char *s2, char *s3);
+void free_env(char **env);
 
 // redirect
 int exec_redirect(t_astnode *astnode, int *exit_status);
