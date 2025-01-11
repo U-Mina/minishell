@@ -9,6 +9,15 @@ change execution according to new AST structures
 test execution
 signals
 
+TODO (update 11/01/2025)
+gc:
+- decide how to handle malloc fail (exit?? / return NULL and handle in next functions and check in every return value??)
+- include gc_split, gc_join, etc
+- change to gc_free_double pointer in parser??
+make:
+- create source folder and object folder to fully remove in the make fclean (rm -rf)
+
+
 *1230update*
 - remove exit_code(not required and currently no uasge)
 - change header file, create s_table as data table

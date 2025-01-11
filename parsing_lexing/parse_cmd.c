@@ -6,14 +6,14 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 11:47:21 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:27:26 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //creates AST nodes for commands
-t_astnode	*parse_command(t_token *tokens, int *current_token, t_gc_list *gc_list)
+t_astnode	*parse_command(t_token *tokens, int *current_token)
 {
 	t_astnode	*command_node;
 
@@ -21,22 +21,22 @@ t_astnode	*parse_command(t_token *tokens, int *current_token, t_gc_list *gc_list
 	if (tokens[*current_token].type == WORD)
 	{
 		tokens[*current_token].type = COMMAND;
-		command_node = create_astnode(&tokens[*current_token], gc_list);
-		if (!command_node)
-			return (handle_error(gc_list));
+		command_node = create_astnode(&tokens[*current_token]);
+		// if (!command_node)
+		// 	return (handle_error(gc_list));
 		command_node->node_type.cmd->type = get_command_type(tokens[*current_token].value);
 		command_node->node_type.cmd->exit_status = 0;
 		(*current_token)++;
-		command_node->node_type.cmd->argv = get_command_args(command_node, tokens, current_token, gc_list);
+		command_node->node_type.cmd->argv = get_command_args(command_node, tokens, current_token);
 		if (tokens[*current_token].type == REDIRECTION)
-			return (parse_redirection(tokens, current_token, command_node, gc_list));
+			return (parse_redirection(tokens, current_token, command_node));
 	}
 	return (command_node);
 }
 
 //returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
 //updates the number of arguments of a command_node
-char	**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token, t_gc_list *gc_list)
+char	**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token)
 {
 	char		**argv;
 	t_cmd		*cmd;
@@ -47,9 +47,9 @@ char	**get_command_args(t_astnode *command_node, t_token *tokens, int *current_t
 	while (tokens[*current_token + cmd->arg_nb].type == WORD \
 			|| tokens[*current_token + cmd->arg_nb].type == QUOTE)
 		(cmd->arg_nb)++;
-	argv = (char **)gc_malloc((cmd->arg_nb + 2) * sizeof(char *), gc_list);
-	if (!argv)
-		return (handle_error(gc_list));
+	argv = (char **)gc_malloc((cmd->arg_nb + 2) * sizeof(char *));
+	// if (!argv)
+	// 	return (handle_error(gc_list));
 	argv[0] = command_node->token->value;
 	i = 1;
 	while (tokens[*current_token].type == WORD \

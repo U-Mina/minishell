@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 12:41:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 17:08:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,13 @@ typedef struct s_token
 	char				*value;
 }						t_token;
 
-// typedef struct s_astnode
-// {
-// 	t_token				*token;
-// 	struct s_astnode	*right;
-// 	struct s_astnode	*left;
-// 	struct s_astnode	*next_arg;
-// 	t_nodetype			node_type;
-// }						t_astnode;
+typedef struct s_tokenizer
+{
+	t_token	*tokens;
+	int		capacity;
+	int		grow;
+	int		count;
+}			t_tokenizer;
 
 struct s_astnode;
 
@@ -179,12 +178,18 @@ size_t					args_nbr(char **arr);
 //void					ft_exit_status(int exit_code);
 void					print_err(char *s1, char *s2, char *s3);
 void free_env(char **env);
-t_gc_list				*gc_list_init(t_gc_list *gc_list);
-void					*gc_malloc(size_t size, t_gc_list *gc_list);
-void					*add_gc_list(void *new_alloc, t_gc_list *gc_list);
-void					gc_free(void *free_ptr, t_gc_list *gc_list);
-void					gc_clean(t_gc_list *gc_list);
-void					*handle_error(t_gc_list *gc_list);
+
+//gc
+void		*gc_malloc(size_t size);
+t_gc_list	**get_gc_list(void);
+void		gc_malloc_error(void);
+void		add_gc_list(void *new_alloc);
+void		gc_free(void *free_ptr);
+void		gc_clean(void);
+char		**gc_split(char const *s, char c);
+char		*gc_strdup(const char *s1);
+char		*gc_strjoin(char const *s1, char const *s2);
+
 
 // redirect
 int exec_redirect(t_astnode *astnode, int *exit_status);
@@ -204,22 +209,22 @@ int exec_pipe(t_astnode *pipe_node, int *exit_status);
 // char *ft_strdup(char *s);
 
 //lexer
-t_token		*tokenizer(char *input, t_gc_list *gc_list);
+t_token		*tokenizer(char *input);
 int			count_token_max(char *input);
-t_token		create_token(t_tokentype type, char *value, t_gc_list *gc_list);
-char		*get_word(char *input, t_gc_list *gc_list);
-char		*get_quote(char *input, char symbol, t_gc_list *gc_list);
-void		free_tokens(t_token *tokens, t_gc_list *gc_list);
+t_token		create_token(t_tokentype type, char *value);
+char		*get_word(char *input);
+char		*get_quote(char *input, char symbol);
+void		free_tokens(t_token *tokens);
 int			ft_isspace(char c);
 
 //parser
-t_astnode	*parse(t_token *tokens, t_gc_list *gc_list);
-t_astnode	*create_astnode(t_token *token, t_gc_list *gc_list);
-t_astnode	*parse_command(t_token *tokens, int *current_token, t_gc_list *gc_list);
-char		**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token, t_gc_list *gc_list);
+t_astnode	*parse(t_token *tokens);
+t_astnode	*create_astnode(t_token *token);
+t_astnode	*parse_command(t_token *tokens, int *current_token);
+char		**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token);
 t_cmdtype	get_command_type(char *command);
-t_astnode	*parse_pipe(t_token *tokens, int *current_token, t_astnode *left_node, t_gc_list *gc_list);
-t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *left_node, t_gc_list *gc_list);
+t_astnode	*parse_pipe(t_token *tokens, int *current_token, t_astnode *left_node);
+t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *right_node);
 t_redirtype	get_redir_type(char *redir);
 void		free_double_pointer(char **str);
 //void		free_ast(t_astnode *root);

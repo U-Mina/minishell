@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 13:24:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:39:09 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,7 @@ int	main(void)
 	char		*input;
 	t_token		*tokens;
 	t_astnode	*ast_root;
-	t_gc_list	*gc_list;
 
-	//initiate gc_list
-	gc_list = NULL;
-	gc_list = gc_list_init(gc_list);
 	//Add signal handling
 	while (1)
 	{
@@ -32,18 +28,18 @@ int	main(void)
 		//Have a working history 
 		add_history(input);
 		//Split into categorized tokens
-		tokens = tokenizer(input, gc_list);
+		tokens = tokenizer(input);
 		free(input);
 		//check lexer
 		print_tokens(tokens);
 		//Create AST with hierarchized tokens
-		ast_root = parse(tokens, gc_list);
+		ast_root = parse(tokens);
 		//check parser
 		print_ast(ast_root, 0);
 		//execution
 		//exec_ast(ast_root);
 		//free allocated memory
-		free_tokens(tokens, gc_list);
+		free_tokens(tokens);
 		//pending of free ast
 		// //execute the command saved into ast
 		// //depending on the type of command: 
@@ -52,6 +48,7 @@ int	main(void)
 		// //3. exec a builtin function
 		// exec(command);
 	}
+	gc_clean();
 	return (0);
 }
 

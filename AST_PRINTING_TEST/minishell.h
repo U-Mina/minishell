@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 15:28:26 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 16:51:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,15 @@ typedef struct s_token
 {
 	t_tokentype			type;
 	char				*value;
-}						t_token;
+}				t_token;
+
+typedef struct s_tokenizer
+{
+	t_token	*tokens;
+	int		capacity;
+	int		grow;
+	int		count;
+}			t_tokenizer;
 
 struct s_astnode;
 
@@ -115,13 +123,16 @@ void		gc_malloc_error(void);
 void		add_gc_list(void *new_alloc);
 void		gc_free(void *free_ptr);
 void		gc_clean(void);
+char		*gc_strdup(const char *s1);
 
 //lexer
 t_token		*tokenizer(char *input);
-int			count_token_max(char *input);
-t_token		create_token(t_tokentype type, char *value);
+t_tokenizer	*init_tokenizer(void);
+int			grow_tokenizer(t_tokenizer *tokenizer);
+t_token		create_token(t_tokenizer *tokenizer, t_tokentype type, char *value);
 char		*get_word(char *input);
 char		*get_quote(char *input, char symbol);
+char		*get_redir(char *input);
 void		free_tokens(t_token *tokens);
 int			ft_isspace(char c);
 
