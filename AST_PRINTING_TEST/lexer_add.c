@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 13:18:40 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:21:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*tokenizer(char *input, t_gc_list *gc_list)
 	max_token_num = count_token_max(input);
 	tokens = (t_token *)gc_malloc((max_token_num + 1) * sizeof(t_token), gc_list);
 	if (!tokens)
-		handle_error(gc_list);
+		return (handle_error(gc_list));
 	current_token = 0;
 	while (*input != '\0')
 	{
@@ -36,8 +36,6 @@ t_token	*tokenizer(char *input, t_gc_list *gc_list)
 			tokens[current_token] = create_token(REDIRECTION, get_word(input, gc_list), gc_list);
 		else if (*input == '\"' || *input == '\'')
 			tokens[current_token] = create_token(QUOTE, get_quote(input, *input, gc_list), gc_list);
-		else if (*input == '\0')
-			break ;
 		else//if (ft_isalpha(*input))
 			tokens[current_token] = create_token(WORD, get_word(input, gc_list), gc_list);
 		//check that really all the cases which are not the previous are words (commands, arguments or textfiles)
