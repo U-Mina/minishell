@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 13:14:29 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:28:26 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct s_cmd
 
 typedef union u_nodetype
 {
-	t_redir	*redirect;
+	t_redir	*redir;
 	t_cmd	*cmd;
 	t_pipe	*pipe;
 }			t_nodetype;
@@ -108,32 +108,31 @@ typedef struct s_gc_list
 }	t_gc_list;
 
 
-// error, free, exit
-//void					ft_exit_status(int exit_code);
-t_gc_list				*gc_list_init(t_gc_list *gc_list);
-void					*gc_malloc(size_t size, t_gc_list *gc_list);
-void					*add_gc_list(void *new_alloc, t_gc_list *gc_list);
-void					gc_free(void *free_ptr, t_gc_list *gc_list);
-void					gc_clean(t_gc_list *gc_list);
-void					*handle_error(t_gc_list *gc_list);
+//gc
+void		*gc_malloc(size_t size);
+t_gc_list	**get_gc_list(void);
+void		gc_malloc_error(void);
+void		add_gc_list(void *new_alloc);
+void		gc_free(void *free_ptr);
+void		gc_clean(void);
 
 //lexer
-t_token		*tokenizer(char *input, t_gc_list *gc_list);
+t_token		*tokenizer(char *input);
 int			count_token_max(char *input);
-t_token		create_token(t_tokentype type, char *value, t_gc_list *gc_list);
-char		*get_word(char *input, t_gc_list *gc_list);
-char		*get_quote(char *input, char symbol, t_gc_list *gc_list);
-void		free_tokens(t_token *tokens, t_gc_list *gc_list);
+t_token		create_token(t_tokentype type, char *value);
+char		*get_word(char *input);
+char		*get_quote(char *input, char symbol);
+void		free_tokens(t_token *tokens);
 int			ft_isspace(char c);
 
 //parser
-t_astnode	*parse(t_token *tokens, t_gc_list *gc_list);
-t_astnode	*create_astnode(t_token *token, t_gc_list *gc_list);
-t_astnode	*parse_command(t_token *tokens, int *current_token, t_gc_list *gc_list);
-char		**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token, t_gc_list *gc_list);
+t_astnode	*parse(t_token *tokens);
+t_astnode	*create_astnode(t_token *token);
+t_astnode	*parse_command(t_token *tokens, int *current_token);
+char		**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token);
 t_cmdtype	get_command_type(char *command);
-t_astnode	*parse_pipe(t_token *tokens, int *current_token, t_astnode *left_node, t_gc_list *gc_list);
-t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *left_node, t_gc_list *gc_list);
+t_astnode	*parse_pipe(t_token *tokens, int *current_token, t_astnode *left_node);
+t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *right_node);
 t_redirtype	get_redir_type(char *redir);
 void		free_double_pointer(char **str);
 //void		free_ast(t_astnode *root);

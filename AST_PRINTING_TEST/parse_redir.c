@@ -6,36 +6,34 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 13:14:07 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:24:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//PENDING: right and left or others according to what is ued in redirect_execution
-
-//parses redirection when present, creating a redirection node, being the left node the command node and the right node the filename
-t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *right_node, t_gc_list *gc_list)
+//parses redirection when present, creating a redirection node, being the left node the filename or the delimiter and the left node the command node or redirections to be further executed
+t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *right_node)
 {
-	t_astnode	*redirection_node;
+	t_astnode	*redir_node;
 
-	redirection_node = create_astnode(&tokens[*current_token], gc_list);
-	redirection_node->node_type.redirect->type = get_redir_type(tokens[*current_token].value);
-	if (!redirection_node)
-		return (handle_error(gc_list));
+	redir_node = create_astnode(&tokens[*current_token]);
+	redir_node->node_type.redir->type = get_redir_type(tokens[*current_token].value);
+	// if (!redir_node)
+	// 	return (handle_error(gc_list));
 	(*current_token)++;
-	if (tokens[*current_token].type == WORD || tokens[*current_token].type == QUOTE)
+	if (tokens[*current_token].type == WORD || \
+		tokens[*current_token].type == QUOTE)
 	{
-		redirection_node->node_type.redirect->left = tokens[*current_token].value;
+		redir_node->node_type.redir->left = tokens[*current_token].value;
 		(*current_token)++;
 		if (tokens[*current_token].type == REDIRECTION)
-		{
-			redirection_node->node_type.redirect->right = parse_redirection(tokens, current_token, right_node, gc_list);
-		}
+			redir_node->node_type.redir->right = \
+			parse_redirection(tokens, current_token, right_node);
 		else
-			redirection_node->node_type.redirect->right = right_node;
+			redir_node->node_type.redir->right = right_node;
 	}
-	return (redirection_node);
+	return (redir_node);
 }
 
 //disambiguates the tokentype, being a redirection (in, out, append or heredoc)

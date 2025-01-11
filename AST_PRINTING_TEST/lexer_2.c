@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   lexer_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/10 12:21:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:35:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+typedef struct s_tokenizer
+{
+	char	**tokens;
+	int		capacity;
+	int		grow;
+	int		count;
+} t_tokenizer;
 
 //lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself. 
 t_token	*tokenizer(char *input, t_gc_list *gc_list)
@@ -19,10 +28,9 @@ t_token	*tokenizer(char *input, t_gc_list *gc_list)
 	int		current_token;
 	t_token	*tokens;
 
-	max_token_num = count_token_max(input);
-	tokens = (t_token *)gc_malloc((max_token_num + 1) * sizeof(t_token), gc_list);
+	tokens = init_tokens();
 	if (!tokens)
-		return (handle_error(gc_list));
+		handle_error(gc_list);
 	current_token = 0;
 	while (*input != '\0')
 	{
@@ -33,9 +41,11 @@ t_token	*tokenizer(char *input, t_gc_list *gc_list)
 		else if (*input == '$') // Pending of somehow handling $?
 			tokens[current_token] = create_token(ENV_VAR, get_word(input, gc_list), gc_list);//extracts the name of the environmental variable, still pending of extending the value of the env_variable
 		else if (*input == '>' || *input == '<')
-			tokens[current_token] = create_token(REDIRECTION, get_word(input, gc_list), gc_list);
+			tokens[current_token] = create_token(REDIRECTION, get_redir(input, gc_list), gc_list);
 		else if (*input == '\"' || *input == '\'')
 			tokens[current_token] = create_token(QUOTE, get_quote(input, *input, gc_list), gc_list);
+		else if (*input == '\0')
+			break ;
 		else//if (ft_isalpha(*input))
 			tokens[current_token] = create_token(WORD, get_word(input, gc_list), gc_list);
 		//check that really all the cases which are not the previous are words (commands, arguments or textfiles)
@@ -46,22 +56,13 @@ t_token	*tokenizer(char *input, t_gc_list *gc_list)
 	return (tokens);
 }
 
-//counts an returns the maximum possible number of tokens in the string (the number of space-separated items)
-int	count_token_max(char *input)
+t_token	*init_token(void)
 {
-	char	**split;
-	int		token_num;
+	t_tokenizer	*tokenizer;
 
-	token_num = 0;
-	split = ft_split(input, ' ');
-	while (split[token_num] != NULL)
-	{
-		free(split[token_num]);
-		token_num++;
-	}
-	free(split);
-	return (token_num);
+	tokens = (t_token *)gc_malloc()
 }
+
 
 //creates a token and assigns the type and the value as set by the arguments. Returns the token.
 t_token	create_token(t_tokentype type, char *value, t_gc_list *gc_list)
@@ -112,6 +113,24 @@ char	*get_quote(char *input, char symbol, t_gc_list *gc_list)
 		return (NULL);
 	ft_strlcpy(quote, input, quote_len + 1);
 	return (quote);
+}
+
+//extracts a redirection operator from the input and returns a pointer to the allocated string
+char	*get_redir(char *input, t_gc_list *gc_list)
+{
+	char	*redir;
+	int		redir_len;
+	char	symbol;
+
+	redir_len = 1;
+	if (input[redir_len] == symbol)
+		redir_len++;
+	redir = gc_malloc((redir_len + 1) * sizeof(char), gc_list);
+	//handle gc_malloc fail
+	if (!redir)
+		return (NULL);
+	ft_strlcpy(redir, input, redir_len + 1);
+	return (redir);
 }
 
 //to use after tokens have been used. Frees each allocated value in the token structure array and frees the whole array
