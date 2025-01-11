@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 14:55:04 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2024/11/17 12:16:49 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:44:08 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ static char	**free_split(char **arr, size_t i)
 	return (NULL);
 }
 
-size_t	get_start(char const *s, size_t i_start, char c)
+static size_t	get_start(char const *s, size_t i_start, char c)
 {
 	while (s[i_start] == c && s[i_start] != '\0')
 		i_start++;
 	return (i_start);
 }
 
-size_t	get_len(char const *s, size_t i_start, char c)
+static size_t	get_len(char const *s, size_t i_start, char c)
 {
 	size_t	word_len;
 
