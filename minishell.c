@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/10 19:14:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/11 13:24:57 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,43 +72,39 @@ void	print_tokens(t_token *tokens)
 //check parser
 void	print_ast(t_astnode* ast_node, int level)
 {
-	(void) level;
-	printf("%s (%i)\n", ast_node->token->value, ast_node->token->type);
-	printf("%s (%i)\n", ast_node->node_type.redirect->left->token->value, ast_node->node_type.redirect->left->token->type);
-	printf("%s (%i)\n", ast_node->node_type.redirect->right->token->value, ast_node->node_type.redirect->right->token->type);
+	int	i;
+	int	j;
 
-	// int	i;
-	// int	j;
-
-	// i = 0;
-	// while(i++ < level)
-	// 	printf("	");
-	// printf("%s (%i)\n", ast_node->token->value, ast_node->token->type);
-	// if (ast_node->token->type == PIPE)
-	// {
-	// 	print_ast(ast_node->node_type.pipe->left, level + 1);
-	// 	print_ast(ast_node->node_type.pipe->right, level + 1);
-	// }
-	// else if (ast_node->token->type == REDIRECTION)
-	// {
-	// 	print_ast(ast_node->node_type.redirect->left, level + 1);
-	// 	print_ast(ast_node->node_type.redirect->right, level + 1);
-	// }
-	// else if (ast_node->token->type == COMMAND)
-	// {
-	// 	j = 1;
-	// 	while (j <= ast_node->node_type.cmd->arg_nb)
-	// 	{
-	// 		i = 0;
-	// 		while(i < level + 1)
-	// 		{
-	// 			printf("	");
-	// 			i++;
-	// 		}
-	// 		printf("arg %i: %s\n", j, ast_node->node_type.cmd->argv[j]);
-	// 		j++;
-	// 	}
-	// }
+	i = 0;
+	while(i++ < level)
+		printf("	");
+	if (ast_node->token->type == PIPE)
+	{
+		printf("%s (%i)\n", ast_node->token->value, ast_node->token->type);
+		print_ast(ast_node->node_type.pipe->left, level + 1);
+		print_ast(ast_node->node_type.pipe->right, level + 1);
+	}
+	else if (ast_node->token->type == REDIRECTION)
+	{
+		printf("%s (%i.%i): %s\n", ast_node->token->value, ast_node->token->type, ast_node->node_type.redirect->type, ast_node->node_type.redirect->left);
+		print_ast(ast_node->node_type.redirect->right, level + 1);
+	}
+	else if (ast_node->token->type == COMMAND)
+	{
+		printf("%s (%i.%i):\n", ast_node->token->value, ast_node->token->type, ast_node->node_type.cmd->type);
+		j = 1;
+		while (j <= ast_node->node_type.cmd->arg_nb)
+		{
+			i = 0;
+			while(i < level + 1)
+			{
+				printf("	");
+				i++;
+			}
+			printf("arg %i: %s\n", j, ast_node->node_type.cmd->argv[j]);
+			j++;
+		}
+	}
 }
 
 /** init and pass env to t_cmd */
