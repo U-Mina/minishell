@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 17:08:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:36:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,15 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <termios.h>
+
+//original_state and signal handling
+typedef struct s_minishell
+{
+	struct sigaction	sa[2];
+	struct sigaction	old_sa[2];
+	struct termios		old_term;
+}			t_minishell;
 
 typedef enum e_tokentype
 {
@@ -106,6 +115,7 @@ typedef struct s_astnode
 {
 	t_token		*token;
 	t_nodetype	node_type;
+	int			fd[2];
 }				t_astnode;
 
 //gc_list
@@ -116,7 +126,9 @@ typedef struct s_gc_list
 }	t_gc_list;
 
 // main and init
-void init_env(char **envp, t_cmd *cmd, int *exit_status);
+void		init_minishell(t_minishell	*minishell);
+void		term_minishell(t_minishell	*minishell, int rv);
+void		init_env(char **envp, t_cmd *cmd, int *exit_status);
 
 //organize ft
 void	exec_ast(t_astnode *ast_node, int *exit_status);
@@ -210,10 +222,12 @@ int exec_pipe(t_astnode *pipe_node, int *exit_status);
 
 //lexer
 t_token		*tokenizer(char *input);
-int			count_token_max(char *input);
-t_token		create_token(t_tokentype type, char *value);
+t_tokenizer	*init_tokenizer(void);
+int			grow_tokenizer(t_tokenizer *tokenizer);
+t_token		create_token(t_tokenizer *tokenizer, t_tokentype type, char *value);
 char		*get_word(char *input);
 char		*get_quote(char *input, char symbol);
+char		*get_redir(char *input);
 void		free_tokens(t_token *tokens);
 int			ft_isspace(char c);
 
@@ -228,6 +242,12 @@ t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *rig
 t_redirtype	get_redir_type(char *redir);
 void		free_double_pointer(char **str);
 //void		free_ast(t_astnode *root);
+
+//signal_handler
+void		init_signal_inter(struct sigaction *sa, struct sigaction *old_sa);
+void		signal_handler(int signum);
+void		restore_signal(struct sigaction *old_sa);
+void		init_signal_exec(void);
 
 //TO BE DELETED AT THE END
 //comprovations

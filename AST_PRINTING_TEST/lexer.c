@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 17:04:16 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:30:49 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ t_token	*tokenizer(char *input)
 		input = input + ft_strlen(tokens[current_token].value);
 		current_token++;
 	}
-	printf("check pre\n");
 	tokens[current_token] = create_token(tokenizer, TOKEN_EOF, NULL);
-	printf("check final\n");
+	printf("%i\n", current_token);
 	return (tokens);
 }
 
@@ -130,7 +129,12 @@ char	*get_quote(char *input, char symbol)
 	quote_len = 0;
 	quote_len++;
 	while (input[quote_len] != symbol && input[quote_len] != '\0')
+	{
+//CONTINUE HERE AFTER 11/01/2025
+		// if (symbol == "\"" && input[quote_len] == "$")
+		// 	handle_env_var(); with getenv
 		quote_len++;
+	}
 	quote_len++;
 	//handle unclosed quotes here, as errors?!?!?
 	// if (input[quote_len] != symbol)
@@ -141,6 +145,9 @@ char	*get_quote(char *input, char symbol)
 	ft_strlcpy(quote, input, quote_len + 1);
 	return (quote);
 }
+
+char	*handle_env_var();
+
 
 //extracts a redirection operator from the input and returns a pointer to the allocated string
 char	*get_redir(char *input)

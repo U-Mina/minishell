@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 16:51:04 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:35:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+
+# include <termios.h>
+
+//original_state
+typedef struct s_minishell
+{
+	struct sigaction	sa[2];
+	struct sigaction	old_sa[2];
+	struct termios		old_term;
+}			t_minishell;
 
 typedef enum e_tokentype
 {
@@ -116,6 +126,10 @@ typedef struct s_gc_list
 }	t_gc_list;
 
 
+//init and term
+void		init_minishell(t_minishell	*minishell);
+void		term_minishell(t_minishell	*minishell, int rv);
+
 //gc
 void		*gc_malloc(size_t size);
 t_gc_list	**get_gc_list(void);
@@ -147,6 +161,12 @@ t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *rig
 t_redirtype	get_redir_type(char *redir);
 void		free_double_pointer(char **str);
 //void		free_ast(t_astnode *root);
+
+//signal_handler
+void		init_signal_inter(struct sigaction *sa, struct sigaction *old_sa);
+void		signal_handler(int signum);
+void		restore_signal(struct sigaction *old_sa);
+//void		init_signal_exec(void);
 
 //check
 void		print_tokens(t_token *tokens);

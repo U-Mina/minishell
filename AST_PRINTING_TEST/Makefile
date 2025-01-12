@@ -9,7 +9,8 @@ SOURCES = 	minishell.c\
 			parse_pipe.c\
 			parse_redir.c\
 			garbage_collector.c\
-			gc_strdup.c
+			gc_strdup.c\
+			signal_handler.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADER = minishell.h
 
