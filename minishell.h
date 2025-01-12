@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 15:06:57 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/12 16:06:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,8 @@ char		*gc_strjoin(char const *s1, char const *s2);
 
 
 // redirect
-int exec_redirect(t_astnode *astnode, int *exit_status);
+int handle_redir_fd(t_astnode *astnode, int *exit_status);
+int check_redir(t_astnode *astnode, int *exit_status);
 int ft_out(t_astnode *astnode, int *exit_status);
 int ft_in(t_astnode *astnode, int *exit_status);
 int here_doc(char *de, int *exit_status);
