@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/10 12:41:07 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/11 13:09:40 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,18 @@ char **create_env(void)
 {
 	char **env;
 	char *_cwd;
-	char *usr;
+	char *hm_usr;
 	char *exec_path;
 	
 	env = safe_malloc(sizeof(char *) * 6);
-	_cwd = getcwd(NULL, 0);
-	if (_cwd == NULL)
-		return NULL;
-	usr = getenv("HOME");
-	if (!usr)
-		usr = "/";
-	env[0] = safe_join("HOME=", usr);
+	// _cwd = getcwd(NULL, 0);
+	// if (_cwd == NULL)
+	// 	return NULL;
+	_cwd = cur_path();
+	hm_usr = getenv("HOME");
+	if (!hm_usr)
+		hm_usr = "/";
+	env[0] = safe_join("HOME=", hm_usr);
 	env[1] = safe_join("PWD=", _cwd);
 	env[2] = ft_strdup("OLDPWD"); //empty at the begining
 	env[3] = safe_join("SHLVL=", "1");

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 13:08:12 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/11 10:52:40 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
  * update PWD n' OLDPWD
  * @case: no arg/ abs/relativ path / cd 'wrong input(more than one arg etc)'
  */
-
-static char *cur_path(int *exit_status) //check static or not?
+ //idea: make this nonstatic and use it in *create_env()
+char *cur_path(int *exit_status)
 {
 	int i;
 	char *tmp;

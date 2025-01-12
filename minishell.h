@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 17:08:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/12 15:06:57 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,13 @@ typedef struct s_tokenizer
 
 struct s_astnode;
 
+//heredoc_fd is specially for heredoc<<
+//heredoc need a tmp fd to hold the content, and then call dup2(heredoc_fd, STDIN_FILENO(0))
 typedef struct s_redir
 {
 	t_redirtype			type;
-	int					fd;
-	char				*left;
+	int					heredoc_fd;
+	char				*left;//the filename
 	struct s_astnode	*right;
 }				t_redir;
 
@@ -97,7 +99,7 @@ typedef struct s_pipe
 
 typedef union u_nodetype
 {
-	t_redir	*redirect;
+	t_redir	*redir;
 	t_cmd	*cmd;
 	t_pipe	*pipe;
 }			t_nodetype;
@@ -106,6 +108,7 @@ typedef struct s_astnode
 {
 	t_token		*token;
 	t_nodetype	node_type;
+	int fd[2];
 }				t_astnode;
 
 //gc_list
@@ -199,9 +202,9 @@ int here_doc(char *de, int *exit_status);
 
 // pipe
 int create_pip(int fd[2], int *exit_status);
-int left_node(t_astnode *pipe_node, int fd[2], int *exit_status);
-int right_node(t_astnode *pipe_node, int fd[2], int *exit_status);
-int exec_pipe(t_astnode *pipe_node, int *exit_status);
+int left_node(t_astnode *astnode, int fd[2], int *exit_status);
+int right_node(t_astnode *astnode, int fd[2], int *exit_status);
+int exec_pipe(t_astnode *astnode, int *exit_status);
 
 // temporary prototype
 // char *ft_strchr(char *s, char c);

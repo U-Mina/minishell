@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 15:24:11 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/12 15:07:07 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ int create_pip(int fd[2], int *exit_status)
 	return -1;
 }
 
-int left_node(t_astnode *pipe_node, int fd[2], int *exit_status)
+int left_node(t_astnode *astnode, int fd[2], int *exit_status)
 {
 	pid_t left;
-	
+
 	left = fork_err(left, fd, exit_status);
 	if (left == -1)
 		return -1;
@@ -60,7 +60,8 @@ int left_node(t_astnode *pipe_node, int fd[2], int *exit_status)
 		cloe(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		exec_ast(pipe_node, exit_status); 
+		exec_ast(astnode, exit_status);
+		//maybe while loop is better than recursion**
 //now: pass pipe_node, and specify in exec_pipe 
 //or specify here exec_ast(pipe_node->left, exit_status); 
 		exit(*exit_status);
@@ -68,7 +69,7 @@ int left_node(t_astnode *pipe_node, int fd[2], int *exit_status)
 	return (left);
 }
 
-int right_node(t_astnode *pipe_node, int fd[2], int *exit_status)
+int right_node(t_astnode *astnode, int fd[2], int *exit_status)
 {
 	pid_t right;
 
@@ -80,24 +81,26 @@ int right_node(t_astnode *pipe_node, int fd[2], int *exit_status)
 		cloe(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
-		exec_ast(pipe_node, exit_status);
+		exec_ast(astnode, exit_status);
 		exit(*exit_status);
 	}
 	return (right);
 }
 
-int exec_pipe(t_astnode *pipe_node, int *exit_status)
+int exec_pipe(t_astnode *astnode, int *exit_status)
 {
 	int fd[2];
 	pid_t left;
 	pid_t right;
+	t_pipe *p_node;
 	
+	p_node = astnode->node_type.pipe;
 	if (create_pip(fd, exit_status) < 0)
 		return -1;
-	left = left_node(pipe_node->left, fd, exit_status);
+	left = left_node(p_node->left, fd, exit_status);
 	if (left < 0)
 		return -1;
-	right = right_node(pipe_node->right, fd, exit_status);
+	right = right_node(p_node->right, fd, exit_status);
 	if (right < 0)
 		return -1;
 	close(fd[0]);
