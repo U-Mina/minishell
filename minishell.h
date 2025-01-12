@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 16:36:16 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:40:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,13 @@ typedef struct s_tokenizer
 
 struct s_astnode;
 
+//heredoc_fd is specially for heredoc<<
+//heredoc need a tmp fd to hold the content, and then call dup2(heredoc_fd, STDIN_FILENO(0))
 typedef struct s_redir
 {
 	t_redirtype			type;
-	int					fd;
-	char				*left;
+	int					heredoc_fd;
+	char				*left;//the filename
 	struct s_astnode	*right;
 }				t_redir;
 
@@ -106,7 +108,7 @@ typedef struct s_pipe
 
 typedef union u_nodetype
 {
-	t_redir	*redirect;
+	t_redir	*redir;
 	t_cmd	*cmd;
 	t_pipe	*pipe;
 }			t_nodetype;
@@ -204,16 +206,17 @@ char		*gc_strjoin(char const *s1, char const *s2);
 
 
 // redirect
-int exec_redirect(t_astnode *astnode, int *exit_status);
+int handle_redir_fd(t_astnode *astnode, int *exit_status);
+int check_redir(t_astnode *astnode, int *exit_status);
 int ft_out(t_astnode *astnode, int *exit_status);
 int ft_in(t_astnode *astnode, int *exit_status);
 int here_doc(char *de, int *exit_status);
 
 // pipe
 int create_pip(int fd[2], int *exit_status);
-int left_node(t_astnode *pipe_node, int fd[2], int *exit_status);
-int right_node(t_astnode *pipe_node, int fd[2], int *exit_status);
-int exec_pipe(t_astnode *pipe_node, int *exit_status);
+int left_node(t_astnode *astnode, int fd[2], int *exit_status);
+int right_node(t_astnode *astnode, int fd[2], int *exit_status);
+int exec_pipe(t_astnode *astnode, int *exit_status);
 
 // temporary prototype
 // char *ft_strchr(char *s, char c);
