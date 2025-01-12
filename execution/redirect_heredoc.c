@@ -6,11 +6,13 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/09 15:19:32 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/12 14:30:36 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//todo: in heredoc, $home etc case need to be handlesd!!!
 
 //changed to non-static
 // static int create_pip(int fd[2], int *exit_status)
@@ -27,42 +29,38 @@
 // 	return -1;
 // }
 
-static int read_here(char *de, char **content, int *exit_status)
+static char *read_here(char *de, int *exit_status)
 {
-	*content = readline("> ");
-	if (!*content) 
+	char *content;
+	char *retval;
+	
+	content = readline("> ");
+	if (!content || !ft_memcmp(content, de, ft_strlen(*content) + 1)) 
 	{
 		if (errno != 0)
-			return (print_err("readline", NULL, strerror(errno)), *exit_status = 1, -1);
+			return (print_err("readline", NULL, strerror(errno)), *exit_status = 1, NULL);
+		free(content);
+		content = NULL;
 		*exit_status = 0;
-		return 0;
+		return NULL;
 	}
-	if (!ft_memcmp(*content, de, ft_strlen(*content) + 1))
-	{
-		free(*content);
-		*content = NULL;
-		*exit_status = 0;
-		return 0;
-	}
-	return 1;
+	//here to add '$' sign handler
+	retval = safe_join(content, "\n");
+	free(content);
+	return (retval);
 }
 
-static int write_pip(int fd[2], char *content, int *exit_status)
+static int write_pip(int fd[2], char *retval, int *exit_status)
 {
-	char *line;
-	
-	line = safe_join(content, "\n");
-	free(content);
-	content = line;
-	if (write(fd[1], content, ft_strlen(content)) == -1)
+	if (write(fd[1], retval, ft_strlen(retval)) == -1)
 	{
-		free(content);
+		free(retval);
 		print_err("write", NULL, strerror(errno));
 		*exit_status = 1;
 		return -1;
 	}
 	*exit_status = 0;
-	free(content);
+	free(retval);
 	return 0;
 }
 
@@ -70,20 +68,21 @@ int here_doc(char *de, int *exit_status)
 {
 	int fd[2];
 	int status;
-	char *content;
-	
+	char *line;
 	
 	if (create_pip(fd, exit_status) < 0)
 		return -1;
-	status = read_here(de, &content, exit_status);
 	while (1)
 	{
-		if (status < 0)
-			return (close(fd[0]), close(fd[1]), -1);
-		else if (status == 0)
+		line = read_here(de, exit_status);
+		if (line == NULL)//finished reading(EOF) or meet delim
 			break ;
-		if (write_pip(fd, content, exit_status) < 0)
+		if (write_pip(fd, line, exit_status) < 0)
+		{
+			free(line);
 			return (close(fd[0]), close(fd[1]), -1);
+		}
 	}
-	return (close(fd[1]), fd[0]);
+	close(fd[1]);
+	return (fd[0]);
 }
