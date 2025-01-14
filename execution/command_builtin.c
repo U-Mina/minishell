@@ -6,14 +6,14 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 12:35:12 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/14 14:48:08 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int exec_builtins(t_astnode *cmd_node)
-{
+{//exit code from: astnode->data->exit_status
 	char **args;
 
 	args = cmd_node->node_type.cmd->argv;

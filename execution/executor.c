@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 12:39:10 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/14 14:46:45 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 //travels the whole AST starting from the AST_root and redirects to the corresponding function to execute each of the types of nodes
 void exec_from_top(t_astnode *astnode)
 {
+	//todo: astnode->node_type.cmd->exit_status need to change to astnode->data->exit_status
 	if (handle_redir_fd(astnode, astnode->node_type.cmd->exit_status) == -1)
 		return ;
 	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0] == NULL)
