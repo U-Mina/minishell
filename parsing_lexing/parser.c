@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 15:31:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:01:40 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_astnode	*parse(t_token *tokens)
 }
 
 //creates a new node for the AST (Abstract Syntax Tree)
+//
 t_astnode	*create_astnode(t_token *token)
 {
 	t_astnode	*new_node;
@@ -46,6 +47,9 @@ t_astnode	*create_astnode(t_token *token)
 	// if (!new_node)
 	// 	return(handle_error(gc_list));
 	new_node->token = token;
+	//fd[2] init
+	new_node->fd[0] = STDIN_FILENO;
+	new_node->fd[1] = STDOUT_FILENO;
 	if (new_node->token->type == COMMAND)
 	{
 		new_node->node_type.cmd = gc_malloc(sizeof(t_cmd));

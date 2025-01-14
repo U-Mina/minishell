@@ -3,42 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   command_binary.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/10 11:55:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:55:55 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //PENDING: create a path variable (char *) in the ast_node structure, and save it there?
-
-// typedef struct s_astnode
-// {
-// 	int					fd[2];
-// 	t_token				*token;
-// 	t_pipe				*pipe;
-// 	t_redir				*redirect;
-// 	t_cmd				*cmd;
-// }						t_astnode;
-
-// typedef struct s_redir
-// {
-// 	int					fd;
-// 	t_token				*token;
-// 	t_redir			*right;
-// 	t_redir			*left;
-
-// }						t_redir;
-
-// typedef struct s_cmd
-// {
-// 	int		args_nbr;
-// 	char	**argv;
-// 	char	*path;
-// 	char	**env; //or wherever it is
-// }			t_cmd;
 
 //Checks if an absolute or relative path is given in the input or searches the binary in the PATH environmental variable. 
 //Returns an allocated string that represents the path in which to find the binary.

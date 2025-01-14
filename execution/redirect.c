@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 11:34:59 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/14 13:22:07 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,55 +96,55 @@ int handle_redir_fd(t_astnode *astnode, int *exit_status)
 	return 0;
 }
 
-static void child_redir(t_astnode *astnode, int *exit_status)
-{
-	pid_t pid;
-	char **env;
-	char **arg;
+// static void child_redir(t_astnode *astnode, int *exit_status)
+// {
+// 	pid_t pid;
+// 	char **env;
+// 	char **arg;
 
-	env = astnode->node_type.cmd->env;
-	arg = astnode->node_type.cmd->argv;
-	if (!env)
-		return ;
-	pid = fork ();
-	if (pid == -1)
-	{
-		print_err("fork", NULL, strerror(errno));
-		*exit_status = 1;
-		return ;
-	}
-	if (pid == 0)
-	{
-		//signal()??
-		execv(astnode->node_type.cmd->path, arg);
-	}
-	waitpid(pid, exit_status, 0);
-	free(env);
-}
+// 	env = astnode->node_type.cmd->env;
+// 	arg = astnode->node_type.cmd->argv;
+// 	if (!env)
+// 		return ;
+// 	pid = fork ();
+// 	if (pid == -1)
+// 	{
+// 		print_err("fork", NULL, strerror(errno));
+// 		*exit_status = 1;
+// 		return ;
+// 	}
+// 	if (pid == 0)
+// 	{
+// 		//signal()??
+// 		execv(astnode->node_type.cmd->path, arg);
+// 	}
+// 	waitpid(pid, exit_status, 0);
+// 	free(env);
+// }
 
-void exec_redir(t_astnode *astnode, int *exit_status)
-{
-//some empty arg/*arg[0] check needed
-//also empty/null cmd??
-	if (handle_redir_fd(astnode, exit_status) == -1)
-		return ;
-	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0] == NULL)
-	//the cmd (argv[0]) is NULL
-	{
-		free(astnode->node_type.cmd->argv);
-		astnode->node_type.cmd->argv == NULL;
-	}
-	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0])
-	{
-		if (astnode->token->type == COMMAND_BUILTIN)
-			exec_builtins(astnode, exit_status);
-		else if (astnode->token->type == COMMAND_BINARY)
-		{
-			get_path(astnode, exit_status);
-			child_redir(astnode, exit_status);
-		}
-	}
-}
+// void exec_redir(t_astnode *astnode, int *exit_status)
+// {
+// //some empty arg/*arg[0] check needed
+// //also empty/null cmd??
+// 	if (handle_redir_fd(astnode, exit_status) == -1)
+// 		return ;
+// 	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0] == NULL)
+// 	//the cmd (argv[0]) is NULL
+// 	{
+// 		free(astnode->node_type.cmd->argv);
+// 		astnode->node_type.cmd->argv == NULL;
+// 	}
+// 	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0])
+// 	{
+// 		if (astnode->token->type == COMMAND_BUILTIN)
+// 			exec_builtins(astnode, exit_status);
+// 		else if (astnode->token->type == COMMAND_BINARY)
+// 		{
+// 			get_path(astnode, exit_status);
+// 			child_redir(astnode, exit_status);
+// 		}
+// 	}
+// }
 
 // int in_output(t_astnode *astnode, int *exit_status)
 // {

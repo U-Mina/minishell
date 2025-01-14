@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 12:34:00 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/14 14:38:52 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,15 @@ typedef struct s_cmd
 	char		**argv;
 	char		*path;
 	int			*exit_status;
-	//char		*cmd;//???
-	//char		**cmd_array;//???
 	char		**env; //or wherever it is
 }				t_cmd;
+
+typedef struct s_data
+{
+	int			*exit_status;
+	char		**env; //or wherever it is
+	//t_astnode	*astnode;
+}				t_data;
 
 //dont know what we need in this case
 typedef struct s_pipe
@@ -118,6 +123,7 @@ typedef struct s_astnode
 	t_token		*token;
 	t_nodetype	node_type;
 	int			fd[2];
+	t_data		*data;//for the retrive of env and exit_code var???
 }				t_astnode;
 
 //gc_list
@@ -126,6 +132,9 @@ typedef struct s_gc_list
 	void				*allocated;
 	struct s_gc_list	*next;
 }	t_gc_list;
+
+//will add into parse_cmd later
+void init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 
 // main and init
 void		init_minishell(t_minishell	*minishell);
