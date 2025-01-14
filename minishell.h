@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 14:38:52 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/14 15:59:36 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ typedef struct s_minishell
 	struct sigaction	old_sa[2];
 	struct termios		old_term;
 }			t_minishell;
+
+typedef struct s_env_var
+{
+	int		start;
+	int		end;
+	int		name_len;
+	int		val_len;
+}	t_env_var;
 
 typedef enum e_tokentype
 {
@@ -99,7 +107,7 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	int			*exit_status;
-	char		**env; //or wherever it is
+	char		**env;
 	//t_astnode	*astnode;
 }				t_data;
 
@@ -216,7 +224,7 @@ void		gc_clean(void);
 char		**gc_split(char const *s, char c);
 char		*gc_strdup(const char *s1);
 char		*gc_strjoin(char const *s1, char const *s2);
-
+char		*gc_substr(char const *s, unsigned int start, size_t len);
 
 // redirect
 int handle_redir_fd(t_astnode *astnode, int *exit_status);
@@ -238,15 +246,19 @@ int exec_pipe(t_astnode *astnode, int *exit_status);
 // int ft_strncmp(char *s1, char *s2);
 // char *ft_strdup(char *s);
 
-//lexer
+//lexer-tokenizer
 t_token		*tokenizer(char *input);
 t_tokenizer	*init_tokenizer(void);
 int			grow_tokenizer(t_tokenizer *tokenizer);
-t_token		create_token(t_tokenizer *tokenizer, t_tokentype type, char *value);
-char		*get_word(char *input);
-char		*get_quote(char *input, char symbol);
-char		*get_redir(char *input);
+void		create_token(t_tokenizer *tokenizer, char *input);
 void		free_tokens(t_token *tokens);
+void		make_eof_token(t_token *token);
+void		make_word_token(t_token *token, char *input);
+void		make_quote_token(t_token *token, char *input, char symbol);
+void		make_redir_token(t_token *token, char *input);
+void		make_pipe_token(t_token *token);
+void		make_env_var_token(t_token *token, char *input);
+char		*get_env_val(char *input, t_env_var *env_var, int i_start);
 int			ft_isspace(char c);
 
 //parser

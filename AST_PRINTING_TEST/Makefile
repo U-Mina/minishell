@@ -4,8 +4,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 SOURCES = 	minishell.c\
 			tokenizer.c\
-			make_token.c\
-			env_var_token.c\
+			token_make.c\
+			token_make_env.c\
 			parser.c\
 			parse_cmd.c\
 			parse_pipe.c\

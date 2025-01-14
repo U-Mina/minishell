@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_var_token.c                                    :+:      :+:    :+:   */
+/*   token_make_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:05:00 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 15:47:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:06:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ void	make_env_var_token(t_token *token, char *input)
 	token->i_len = env_var.end - env_var.start;
 }
 
-//expands the environmental variable to its value and returns a pointer to the allocated string representing the value
+//expands the environmental variable found at the i_start position of a string (input) to its value
+//fills a t_env_var structure with the info about the start, end and len of the variable in the input string
+//returns a pointer to the allocated string representing the value
 char	*get_env_val(char *input, t_env_var *env_var, int i_start)
 {
 	int		i;
