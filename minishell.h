@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 11:32:14 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/14 12:34:00 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,11 @@ void		init_env(char **envp, t_cmd *cmd, int *exit_status);
 void	get_path(t_astnode *ast_node, int *exit_status);
 
 //organize ft
-void	exec_ast(t_astnode *ast_node, int *exit_status);
-int exec_command(t_astnode *astnode, int *exit_status);
-int exec_builtins(t_astnode *cmd_node, int *exit_status);
+void exec_from_top(t_astnode *astnode);
+void child_proc(t_astnode *astnode, int *exit_status);
+// void	exec_ast(t_astnode *ast_node, int *exit_status);
+// int exec_command(t_astnode *astnode, int *exit_status);
+int exec_builtins(t_astnode *cmd_node);
 
 // builtin ft
 void ft_echo(char **args, int* exit_status);
