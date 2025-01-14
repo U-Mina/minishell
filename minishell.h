@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 16:40:23 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:38:52 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,15 @@ typedef struct s_cmd
 	char		**argv;
 	char		*path;
 	int			*exit_status;
-	//char		*cmd;//???
-	//char		**cmd_array;//???
 	char		**env; //or wherever it is
 }				t_cmd;
+
+typedef struct s_data
+{
+	int			*exit_status;
+	char		**env; //or wherever it is
+	//t_astnode	*astnode;
+}				t_data;
 
 //dont know what we need in this case
 typedef struct s_pipe
@@ -118,6 +123,7 @@ typedef struct s_astnode
 	t_token		*token;
 	t_nodetype	node_type;
 	int			fd[2];
+	t_data		*data;//for the retrive of env and exit_code var???
 }				t_astnode;
 
 //gc_list
@@ -127,16 +133,23 @@ typedef struct s_gc_list
 	struct s_gc_list	*next;
 }	t_gc_list;
 
+//will add into parse_cmd later
+void init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
+
 // main and init
 void		init_minishell(t_minishell	*minishell);
 void		term_minishell(t_minishell	*minishell, int rv);
 void		init_env(char **envp, t_cmd *cmd, int *exit_status);
 
+//cmd exec ft
+void	get_path(t_astnode *ast_node, int *exit_status);
+
 //organize ft
-void	exec_ast(t_astnode *ast_node, int *exit_status);
-char	**get_command_args(t_astnode *command_node);
-int exec_command(t_astnode *astnode, int *exit_status);
-int exec_builtins(t_astnode *cmd_node, int *exit_status);
+void exec_from_top(t_astnode *astnode);
+void child_proc(t_astnode *astnode, int *exit_status);
+// void	exec_ast(t_astnode *ast_node, int *exit_status);
+// int exec_command(t_astnode *astnode, int *exit_status);
+int exec_builtins(t_astnode *cmd_node);
 
 // builtin ft
 void ft_echo(char **args, int* exit_status);
@@ -211,6 +224,8 @@ int check_redir(t_astnode *astnode, int *exit_status);
 int ft_out(t_astnode *astnode, int *exit_status);
 int ft_in(t_astnode *astnode, int *exit_status);
 int here_doc(char *de, int *exit_status);
+int handle_redir_fd(t_astnode *astnode, int *exit_status);
+void exec_redir(t_astnode *astnode, int *exit_status);
 
 // pipe
 int create_pip(int fd[2], int *exit_status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/12 16:36:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:40:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 //include all allocated elements in gc_list (using gc_malloc and handle mallocated in other functions ex. ft_split)
 //todo: char **envp need to be passed as para in main to get the env from sys 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
 	char		*input;
 	t_token		*tokens;
+	t_data		data;
 	t_astnode	*ast_root;
 	t_minishell	minishell;
 
+	init_data(envp, &data);
+	ast_root->data = &data;
+	//assign env and exitcode in data to ast_root node
+	//or another wy??
 	init_minishell(&minishell);
 	while (1)
 	{
@@ -130,29 +135,5 @@ void	print_ast(t_astnode* ast_node, int level)
 			printf("arg %i: %s\n", j, ast_node->node_type.cmd->argv[j]);
 			j++;
 		}
-	}
-}
-
-/** init and pass env to t_cmd */
-void init_env(char **envp, t_cmd *cmd, int *exit_status)
-{
-	if (!envp[0])
-	{
-		cmd->env = create_env();
-		if (cmd->env == NULL)
-		{
-			*exit_status = 1;
-			exit(1);			
-		}
-	}
-	else
-	{
-		cmd->env = cpy_env(envp);
-		if (cmd->env == NULL)
-		{
-			*exit_status = 1;
-			exit(1);			
-		}
-		change_shlvl_oldpwd(&cmd->env, "SHLVL", "OLDPWD");
 	}
 }

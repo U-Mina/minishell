@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 15:27:26 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:16:49 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 {
 	t_astnode	*command_node;
 
-	command_node = NULL;
+	//command_node = NULL;//or init the top_astnode separately?
+	command_node->token == NULL;
+	
 	if (tokens[*current_token].type == WORD)
 	{
 		tokens[*current_token].type = COMMAND;
@@ -25,7 +27,7 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 		// if (!command_node)
 		// 	return (handle_error(gc_list));
 		command_node->node_type.cmd->type = get_command_type(tokens[*current_token].value);
-		command_node->node_type.cmd->exit_status = 0;
+		// command_node->node_type.cmd->exit_status = 0;
 		(*current_token)++;
 		command_node->node_type.cmd->argv = get_command_args(command_node, tokens, current_token);
 		if (tokens[*current_token].type == REDIRECTION)
@@ -92,5 +94,3 @@ t_cmdtype	get_command_type(char *command)
 	}
 	return (command_type);
 }
-
-
