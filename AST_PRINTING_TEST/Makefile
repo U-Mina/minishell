@@ -3,13 +3,16 @@ NAME = minishell
 CFLAGS = -Wall -Wextra -Werror
 
 SOURCES = 	minishell.c\
-			lexer.c\
+			tokenizer.c\
+			make_token.c\
+			env_var_token.c\
 			parser.c\
 			parse_cmd.c\
 			parse_pipe.c\
 			parse_redir.c\
 			garbage_collector.c\
 			gc_strdup.c\
+			gc_substr.c\
 			signal_handler.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADER = minishell.h

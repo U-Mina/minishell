@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 15:27:26 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 15:44:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 		if (tokens[*current_token].type == REDIRECTION)
 			return (parse_redirection(tokens, current_token, command_node));
 	}
+	// else
+	// {
+	// 	// //handle error correclty!!!! here or during execution!!?!?
+	// 	// printf("No valid command\n");//correctly named and finish AST_node construction
+	// 	// exit_status (127);
+	// }
 	return (command_node);
 }
 

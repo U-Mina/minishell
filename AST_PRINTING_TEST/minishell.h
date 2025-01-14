@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 16:35:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 14:46:49 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ typedef struct s_minishell
 	struct termios		old_term;
 }			t_minishell;
 
+typedef struct s_env_var
+{
+	int		start;
+	int		end;
+	int		name_len;
+	int		val_len;
+}	t_env_var;
+
 typedef enum e_tokentype
 {
 	WORD, //Will be disambiguated to Command_builtin, Command_binary, argument or filename in the parser
@@ -51,9 +59,7 @@ typedef enum e_redirtype
 {
 	INPUT,
 	OUTPUT,
-	FILENAME,
 	HEREDOC,
-	DELIMITER,
 	APPEND
 }						t_redirtype;
 
@@ -67,6 +73,7 @@ typedef struct s_token
 {
 	t_tokentype			type;
 	char				*value;
+	int					i_len;
 }				t_token;
 
 typedef struct s_tokenizer
@@ -138,16 +145,21 @@ void		add_gc_list(void *new_alloc);
 void		gc_free(void *free_ptr);
 void		gc_clean(void);
 char		*gc_strdup(const char *s1);
+char		*gc_substr(char const *s, unsigned int start, size_t len);
 
-//lexer
+//lexer-tokenizer
 t_token		*tokenizer(char *input);
 t_tokenizer	*init_tokenizer(void);
 int			grow_tokenizer(t_tokenizer *tokenizer);
-t_token		create_token(t_tokenizer *tokenizer, t_tokentype type, char *value);
-char		*get_word(char *input);
-char		*get_quote(char *input, char symbol);
-char		*get_redir(char *input);
+void		create_token(t_tokenizer *tokenizer, char *input);
 void		free_tokens(t_token *tokens);
+void		make_eof_token(t_token *token);
+void		make_word_token(t_token *token, char *input);
+void		make_quote_token(t_token *token, char *input, char symbol);
+void		make_redir_token(t_token *token, char *input);
+void		make_pipe_token(t_token *token);
+void		make_env_var_token(t_token *token, char *input);
+char		*get_env_val(char *input, t_env_var *env_var, int i_start);
 int			ft_isspace(char c);
 
 //parser
