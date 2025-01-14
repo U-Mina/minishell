@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/09 17:33:29 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:29:40 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ void	exec_ast(t_astnode *ast_node, int *exit_status)
 	else if (ast_node->token->type == COMMAND_BINARY)
 	{
 		get_path(ast_node, exit_status);
-		execve(ast_node->cmd->path, get_command_args(ast_node), ast_node->cmd->env);//adjust env to wherever it is
+		execve(ast_node->node_type.cmd->path, ast_node->node_type.cmd->argv);//adjust env to wherever it is
 	}
 }

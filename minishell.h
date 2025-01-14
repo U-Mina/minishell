@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 16:40:23 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:32:14 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,11 @@ void		init_minishell(t_minishell	*minishell);
 void		term_minishell(t_minishell	*minishell, int rv);
 void		init_env(char **envp, t_cmd *cmd, int *exit_status);
 
+//cmd exec ft
+void	get_path(t_astnode *ast_node, int *exit_status);
+
 //organize ft
 void	exec_ast(t_astnode *ast_node, int *exit_status);
-char	**get_command_args(t_astnode *command_node);
 int exec_command(t_astnode *astnode, int *exit_status);
 int exec_builtins(t_astnode *cmd_node, int *exit_status);
 
@@ -211,6 +213,8 @@ int check_redir(t_astnode *astnode, int *exit_status);
 int ft_out(t_astnode *astnode, int *exit_status);
 int ft_in(t_astnode *astnode, int *exit_status);
 int here_doc(char *de, int *exit_status);
+int handle_redir_fd(t_astnode *astnode, int *exit_status);
+void exec_redir(t_astnode *astnode, int *exit_status);
 
 // pipe
 int create_pip(int fd[2], int *exit_status);
