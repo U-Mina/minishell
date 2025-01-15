@@ -6,31 +6,31 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 14:48:08 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 13:00:13 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int exec_builtins(t_astnode *cmd_node)
-{//exit code from: astnode->data->exit_status
+int exec_builtins(t_data *data)
+{
 	char **args;
 
-	args = cmd_node->node_type.cmd->argv;
+	args = data->ast_root->node_type.cmd->argv;
 	if (ft_strncmp(ft_tolower(args[0]), "echo", 5) == 0)
-		return (ft_echo(args, cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_echo(args, data->ast_root->node_type.cmd->exit_status), 0);
 	else if (ft_strncmp(args[0], "cd", 3) == 0)
-		return (ft_cd(args, &cmd_node->node_type.cmd->env, cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_cd(args, &data->ast_root->node_type.cmd->env, data->ast_root->node_type.cmd->exit_status), 0);
 	else if (ft_strncmp(ft_tolower(args[0]), "pwd", 4) == 0)
-		return (ft_pwd(cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_pwd(data->ast_root->node_type.cmd->exit_status), 0);
 	else if (ft_strncmp(args[0], "export", 7) == 0)
-		return (ft_export(&cmd_node->node_type.cmd->env, args, cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_export(&data->ast_root->node_type.cmd->env, args, data->ast_root->node_type.cmd->exit_status), 0);
 	else if (ft_strncmp(args[0], "unset", 6) == 0)
-		return (ft_unset(args, &cmd_node->node_type.cmd->env, cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_unset(args, &data->ast_root->node_type.cmd->env, data->ast_root->node_type.cmd->exit_status), 0);
 	else if (ft_strncmp(ft_tolower(args[0]), "env", 4) == 0)
-		return (ft_env(cmd_node->node_type.cmd->env, cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_env(data->ast_root->node_type.cmd->env, data->ast_root->node_type.cmd->exit_status), 0);
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
-		return (ft_exit(args, cmd_node->node_type.cmd->exit_status), 0);
+		return (ft_exit(args, data->ast_root->node_type.cmd->exit_status), 0);
 	return -2;//set -2 for error check
 }
 //args = get_command_args(cmd_node) -->already done in parsing

@@ -6,16 +6,17 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/01 20:28:41 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:41:05 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * get the value of env var
  */
 
+//rename as *var_value()
 char *env_value(char **env, const char *key)
 {
 	int i;
@@ -47,7 +48,8 @@ void del_val(char **env, char *key)
 		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
 		{
 			free(env[i]);
-			env[i] = ft_strdup(key);//check: null check for env[i] or not?
+			env[i] = ft_strdup(key);
+			//check: null check for env[i] or not?
 			break ;
 		}
 		i++;

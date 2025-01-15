@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 13:33:04 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:40:38 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 //grammar check
 bool valid_exp(const char *arg)
@@ -41,7 +41,7 @@ bool valid_exp(const char *arg)
  * @fn: export with args & values
  */
 //wrap fn for case choose
-int exp_arg(char ***env, char *arg)
+int exp_with_arg(char ***env, char *arg)
 {
 	char *sign;
 	int res;

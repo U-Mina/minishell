@@ -6,16 +6,35 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 12:39:07 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:50:13 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
+
+int ft_unset(char **args, char ***env, int *exit_status)
+{
+	int i;
+
+	i = 1;
+	if (args_nbr(args) == 1 || !env || !(*env)[0])
+		return (1);
+	*exit_status = 0;
+	while (i < args_nbr(args))
+	{
+		if (unset_env(*env, args[i]))
+		{
+			*exit_status = 1;
+			return (-1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 /**
  * del the var/val added by 'export', update *cpenv
  */
-
 bool valid_unset(const char *arg)
 {
 	int i;
@@ -52,27 +71,6 @@ int unset_env(char ***env, char *arg)
 		{
 			del_var(env, arg);
 			break ;
-		}
-		i++;
-	}
-	return (0);
-}
-
-//or make the check-condition == -1 evertime error occurs?
-int ft_unset(char **args, char ***env, int *exit_status)
-{
-	int i;
-
-	i = 1;
-	if (args_nbr(args) == 1 || !env || !(*env)[0])
-		return (1);
-	*exit_status = 0;
-	while (i < args_nbr(args))
-	{
-		if (unset_env(*env, args[i]))
-		{
-			*exit_status = 1;
-			return (1);
 		}
 		i++;
 	}

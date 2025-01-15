@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 14:33:41 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 12:49:39 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 
 /** init and pass env to t_cmd */
-void init_data(char **envp, t_data *data)
+void init_data(char **envp, t_data *data, int *exit_status)
 {
-	data->exit_status = 0;
+	data->exit_status = exit_status;
 	//^^ being set in parse_cmd alreadt
 	if (!envp[0])
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 15:59:36 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 14:36:43 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
 # include <errno.h>
 # include <fcntl.h> // for read()
 # include <limits.h>
@@ -24,32 +21,39 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <termios.h>
+# include <unistd.h>
 
-//original_state and signal handling
+struct s_data;
+
+// original_state and signal handling
 typedef struct s_minishell
 {
 	struct sigaction	sa[2];
 	struct sigaction	old_sa[2];
 	struct termios		old_term;
-}			t_minishell;
+}						t_minishell;
 
 typedef struct s_env_var
 {
-	int		start;
-	int		end;
-	int		name_len;
-	int		val_len;
-}	t_env_var;
+	int					start;
+	int					end;
+	int					name_len;
+	int					val_len;
+}						t_env_var;
 
+// Will be disambiguated to Command_builtin, Command_binary,
+//argument or filename in the parser
 typedef enum e_tokentype
 {
-	WORD, //Will be disambiguated to Command_builtin, Command_binary, argument or filename in the parser
+	WORD, 
 	COMMAND,
 	ARGUMENT,
 	ENV_VAR,
 	QUOTE,
-	REDIRECTION, //Will be disambiguated to input, output, append or heredoc
+	REDIRECTION, // Will be disambiguated to input, output, append or heredoc
 	PIPE,
 	TOKEN_EOF
 }						t_tokentype;
@@ -76,125 +80,129 @@ typedef struct s_token
 
 typedef struct s_tokenizer
 {
-	t_token	*tokens;
-	int		capacity;
-	int		grow;
-	int		count;
-}			t_tokenizer;
+	t_token				*tokens;
+	int					capacity;
+	int					grow;
+	int					count;
+}						t_tokenizer;
 
 struct s_astnode;
 
-//heredoc_fd is specially for heredoc<<
-//heredoc need a tmp fd to hold the content, and then call dup2(heredoc_fd, STDIN_FILENO(0))
+// heredoc_fd is specially for heredoc<<
+// heredoc need a tmp fd to hold the content, 
+//and then call dup2(heredoc_fd, STDIN_FILENO(0))
 typedef struct s_redir
 {
 	t_redirtype			type;
 	int					heredoc_fd;
-	char				*left;//the filename
+	char *left; // the filename
 	struct s_astnode	*right;
-}				t_redir;
+}						t_redir;
 
 typedef struct s_cmd
 {
-	t_cmdtype	type;
-	int			arg_nb;
-	char		**argv;
-	char		*path;
-	int			*exit_status;
-	char		**env; //or wherever it is
-}				t_cmd;
+	t_cmdtype			type;
+	int					arg_nb;
+	char				**argv;
+	char				*path;
+	int					*exit_status;
+	char **env; // or wherever it is
+}						t_cmd;
 
-typedef struct s_data
-{
-	int			*exit_status;
-	char		**env;
-	//t_astnode	*astnode;
-}				t_data;
-
-//dont know what we need in this case
+// dont know what we need in this case
 typedef struct s_pipe
 {
 	struct s_astnode	*right;
 	struct s_astnode	*left;
 
-}				t_pipe;
+}						t_pipe;
 
 typedef union u_nodetype
 {
-	t_redir	*redir;
-	t_cmd	*cmd;
-	t_pipe	*pipe;
-}			t_nodetype;
+	t_redir				*redir;
+	t_cmd				*cmd;
+	t_pipe				*pipe;
+}						t_nodetype;
 
 typedef struct s_astnode
 {
-	t_token		*token;
-	t_nodetype	node_type;
-	int			fd[2];
-	t_data		*data;//for the retrive of env and exit_code var???
-}				t_astnode;
+	t_token				*token;
+	t_nodetype			node_type;
+	int					fd[2];
+}						t_astnode;
 
-//gc_list
+typedef struct s_data
+{
+	int					*exit_status;
+	char				**env;
+	t_astnode			*ast_root;
+}						t_data;
+
+// gc_list
 typedef struct s_gc_list
 {
 	void				*allocated;
 	struct s_gc_list	*next;
-}	t_gc_list;
+}						t_gc_list;
 
-//will add into parse_cmd later
-void init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
+// will add into parse_cmd later
+void					init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 
 // main and init
-void		init_minishell(t_minishell	*minishell);
-void		term_minishell(t_minishell	*minishell, int rv);
-void		init_env(char **envp, t_cmd *cmd, int *exit_status);
+void					init_minishell(t_minishell *minishell);
+void					term_minishell(t_minishell *minishell, int rv);
+void					init_data(char **envp, t_data *data, int *exit_status);
 
-//cmd exec ft
-void	get_path(t_astnode *ast_node, int *exit_status);
+// cmd exec ft
+void					get_path(t_data *data);
 
-//organize ft
-void exec_from_top(t_astnode *astnode);
-void child_proc(t_astnode *astnode, int *exit_status);
+// organize ft
+void					exec_at_top(t_data *data);
+void exec_with_pipe(t_data *data);
+void					exec_after_top(t_data *data);
+
+void					child_proc(t_data *data);
 // void	exec_ast(t_astnode *ast_node, int *exit_status);
 // int exec_command(t_astnode *astnode, int *exit_status);
-int exec_builtins(t_astnode *cmd_node);
+int						exec_builtins(t_data *data);
 
 // builtin ft
-void ft_echo(char **args, int* exit_status);
-int ft_cd(char **args, char ***env, int *exit_status);
-void					ft_pwd(int* exit_status);
+void					ft_echo(char **args, int *exit_status);
+int						ft_cd(char **args, char ***env, int *exit_status);
+void					ft_pwd(int *exit_status);
 int						ft_export(char ***env, char **args, int *exit_status);
-int ft_unset(char **args, char ***env, int *exit_status);
+int						ft_unset(char **args, char ***env, int *exit_status);
 int						ft_env(char **env, int *exit_status);
 void					ft_exit(char **args, int *exit_status);
 
 // cd helper
-static char	*cur_path(void);
+static char				*cur_path(int *exit_status);
 void					ch_pwd_oldpwd(char **env, int flag, int *exit_status);
 char					*cd_home(char **env, int *exit_status);
 
 // env helper ft
-char **create_env(void);
+char					**create_env(void);
 size_t					varlen(char **env);
 char					**cpy_env(char **env);
-void change_shlvl_oldpwd(char ***env, char *key1, char *key2);
+void					change_shlvl_oldpwd(char ***env, char *key1,
+							char *key2);
 int						find_env_var(char **env, const char *key);
-char					*create_var(const char *key, char *val);
+char					*create_newvar(const char *key, char *val);
 void					put_var(char ***env, char *n_var);
 int						update_env(char ***env, const char *key, char *val,
 							bool flg);
 void					mod_val(char **env, char *key, char *val);
 void					del_var(char ***env, char *key);
 void					del_val(char **env, char *key);
-char					*env_value(char **env, const char *key);
+char					*env_var_value(char **env, const char *key);
 
 // export hlper
 char					*smallest(char **tmp);
 size_t					nonull_varlen(char **env);
 char					**nonull_cpy(char **env, size_t len);
 char					**sort_env(char **env);
-int					exp_only(char **env, int *exit_status);
-int						exp_arg(char ***env, char *arg);
+int						exp_only(char **env, int *exit_status);
+int						exp_with_arg(char ***env, char *arg);
 int						withsigh(char ***env, char *arg, char *sign);
 int						nosign(char ***env, char *arg);
 bool					valid_exp(const char *arg);
@@ -209,79 +217,87 @@ void					*safe_malloc(size_t size);
 void					*ft_realloc(void *ptr, size_t old, size_t new);
 size_t					args_nbr(char **arr);
 
-// error, free, clean, exit 
-//void					ft_exit_status(int exit_code);
+// error, free, clean, exit
+// void					ft_exit_status(int exit_code);
 void					print_err(char *s1, char *s2, char *s3);
-void free_env(char **env);
+void					free_env(char **env);
 
-//gc
-void		*gc_malloc(size_t size);
-t_gc_list	**get_gc_list(void);
-void		gc_malloc_error(void);
-void		add_gc_list(void *new_alloc);
-void		gc_free(void *free_ptr);
-void		gc_clean(void);
-char		**gc_split(char const *s, char c);
-char		*gc_strdup(const char *s1);
-char		*gc_strjoin(char const *s1, char const *s2);
-char		*gc_substr(char const *s, unsigned int start, size_t len);
+// gc
+void					*gc_malloc(size_t size);
+t_gc_list				**get_gc_list(void);
+void					gc_malloc_error(void);
+void					add_gc_list(void *new_alloc);
+void					gc_free(void *free_ptr);
+void					gc_clean(void);
+char					**gc_split(char const *s, char c);
+char					*gc_strdup(const char *s1);
+char					*gc_strjoin(char const *s1, char const *s2);
+char					*gc_substr(char const *s, unsigned int start,
+							size_t len);
 
 // redirect
-int handle_redir_fd(t_astnode *astnode, int *exit_status);
-int check_redir(t_astnode *astnode, int *exit_status);
-int ft_out(t_astnode *astnode, int *exit_status);
-int ft_in(t_astnode *astnode, int *exit_status);
-int here_doc(char *de, int *exit_status);
-int handle_redir_fd(t_astnode *astnode, int *exit_status);
-void exec_redir(t_astnode *astnode, int *exit_status);
+int						handle_redir_fd(t_data *data);
+int						check_redir(t_data *data);
+int						ft_out(t_data *data);
+int						ft_in(t_data *data);
+int						here_doc(char *de, int *exit_status);
+//void					exec_redir(t_astnode *astnode, int *exit_status);
 
 // pipe
-int create_pip(int fd[2], int *exit_status);
-int left_node(t_astnode *astnode, int fd[2], int *exit_status);
-int right_node(t_astnode *astnode, int fd[2], int *exit_status);
-int exec_pipe(t_astnode *astnode, int *exit_status);
+int						create_pip(int fd[2], int *exit_status);
+int						left_node(t_astnode *astnode, int fd[2],
+							int *exit_status);
+int						right_node(t_astnode *astnode, int fd[2],
+							int *exit_status);
+void						exec_pipe(t_data *data);
 
 // temporary prototype
 // char *ft_strchr(char *s, char c);
 // int ft_strncmp(char *s1, char *s2);
 // char *ft_strdup(char *s);
 
-//lexer-tokenizer
-t_token		*tokenizer(char *input);
-t_tokenizer	*init_tokenizer(void);
-int			grow_tokenizer(t_tokenizer *tokenizer);
-void		create_token(t_tokenizer *tokenizer, char *input);
-void		free_tokens(t_token *tokens);
-void		make_eof_token(t_token *token);
-void		make_word_token(t_token *token, char *input);
-void		make_quote_token(t_token *token, char *input, char symbol);
-void		make_redir_token(t_token *token, char *input);
-void		make_pipe_token(t_token *token);
-void		make_env_var_token(t_token *token, char *input);
-char		*get_env_val(char *input, t_env_var *env_var, int i_start);
-int			ft_isspace(char c);
+// lexer-tokenizer
+t_token					*tokenizer(char *input);
+t_tokenizer				*init_tokenizer(void);
+int						grow_tokenizer(t_tokenizer *tokenizer);
+void					create_token(t_tokenizer *tokenizer, char *input);
+void					free_tokens(t_token *tokens);
+void					make_eof_token(t_token *token);
+void					make_word_token(t_token *token, char *input);
+void					make_quote_token(t_token *token, char *input,
+							char symbol);
+void					make_redir_token(t_token *token, char *input);
+void					make_pipe_token(t_token *token);
+void					make_env_var_token(t_token *token, char *input);
+char					*get_env_val(char *input, t_env_var *env_var,
+							int i_start);
+int						ft_isspace(char c);
 
-//parser
-t_astnode	*parse(t_token *tokens);
-t_astnode	*create_astnode(t_token *token);
-t_astnode	*parse_command(t_token *tokens, int *current_token);
-char		**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token);
-t_cmdtype	get_command_type(char *command);
-t_astnode	*parse_pipe(t_token *tokens, int *current_token, t_astnode *left_node);
-t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *right_node);
-t_redirtype	get_redir_type(char *redir);
-void		free_double_pointer(char **str);
-//void		free_ast(t_astnode *root);
+// parser
+t_astnode				*parse(t_token *tokens);
+t_astnode				*create_astnode(t_token *token);
+t_astnode				*parse_command(t_token *tokens, int *current_token);
+char					**get_command_args(t_astnode *command_node,
+							t_token *tokens, int *current_token);
+t_cmdtype				get_command_type(char *command);
+t_astnode				*parse_pipe(t_token *tokens, int *current_token,
+							t_astnode *left_node);
+t_astnode				*parse_redirection(t_token *tokens, int *current_token,
+							t_astnode *right_node);
+t_redirtype				get_redir_type(char *redir);
+void					free_double_pointer(char **str);
+// void		free_ast(t_astnode *root);
 
-//signal_handler
-void		init_signal_inter(struct sigaction *sa, struct sigaction *old_sa);
-void		signal_handler(int signum);
-void		restore_signal(struct sigaction *old_sa);
-void		init_signal_exec(void);
+// signal_handler
+void					init_signal_inter(struct sigaction *sa,
+							struct sigaction *old_sa);
+void					signal_handler(int signum);
+void					restore_signal(struct sigaction *old_sa);
+void					init_signal_exec(void);
 
-//TO BE DELETED AT THE END
-//comprovations
-void		print_tokens(t_token *tokens);
-void		print_ast(t_astnode* ast_node, int level);
+// TO BE DELETED AT THE END
+// comprovations
+void					print_tokens(t_token *tokens);
+void					print_ast(t_astnode *ast_node, int level);
 
 #endif

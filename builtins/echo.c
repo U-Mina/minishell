@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:23:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 12:45:26 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:40:48 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static bool check_flag(char *arg)
 {

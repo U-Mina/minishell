@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 20:58:40 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 12:11:20 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 13:40:30 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static int out_or_appen(t_redir *redir, int fd, int *exit_status)
 {
@@ -51,20 +51,20 @@ static int append(t_redir *redir, int fd, int *exit_status)
 	return (fd);
 }
 
-int ft_out(t_astnode *astnode, int *exit_status)
+int ft_out(t_data *data)
 {
 	int fd;
 	t_redir *redir;
 	
 	fd = 1;
-	redir = astnode->node_type.redir;
+	redir = data->ast_root->node_type.redir;
 	while (redir)
 	{
-		fd = out_or_appen(redir, fd, exit_status);
+		fd = out_or_appen(redir, fd, data->exit_status);
 		if (fd < 0)
 			return -1;
 		redir = redir->right->node_type.redir;
 	}
-	astnode->fd[1] = fd;//pass the fd to node
+	data->ast_root->fd[1] = fd;//pass the fd to node
 	return 0;
 }

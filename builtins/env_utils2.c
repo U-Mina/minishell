@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/01 17:56:25 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:41:01 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * modify ENV wrt:
@@ -51,7 +51,8 @@ char *create_newvar(const char *key, char *val)
 	char	*tmp;
 	char	*n_var;
 
-	if (val == NULL) //export cmd without '='/value
+	//export cmd without '='/value
+	if (val == NULL) 
 		n_var = ft_strdup(key);
 	else
 	{
@@ -62,6 +63,10 @@ char *create_newvar(const char *key, char *val)
 	return (n_var);
 }
 
+/**
+ * cpenv is an array, so everytime new var is added, 
+ * new mem_space is needed to put new_var into **cpenv array
+ */
 void put_var(char ***env, char *n_var)
 {
 	size_t i;
@@ -100,6 +105,7 @@ void	del_var(char ***env, char *key)
 					+ 1), sizeof(char *) * len);
 }
 
+//after any change in env (add/del of var/val), updtae **env array
 int update_env (char ***env, const char *key, char *val, bool flg)
 {
 	int pos;
