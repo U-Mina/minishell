@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 14:46:49 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:33:49 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_minishell
 
 typedef struct s_env_var
 {
+	char	*val;
 	int		start;
 	int		end;
 	int		name_len;
@@ -146,6 +147,7 @@ void		gc_free(void *free_ptr);
 void		gc_clean(void);
 char		*gc_strdup(const char *s1);
 char		*gc_substr(char const *s, unsigned int start, size_t len);
+char		*gc_strtrim(char const *s1, char const *set);
 
 //lexer-tokenizer
 t_token		*tokenizer(char *input);
@@ -168,6 +170,7 @@ t_astnode	*create_astnode(t_token *token);
 t_astnode	*parse_command(t_token *tokens, int *current_token);
 char		**get_command_args(t_astnode *command_node, t_token *tokens, int *current_token);
 t_cmdtype	get_command_type(char *command);
+void		del_cmd_quotes(t_token *tokens, int *current_token);
 t_astnode	*parse_pipe(t_token *tokens, int *current_token, t_astnode *left_node);
 t_astnode	*parse_redirection(t_token *tokens, int *current_token, t_astnode *right_node);
 t_redirtype	get_redir_type(char *redir);

@@ -6,14 +6,14 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 14:59:53 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:35:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself
-t_token	*tokenizer(char *input)
+t_token	*tokenizer(char *input, t_data *data)
 {
 	int			current_token;
 	t_token		*tokens;
@@ -34,7 +34,7 @@ t_token	*tokenizer(char *input)
 		current_token++;
 	}
 	create_token(tokenizer, input);
-	return (tokens);
+	return (tokens); // or data->tokens = tokens; and make the function void and in the main, the data->tokens will be passed to the parsing part
 }
 
 t_tokenizer	*init_tokenizer(void)
@@ -101,8 +101,7 @@ void	free_tokens(t_token *tokens)
 	i = 0;
 	while (tokens[i].type != TOKEN_EOF)
 	{
-		if (tokens[i].type != PIPE)
-			gc_free(tokens[i].value);
+		gc_free(tokens[i].value);
 		i++;
 	}
 	gc_free(tokens);

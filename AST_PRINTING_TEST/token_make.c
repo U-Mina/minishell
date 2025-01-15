@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_token.c                                       :+:      :+:    :+:   */
+/*   token_make.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 15:25:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:15:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,19 @@ void	make_quote_token(t_token *token, char *input, char symbol)
 	char		*quote;
 	int			quote_len;
 	t_env_var	env_var;
-	char		*env_var_val;
 
-	quote_len = 0;
-	quote_len++;
+	quote_len = 1;
 	env_var.val_len = 0;
 	token->type = QUOTE;
 	while (input[quote_len] != symbol && input[quote_len] != '\0')
 	{
 		if (symbol == '\"' && input[quote_len] == '$')
-			env_var_val = get_env_val(input, &env_var, quote_len);
-			// if (!env_var_val)
-			// 	gc_malloc_error();
-			// check if it was $?
+			get_env_val(input, &env_var, quote_len);
+			//check error??
 		quote_len++;
 	}
-	quote_len++;
+	if (input[quote_len] == symbol)
+		quote_len++;
 	//handle unclosed quotes here, as errors?!?!?
 	// if (input[quote_len] != symbol)
 	// 	handle_error();
@@ -68,12 +65,7 @@ void	make_quote_token(t_token *token, char *input, char symbol)
 	// if (!quote)
 	// 	gc_malloc_error();
 	if (env_var.val_len != 0)
-	{
-		ft_strlcpy(quote, input, env_var.start + 1);
-		ft_strlcpy(quote + env_var.start, env_var_val, env_var.val_len + 1);
-		ft_strlcpy(quote + env_var.start + env_var.val_len, input + env_var.end, quote_len - env_var.end + 1);
-		gc_free(env_var_val);
-	}
+		comb_quote_env(quote, input, &env_var);
 	else
 		ft_strlcpy(quote, input, quote_len + 1);
 	token->value = quote;

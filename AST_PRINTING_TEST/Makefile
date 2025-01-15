@@ -13,6 +13,7 @@ SOURCES = 	minishell.c\
 			garbage_collector.c\
 			gc_strdup.c\
 			gc_substr.c\
+			gc_strtrim.c\
 			signal_handler.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADER = minishell.h

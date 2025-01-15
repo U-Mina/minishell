@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 15:44:04 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:45:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 	t_astnode	*command_node;
 
 	command_node = NULL;
+	if (tokens[*current_token].type == QUOTE)
+		del_cmd_quotes(tokens, current_token);
 	if (tokens[*current_token].type == WORD)
 	{
 		tokens[*current_token].type = COMMAND;
@@ -34,7 +36,7 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 	// else
 	// {
 	// 	// //handle error correclty!!!! here or during execution!!?!?
-	// 	// printf("No valid command\n");//correctly named and finish AST_node construction
+	// 	// printf("%s: Command not found\n");//correctly named and finish AST_node construction
 	// 	// exit_status (127);
 	// }
 	return (command_node);
@@ -99,4 +101,16 @@ t_cmdtype	get_command_type(char *command)
 	return (command_type);
 }
 
+//removes the quotes of the the token value and converts it to a WORD token, so it can be processed as a command
+void	del_cmd_quotes(t_token *tokens, int *current_token)
+{
+	char	*trimmed;
+	char	quote[2];
 
+	quote[0] = tokens[*current_token].value[0];
+	quote[1] = '\0';
+	trimmed = gc_strtrim(tokens[*current_token].value, quote);
+	gc_free(tokens[*current_token].value);
+	tokens[*current_token].value = trimmed;
+	tokens[*current_token].type = WORD;
+}
