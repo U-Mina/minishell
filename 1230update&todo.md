@@ -39,6 +39,32 @@
 		redirec.c
 			+ redir_in.c + redir_out.c + redir_heredoc.c
 		pipe.c: -->restructured
+	5. token
+		- quotes and words token types checked for env var
+		- env var values expanded using function get_env_val (env_var structure created to store info for comb_lit_env -> see next point)
+		- env var val expanded inside the token value using new (comb_lit_env)
+		- expand &? using exit_status from new data structures (returned as a char *. Need for int?!?!?!)
+		TODO: 
+		exit_status as int or just as char*??
+	6. parse
+		- accept also quotes as command types (remove quotes in this case, with new function del_cmd_quotes)
+		- free ast functions implemented
+		TODO:
+		check redirections without commands (in exec or in parsing??)
+	7. gc
+		- some gc_libft_functions added
+		- free double pointer changed to gc_free double pointer
+	8. header:
+		- start spliting in different headers
+		TODO:
+		decide if we want to split just function declarations, also structures, libraries???
+		finish spliting
+	TODO: 
+	. init including init minishell function
+	· terminate including term minishell function
+	· implement signals in exec mode
+	· MAKEFILE and test
+
 
 
 check the function about env (find/add/mod/del)
@@ -46,11 +72,8 @@ debug unset & cd!!! (make sure the PWD function works!!!)
 think about *exit_code (necessary or not??? //not required by subject)
 
 check new implementation of AST -> AST printing check, and take into account redirect execution
-gc change all the variables used for a gc_handle with static pointer to list initial
-gc implement helper functions gc_split and gc_join, etc (out of the library)
 change execution according to new AST structures
 test execution
-signals
 
 TODO (update 11/01/2025)
 gc:

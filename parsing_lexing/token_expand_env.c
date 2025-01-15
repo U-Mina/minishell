@@ -6,56 +6,64 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:05:00 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 16:06:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:47:56 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//extracts a quote (delimited by quote_symbol (" or ')) from the input and fills the token variables according to this
-void	make_env_var_token(t_token *token, char *input)
-{
-	t_env_var	env_var;
-	char		*env_var_val;
-
-	env_var_val = get_env_val(input, &env_var, 0);
-	// if (!env_var_val)
-	// 	gc_malloc_error();
-	token->value = env_var_val;
-	token->i_len = env_var.end - env_var.start;
-}
-
 //expands the environmental variable found at the i_start position of a string (input) to its value
 //fills a t_env_var structure with the info about the start, end and len of the variable in the input string
 //returns a pointer to the allocated string representing the value
-char	*get_env_val(char *input, t_env_var *env_var, int i_start)
+void	get_env_val(char *input, t_env_var *env_var, int i_start, int *exit_status)
 {
 	int		i;
 	char	*env_val;
-	char	*alloc_val;
 
 	env_var->start = i_start;
 	i = i_start + 1;
-	// if (input[i] == '?')
-		//expand to the exit status of the most recently executed foreground pipeline (as int or as char* ???)
-	// else
-	// {
+	if (input[i] == '?')
+		env_var->val = gc_itoa(*exit_status); // (as int or as char* ???)
+	else
+	{
 		while (ft_isalnum(input[i]) || input[i] == '_')
 			i++;
 		env_var->end = i;
 		env_var->name_len = env_var->end - env_var->start - 1;
-	// }
+	}
 	env_val = getenv(gc_substr(input, i_start + 1, env_var->name_len));
 	if (!env_val)//proper error check!!!
 	{
 		printf("Non valid envvar\n");
-		exit (1);
+		exit (1);//manage correctly
 	}
 	env_var->val_len = ft_strlen(env_val);
-	alloc_val = gc_malloc(env_var->val_len + 1);
-	// if (!env_val)
+	env_var->val = gc_malloc(env_var->val_len + 1);
+	// if (!env_var->val)
 	// 	gc_malloc_error();
 	ft_strlcpy(alloc_val, env_val, env_var->val_len + 1);
 	env_var->val_len = ft_strlen(env_val);
-	return (alloc_val);
+}
+
+//combines literal text from quotes with expanded env var value
+void	comb_lit_env(char *lit, char *input, t_env_var *env_var)
+{
+	ft_strlcpy(lit, input, env_var->start + 1);
+	ft_strlcpy(lit + env_var->start, env_var->val, env_var->val_len + 1);
+	ft_strlcpy(lit + env_var->start + env_var->val_len, input + env_var->end, ft_strlen(lit) - env_var->end + 1);
+	gc_free(env_var->val);
+}
+
+//include this function in libft?? or in utils??
+//check if the passed character is an space
+int	ft_isspace(char c)
+{
+	unsigned char	u_c;
+
+	u_c = (unsigned char)c;
+	if (u_c != c)
+		return (0);
+	if ((u_c >= 9 && u_c <= 13) || u_c == 32)
+		return (1);
+	return (0);
 }

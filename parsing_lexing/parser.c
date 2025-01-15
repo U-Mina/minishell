@@ -3,20 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 14:01:40 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 17:28:43 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //PENDING:
-//Include env variables!! Where??
 //Handle parenthesis priorizing redirections
-//check if all types of redirections are properly managed
-//check if gc_list is properly implemented
+//check if void commands are correctly implemented
 //check error handling
 
 //parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
@@ -26,7 +24,8 @@ t_astnode	*parse(t_token *tokens)
 	int			current_token;
 
 	current_token = 0;
-	root = parse_command(tokens, &current_token);
+	if (tokens[current_token].type == WORD || tokens[current_token].type == QUOTE)
+		root = parse_command(tokens, &current_token);
 	while (tokens[current_token].type != TOKEN_EOF)
 	{
 		if (tokens[current_token].type == PIPE)
@@ -70,23 +69,3 @@ t_astnode	*create_astnode(t_token *token)
 	}
 	return (new_node);
 }
-
-//in libft or in helpers
-//frees all the string elements in a double pointer, and the double pointer itself
-void	free_double_pointer(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
-
-// void	free_ast(t_astnode *root);
-// {
-	
-// }

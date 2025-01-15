@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 17:30:32 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:17:31 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "token.h"
+# include "parse.h"
 # include <errno.h>
 # include <fcntl.h> // for read()
 # include <limits.h>
@@ -36,106 +38,13 @@ typedef struct s_minishell
 	struct termios		old_term;
 }						t_minishell;
 
-typedef struct s_env_var
-{
-	char				*val;
-	int					start;
-	int					end;
-	int					name_len;
-	int					val_len;
-}						t_env_var;
-
-// Will be disambiguated to Command_builtin, Command_binary,
-//argument or filename in the parser
-typedef enum e_tokentype
-{
-	WORD, 
-	COMMAND,
-	ARGUMENT,
-	QUOTE,
-	REDIRECTION, // Will be disambiguated to input, output, append or heredoc
-	PIPE,
-	TOKEN_EOF
-}						t_tokentype;
-
-typedef enum e_redirtype
-{
-	INPUT,
-	OUTPUT,
-	HEREDOC,
-	APPEND
-}						t_redirtype;
-
-typedef enum e_cmdtype
-{
-	COMMAND_BUILTIN,
-	COMMAND_BINARY
-}						t_cmdtype;
-
-typedef struct s_token
-{
-	t_tokentype			type;
-	char				*value;
-}						t_token;
-
-typedef struct s_tokenizer
-{
-	t_token				*tokens;
-	int					capacity;
-	int					grow;
-	int					count;
-}						t_tokenizer;
-
 struct s_astnode;
-
-// heredoc_fd is specially for heredoc<<
-// heredoc need a tmp fd to hold the content, 
-//and then call dup2(heredoc_fd, STDIN_FILENO(0))
-typedef struct s_redir
-{
-	t_redirtype			type;
-	int					heredoc_fd;
-	char *left; // the filename
-	struct s_astnode	*right;
-}						t_redir;
-
-typedef struct s_cmd
-{
-	t_cmdtype			type;
-	int					arg_nb;
-	char				**argv;
-	char				*path;
-	int					*exit_status;
-	char **env; // or wherever it is
-}						t_cmd;
-
-// dont know what we need in this case
-typedef struct s_pipe
-{
-	struct s_astnode	*right;
-	struct s_astnode	*left;
-
-}						t_pipe;
-
-typedef union u_nodetype
-{
-	t_redir				*redir;
-	t_cmd				*cmd;
-	t_pipe				*pipe;
-}						t_nodetype;
-
-typedef struct s_astnode
-{
-	t_token				*token;
-	t_nodetype			node_type;
-	int					fd[2];
-}						t_astnode;
 
 typedef struct s_data
 {
 	int					*exit_status;
 	char				**env;
-	t_astnode			*ast_root;
+	struct s_astnode	*ast_root;
 }						t_data;
 
 // gc_list
@@ -255,36 +164,6 @@ void						exec_pipe(t_data *data);
 // char *ft_strchr(char *s, char c);
 // int ft_strncmp(char *s1, char *s2);
 // char *ft_strdup(char *s);
-
-// lexer-tokenizer
-t_token					*tokenizer(char *input, int *exit_status);
-t_tokenizer				*init_tokenizer(void);
-int						grow_tokenizer(t_tokenizer *tokenizer);
-void					create_token(t_tokenizer *tokenizer, char *input, int *exit_status);
-void					free_tokens(t_token *tokens);
-void					make_eof_token(t_token *token);
-void					make_word_token(t_token *token, char *input, int *exit_status);
-void					make_quote_token(t_token *token, char *input, char symbol, int *exit_status);
-void					make_redir_token(t_token *token, char *input);
-void					make_pipe_token(t_token *token);
-char					*get_env_val(char *input, t_env_var *env_var, int i_start, int *exit_status);
-void					comb_lit_env(char *lit, char *input, t_env_var *env_var);
-int						ft_isspace(char c);
-
-// parser
-t_astnode				*parse(t_token *tokens);
-t_astnode				*create_astnode(t_token *token);
-t_astnode				*parse_command(t_token *tokens, int *current_token);
-char					**get_command_args(t_astnode *command_node,
-							t_token *tokens, int *current_token);
-t_cmdtype				get_command_type(char *command);
-t_astnode				*parse_pipe(t_token *tokens, int *current_token,
-							t_astnode *left_node);
-t_astnode				*parse_redirection(t_token *tokens, int *current_token,
-							t_astnode *right_node);
-t_redirtype				get_redir_type(char *redir);
-void					free_double_pointer(char **str);
-void					free_ast(t_astnode *ast_node);
 
 // signal_handler
 void					init_signal_inter(struct sigaction *sa,

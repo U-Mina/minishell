@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 12:27:38 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 18:08:55 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 //include all allocated elements in gc_list (using gc_malloc and handle mallocated in other functions ex. ft_split)
 //todo: char **envp need to be passed as para in main to get the env from sys 
@@ -38,7 +36,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			add_history(input);
 			//Split into categorized tokens
-			tokens = tokenizer(input);
+			tokens = tokenizer(input, &exit_status);
 			//free(input);//free at the end for all cases
 			//check lexer
 			print_tokens(tokens);
@@ -50,7 +48,7 @@ int	main(int ac, char **av, char **envp)
 			//exec_ast(ast_root);
 			//free allocated memory
 			free_tokens(tokens);
-			//pending of free ast
+			free_ast(data.ast_root);
 			// //execute the command saved into ast
 			// //depending on the type of command: 
 			// //1. search in files and exec the program

@@ -2,6 +2,10 @@ NAME = minishell
 
 CFLAGS = -Wall -Wextra -Werror
 
+SRC_DIR = src
+OBJ_DIR = obj
+INC_DIR = include
+
 SOURCES = 	minishell.c\
 			lexer.c\
 			parser.c\

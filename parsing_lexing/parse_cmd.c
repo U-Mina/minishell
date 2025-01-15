@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 16:14:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:10:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 {
 	t_astnode	*command_node;
 
-	//command_node = NULL;//or init the top_astnode separately?
-	command_node->token == NULL;
-	
+	command_node = NULL;
+	if (tokens[*current_token].type == QUOTE)
+		del_cmd_quotes(tokens, current_token);
 	if (tokens[*current_token].type == WORD)
 	{
 		tokens[*current_token].type = COMMAND;
@@ -27,18 +27,12 @@ t_astnode	*parse_command(t_token *tokens, int *current_token)
 		// if (!command_node)
 		// 	return (handle_error(gc_list));
 		command_node->node_type.cmd->type = get_command_type(tokens[*current_token].value);
-		// command_node->node_type.cmd->exit_status = 0;
+		command_node->node_type.cmd->exit_status = 0;
 		(*current_token)++;
 		command_node->node_type.cmd->argv = get_command_args(command_node, tokens, current_token);
 		if (tokens[*current_token].type == REDIRECTION)
 			return (parse_redirection(tokens, current_token, command_node));
 	}
-	// else
-	// {
-	// 	// //handle error correclty!!!! here or during execution!!?!?
-	// 	// printf("No valid command\n");//correctly named and finish AST_node construction
-	// 	// exit_status (127);
-	// }
 	return (command_node);
 }
 
@@ -99,4 +93,18 @@ t_cmdtype	get_command_type(char *command)
 			i++;
 	}
 	return (command_type);
+}
+
+//removes the quotes of the the token value and converts it to a WORD token, so it can be processed as a command
+void	del_cmd_quotes(t_token *tokens, int *current_token)
+{
+	char	*trimmed;
+	char	quote[2];
+
+	quote[0] = tokens[*current_token].value[0];
+	quote[1] = '\0';
+	trimmed = gc_strtrim(tokens[*current_token].value, quote);
+	gc_free(tokens[*current_token].value);
+	tokens[*current_token].value = trimmed;
+	tokens[*current_token].type = WORD;
 }
