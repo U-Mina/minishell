@@ -6,16 +6,16 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 13:32:19 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:41:16 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
- * @fn: export cmd without argument, only print
+ * @fn: export cmd without argument, only print alphabetically
  */
- 
+//find the smallest alphabetic num/letter
 char *smallest(char **tmp)
 {
 	int i;
@@ -29,7 +29,8 @@ char *smallest(char **tmp)
 	pos = 0;
 	while (tmp[i])
 	{
-		if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap)) > 0) //cheap > tmp[i], swap
+		if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap)) > 0) 
+		//cheap > tmp[i], swap
 		{
 			cheap = tmp[i];
 			pos = i;
@@ -41,7 +42,8 @@ char *smallest(char **tmp)
 	return (cheap);
 }
 
-size_t nonull_varlen(char **env) //count non-null var in env
+//count non-null var in env (with a value and '=' sign)
+size_t nonull_varlen(char **env)
 {
 	int i;
 	int j;
@@ -107,11 +109,7 @@ int exp_only(char **env, int *exit_status)
 	i = 0;
 	sorted = sort_env(env);
 	if (!sort_env)
-	{
-		perror("malloc");
-		*exit_status = 1;
-		return (1);
-	}
+		return (perror("malloc"), *exit_status = 1, -1);
 	while (sorted[i])
 	{
 		sign = ft_strchr(sorted[i], '=');

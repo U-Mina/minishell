@@ -6,11 +6,13 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 14:40:41 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 12:27:38 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
 
 //include all allocated elements in gc_list (using gc_malloc and handle mallocated in other functions ex. ft_split)
 //todo: char **envp need to be passed as para in main to get the env from sys 
@@ -19,13 +21,12 @@ int	main(int ac, char **av, char **envp)
 	char		*input;
 	t_token		*tokens;
 	t_data		data;
-	t_astnode	*ast_root;
+	int			exit_status;
+	//t_astnode	*ast_root;
 	t_minishell	minishell;
 
-	init_data(envp, &data);
-	ast_root->data = &data;
-	//assign env and exitcode in data to ast_root node
-	//or another wy??
+	exit_status = 0;
+	init_data(envp, &data, &exit_status);
 	init_minishell(&minishell);
 	while (1)
 	{
@@ -42,9 +43,9 @@ int	main(int ac, char **av, char **envp)
 			//check lexer
 			print_tokens(tokens);
 			//Create AST with hierarchized tokens
-			ast_root = parse(tokens);
+			data.ast_root = parse(tokens);
 			//check parser
-			print_ast(ast_root, 0);
+			print_ast(data.ast_root, 0);
 			//execution
 			//exec_ast(ast_root);
 			//free allocated memory

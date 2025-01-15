@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 15:07:07 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 13:52:51 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,27 +87,27 @@ int right_node(t_astnode *astnode, int fd[2], int *exit_status)
 	return (right);
 }
 
-int exec_pipe(t_astnode *astnode, int *exit_status)
+void exec_pipe(t_data *data)
 {
 	int fd[2];
 	pid_t left;
 	pid_t right;
 	t_pipe *p_node;
 	
-	p_node = astnode->node_type.pipe;
-	if (create_pip(fd, exit_status) < 0)
-		return -1;
-	left = left_node(p_node->left, fd, exit_status);
+	p_node = data->ast_root->node_type.pipe;
+	if (create_pip(fd, data->exit_status) < 0)
+		return ;
+	left = left_node(p_node->left, fd, data->exit_status);
 	if (left < 0)
-		return -1;
-	right = right_node(p_node->right, fd, exit_status);
+		return ;
+	right = right_node(p_node->right, fd, data->exit_status);
 	if (right < 0)
-		return -1;
+		return ;
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(left, exit_status, 0);
-	waitpid(right, exit_status, 0);
-	return 0; //exit(*exit_status);
+	waitpid(left, data->exit_status, 0);
+	waitpid(right, data->exit_status, 0);
+	exit (data->exit_status);
 }
 
 //too many lines, split into several fts

@@ -6,21 +6,16 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 13:19:55 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:41:10 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * end cur shell, clean everything
  * no arg, nbr args, word args
  */
-
-/**
- * @args: array of passed args, based on pasrsing
-*/
-
 //check: handle 'args[1]:' print, or ft_exit_status?
 void ft_exit(char **args, int *exit_status)
 {

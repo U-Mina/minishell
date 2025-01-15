@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 13:09:40 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:40:54 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * @count_env_len: mem allocate
@@ -29,10 +29,10 @@ char **create_env(void)
 	char *exec_path;
 	
 	env = safe_malloc(sizeof(char *) * 6);
-	// _cwd = getcwd(NULL, 0);
-	// if (_cwd == NULL)
-	// 	return NULL;
-	_cwd = cur_path();
+	_cwd = getcwd(NULL, 0);
+	if (_cwd == NULL)
+		return NULL;
+	// _cwd = cur_path();
 	hm_usr = getenv("HOME");
 	if (!hm_usr)
 		hm_usr = "/";
@@ -47,7 +47,7 @@ char **create_env(void)
 	return (env);
 }
 
-// count len of original env, and allocate space accordingly for cpy_env
+// count num of var in env, and allocate mem accordingly for cpy_env
 size_t varlen(char **env)
 {
 	int i;
@@ -58,7 +58,8 @@ size_t varlen(char **env)
 	return (i);
 }
 
-// hard cp envp vars to **cpenv
+//todo: to change all safe-malloc() to gc_malloc()??
+// hard cp **envp vars to **cpenv
 char **cpy_env(char **env)
 {
 	size_t i;
@@ -83,7 +84,7 @@ char **cpy_env(char **env)
 	return (cpenv);
 }
 
-//key1->"SHLVL", key2->"OLDPWD"
+//key1->"SHLVL", key2->"OLDPWD": shlvl + 1, modify OLDPWD
 void change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 {
 	char *val;
@@ -97,7 +98,8 @@ void change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	//check: the error check necesary or not? just created above
 	free((*env)[pos1]);
 	val = ft_itoa(ft_atoi(env_value(*env, key1) + 1));
-	(*env)[pos1] = safe_join("SHLVL=", val);//check: is a ;var_create funtion necessary?
+	(*env)[pos1] = safe_join("SHLVL=", val);
+	//check: is var_create() funtion necessary?
 	free(val);
 	pos2 = find_env_var(*env, key2);
 	free((*env)[pos2]);

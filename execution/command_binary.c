@@ -6,43 +6,44 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 12:55:55 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 13:30:02 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 //PENDING: create a path variable (char *) in the ast_node structure, and save it there?
 
 //Checks if an absolute or relative path is given in the input or searches the binary in the PATH environmental variable. 
 //Returns an allocated string that represents the path in which to find the binary.
 //In the case that the relative or absolute path is given, the token value is changed to that of the cmd name alone.
-void	get_path(t_astnode *ast_node, int *exit_status)
+void	get_path(t_data *data)
 {
 	char	*cmd;
 
-	cmd = ast_node->token->value;
+	cmd = data->ast_root->token->value;
 	if (cmd[0] == '/' || (cmd[0] == '.' && (cmd[1] == '/' || (cmd[1] == '.' && cmd[2] == '/'))))
 	{
 		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
 		{
-			ast_node->cmd->path = ft_strdup(cmd); //need to allocate somehow, change strdup or gc_malloc somehow???
-			ast_node->token->value = get_binary_name(cmd, '/');
-			ast_node->node_type.cmd->argv[0] = ast_node->token->value;
+			data->ast_root->node_type.cmd->path = ft_strdup(cmd); //need to allocate somehow, change strdup or gc_malloc somehow???
+			// ast_node->token->value = get_binary_name(cmd, '/');
+			data->ast_root->token->value = get_binary_name(cmd, '/');
+			data->ast_root->node_type.cmd->argv[0] = data->ast_root->token->value;
 		}
 		else
 		{
 			print_err("minishell: ", cmd, ": No such file or directory");
-			*exit_status = 1;
+			data->exit_status = 1;
 		}
 	}
 	else
 	{
-		ast_node->cmd->path = search_in_path(cmd);
-		if (!ast_node->cmd->path)
+		data->ast_root->node_type.cmd->path = search_in_path(cmd);
+		if (!data->ast_root->node_type.cmd->path)
 		{
 			print_err("minishell: ", cmd, ": command not found");
-			*exit_status = 1;
+			data->exit_status = 1;
 		}
 	}
 }

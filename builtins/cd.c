@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/11 10:52:40 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:46:06 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * update PWD n' OLDPWD
@@ -26,7 +26,7 @@ char *cur_path(int *exit_status)
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
 	{
-		perror("gercwd");
+		perror("gercwd: ");
 		*exit_status = 1;
 		return (NULL);
 	}

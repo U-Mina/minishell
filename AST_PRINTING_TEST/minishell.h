@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 14:46:49 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:57:49 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,13 @@ typedef struct s_astnode
 	t_token		*token;
 	t_nodetype	node_type;
 }				t_astnode;
+
+typedef struct s_data
+{
+	int					*exit_status;
+	char				**env;
+	t_astnode			*ast_root;
+}						t_data;
 
 //gc_list
 typedef struct s_gc_list

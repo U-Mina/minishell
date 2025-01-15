@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:32:49 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 12:40:42 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:45:22 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * todo: use 'args' or 'int* exit_code' as para?
@@ -23,7 +23,8 @@ void ft_pwd(int *exit_status)
 	cur_dir = getcwd(NULL, 0);
 	if (cur_dir == NULL)
 	{
-		perror("getcwd: "); // autmatically format as "getcwd: xxx (error details)"
+		perror("getcwd: "); 
+	// autmatically format as "getcwd: xxx (error details)"
 		*exit_status = 1;
 	}
 	printf("%s\n", cur_dir);

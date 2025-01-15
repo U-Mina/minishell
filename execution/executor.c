@@ -6,66 +6,85 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/14 14:46:45 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 14:44:28 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
+
+void exec_at_top(t_data *data)
+{
+	if (data == NULL || data->ast_root == NULL)
+		return ;
+	if (data->ast_root->token->type == PIPE)//single cmd, no pipe
+		exec_with_pipe(data);
+	else
+		exec_after_top(data);
+	//clean and free function needed to clean 'data'??
+}
+
+void exec_with_pipe(t_data *data)
+{
+	exec_pipe(data);
+	if (data->ast_root && data->ast_root->token->type != PIPE)
+		exec_after_top(data);
+}
 
 //*BIG CHANGE* to check and get fd from redir before run any command!!!
 //think properly how to proceed. This is just a copy of the logic of AST printing, that should be adapted to executing
 //travels the whole AST starting from the AST_root and redirects to the corresponding function to execute each of the types of nodes
-void exec_from_top(t_astnode *astnode)
+void exec_after_top(t_data *data)
 {
-	//todo: astnode->node_type.cmd->exit_status need to change to astnode->data->exit_status
-	if (handle_redir_fd(astnode, astnode->node_type.cmd->exit_status) == -1)
+	// if (data->ast_root->token->type == PIPE)
+	// 	exec_pipe(data);
+	if (handle_redir_fd(data) == -1)
 		return ;
-	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0] == NULL)
+	if (data->ast_root->node_type.cmd->argv && data->ast_root->node_type.cmd->argv[0] == NULL)
 	{
-		free(astnode->node_type.cmd->argv);
-		astnode->node_type.cmd->argv == NULL;
+		free(data->ast_root->node_type.cmd->argv);
+		data->ast_root->node_type.cmd->argv == NULL;
 	}
-	if (astnode->node_type.cmd->argv && astnode->node_type.cmd->argv[0])
+	if (data->ast_root->node_type.cmd->argv && data->ast_root->node_type.cmd->argv[0])
 	{
-		if (astnode->token->type == COMMAND_BUILTIN)
-			exec_builtins(astnode);
-		else if (astnode->token->type == COMMAND_BINARY)
+		if (data->ast_root->token->type == COMMAND_BUILTIN)
+			exec_builtins(data);
+		else if (data->ast_root->token->type == COMMAND_BINARY)
 		{
-			get_path(astnode, astnode->node_type.cmd->exit_status);
-			child_proc(astnode, astnode->node_type.cmd->exit_status);
+			get_path(data);
+			child_proc(data);
 		}
 		else
 		{
-			print_err("minishell", astnode->token->value, "command not found");
-			astnode->node_type.cmd->exit_status = 1;
+			print_err("minishell", data->ast_root->token->value, "command not found");
+			data->ast_root->node_type.cmd->exit_status = 1;
 			return ;
 		}
 	}
 }
 
-void child_proc(t_astnode *astnode, int *exit_status)
+void child_proc(t_data *data)
 {
 	pid_t pid;
 	char **env;
 	char **arg;
 
-	env = astnode->node_type.cmd->env;
-	arg = astnode->node_type.cmd->argv;
+	env = data->ast_root->node_type.cmd->env;
+	arg = data->ast_root->node_type.cmd->argv;
 	if (!env)
 		return ;
 	pid = fork ();
 	if (pid == -1)
 	{
 		print_err("fork", NULL, strerror(errno));
-		*exit_status = 1;
+		data->exit_status = 1;
 		return ;
 	}
 	if (pid == 0)
 	{
 		//signal()??
-		execv(astnode->node_type.cmd->path, arg);
+		execv(data->ast_root->node_type.cmd->path, arg);
 	}
-	waitpid(pid, exit_status, 0);
+	waitpid(pid, data->exit_status, 0);
 	free(env);
 }
 

@@ -1,3 +1,46 @@
+*Changes and some undecided part (0115)*
+- Undecided part
+	1. env_u.c: 
+			change all safe_malloc()/safe_join() to gc_malloc()/join()?
+			costomize ft_strdup() to avoid error/null check everytime?
+	2. memory management Q
+			ft_realloc() in re-allocate mem after change **env (change/add/del var and val) --> need adjust to gc_malloc()? or write gc_realloc()??
+	3. minishell.c (decision made after dession)
+			*some changes in main()*!!!
+				+ line 24 - 29: exit_status = 0, and pass &exit_status to init_data()
+				+ line 25: comment out astnode *ast_root due to 5 var imit
+				+ line 44: access and print ast_root via: data.ast_root = parse(tokens); print_ast(data.ast_root, 0);
+
+- Changes
+	1. builtins:
+			all builtins adjustment and error-fixed
+	2. execution:
+			necessary functions adjusted to t_data struct
+	3. logic in executing(in executor.c):!!!
+			exec_at_top() into two sub_function:
+						:if (type == PIPE) 
+							--> exec_with_pipe() 
+								 ---> then check if (!= PIPE)-> exec_after_top()
+						:if (!= PIPE)
+							--> exec_after_top()
+	4. init_data():
+			retrive *exit_status from main(), create **env
+			Q: may put into minishell.c later (???)
+			
+    - Functions adapted to new struct (t_data)
+		command_builtins.c :
+				all builtins
+		command_binary.c : 
+				get_path(t_data *data);
+		executor.c:
+				exec_at_top() + exec_after_top() + exec_wuth_pipe();
+				child_proc() --> restructured
+				handle_redir_fd()
+		redirec.c
+			+ redir_in.c + redir_out.c + redir_heredoc.c
+		pipe.c: -->restructured
+
+
 check the function about env (find/add/mod/del)
 debug unset & cd!!! (make sure the PWD function works!!!)
 think about *exit_code (necessary or not??? //not required by subject)

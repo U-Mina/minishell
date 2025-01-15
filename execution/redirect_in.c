@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 21:55:00 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/12 11:59:52 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 13:40:00 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static int in_or_heredoc(t_redir *redir, int fd, int *exit_status)
 {
@@ -51,20 +51,20 @@ static int heredoc(t_redir *redir, int fd, int *exit_status)
 	return -1;
 }
 
-int ft_in(t_astnode *astnode, int *exit_status)
+int ft_in(t_data *data)
 {
 	int fd;
 	t_redir *redir;
 
 	fd = 0;
-	redir = astnode->node_type.redir;
+	redir = data->ast_root->node_type.redir;
 	while (redir)
 	{
-		fd = in_or_heredoc(redir, fd, exit_status);
+		fd = in_or_heredoc(redir, fd, data->exit_status);
 		if (fd < 0)
 			return -1;
 		redir = redir->right->node_type.redir;
 	}
-	astnode->fd[0] = fd;
+	data->ast_root->fd[0] = fd;
 	return 0;
 }

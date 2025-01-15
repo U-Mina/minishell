@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/14 13:22:07 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 13:38:54 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,22 @@ typedef struct s_astnode
 
 //heredoc_fd is specially for heredoc<<
 //heredoc need a tmp fd to hold the content, and then call dup2(heredoc_fd, STDIN_FILENO(0))
-int check_redir(t_astnode *astnode, int *exit_status)
+int check_redir(t_data *data)
 {
 	t_redir *redir;
 
-	redir = astnode->node_type.redir;
+	redir = data->ast_root->node_type.redir;
 	while (redir)
 	{
 		if (redir->type == HEREDOC)
 		{
-			redir->heredoc_fd = here_doc(redir->left, exit_status); //redir->token->value shouc be change to redir->right->token->value ???
+			redir->heredoc_fd = here_doc(redir->left, data->exit_status); //redir->token->value shouc be change to redir->right->token->value ???
 			if (redir->heredoc_fd < 0)
 				return -1;
 		}
 		redir = redir->right->node_type.redir;
 	}
-	if (ft_in(astnode, exit_status) < 0 || ft_out(astnode, exit_status) < 0)
+	if (ft_in(data) < 0 || ft_out(data) < 0)
 		return -1;
 	return 0;
 }
@@ -70,29 +70,29 @@ static int dup_err(int fd1, int std_fd, int *exit_status)
 	return 0;
 }
 
-int handle_redir_fd(t_astnode *astnode, int *exit_status)
+int handle_redir_fd(t_data *data)
 {
 	t_redir *redir;
 
-	redir = astnode->node_type.redir;
+	redir = data->ast_root->node_type.redir;
 	if (redir)
 	{
-		if (check_redir(astnode, exit_status) == -1)
+		if (check_redir(data) == -1)
 			return -1;
-		if (astnode->fd[0] != 0) //being overwrite by new_fd, change with stdin
+		if (data->ast_root->fd[0] != 0) //being overwrite by new_fd, change with stdin
 		{
-			if (dup_err(astnode->fd[0], 0, exit_status) == -1)//stdin_fileno
+			if (dup_err(data->ast_root->fd[0], 0, data->exit_status) == -1)//stdin_fileno
 				return -1;
-			close(astnode->fd[0]);
+			close(data->ast_root->fd[0]);
 		}
-		if (astnode->fd[1] != 1)
+		if (data->ast_root->fd[1] != 1)
 		{
-			if (dup_err(astnode->fd[1], 1, exit_status) == -1)//stdout_fileno
+			if (dup_err(data->ast_root->fd[1], 1, data->exit_status) == -1)//stdout_fileno
 				return -1;
-			close(astnode->fd[1]);	
+			close(data->ast_root->fd[1]);	
 		}
 	}
-	*exit_status = 0;
+	data->exit_status = 0;
 	return 0;
 }
 

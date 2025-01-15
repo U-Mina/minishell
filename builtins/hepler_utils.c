@@ -6,11 +6,11 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2024/12/27 04:24:26 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:45:02 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /**
  * hlper ft from libft
@@ -54,7 +54,8 @@ char	*safe_join(char *s1, char *s2)
 	ft_memcpy((char *)(res + l1), s2, l2);
 	res[l1 + l2] = '\0';
 	if (res == NULL)
-		return (NULL); //check: no need NULL check when call safejoin anymore?
+		return (NULL); 
+	//check: no need NULL check when call safejoin anymore??
 	return (res);
 }
 
@@ -89,5 +90,3 @@ void	*ft_realloc(void *ptr, size_t old, size_t new)
 	free(ptr);
 	return (new_ptr);
 }
-
-void	*gab_collect(void);

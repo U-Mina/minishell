@@ -6,13 +6,13 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:16:51 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/08 13:18:16 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/15 11:39:29 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-//todo: -1/0 for builins to indicate fail/success
+//idea: **env == **cpenv, with shlvl+1 and OLDPWD changed
 int ft_env(char  **env, int *exit_status)
 {
 	int i;
@@ -22,7 +22,8 @@ int ft_env(char  **env, int *exit_status)
 		return (-1);
 	while (env[i])
 	{
-		if (ft_strchr(env[i], '=') != NULL) //ret ptr to '=' otherwise 'NULL'
+		if (ft_strchr(env[i], '=') != NULL) 
+		//ret ptr to '=' otherwise 'NULL'
 			printf("%s\n", env[i]);
 		i++;
 	}
