@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 18:08:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:13:30 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,6 @@ int	main(int ac, char **av, char **envp)
 	}
 	term_minishell(&minishell, 0);
 	//return (0); //already done in term_minshell!?
-}
-
-//disables the printing of Ctrl as ^ (ECHOCTL flag) and sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
-void	init_minishell(t_minishell	*minishell)
-{
-	struct termios term;
-
-	init_signal_inter(minishell->sa, minishell->old_sa);
-	tcgetattr(STDIN_FILENO, &(minishell->old_term));
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	term.c_cc[VEOF] = 4;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
-//restores the termios attributes and the signal actions to the original, and cleans all allocated items (gc_list) before exiting shell
-void	term_minishell(t_minishell	*minishell, int rv)
-{
-	restore_signal(minishell->old_sa);
-	tcsetattr(STDIN_FILENO, TCSANOW, &(minishell->old_term));
-	gc_clean();
-	exit (rv); //return value???
 }
 
 //COMPROVATIONS

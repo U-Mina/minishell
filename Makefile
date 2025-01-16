@@ -1,35 +1,80 @@
 NAME = minishell
 
 CFLAGS = -Wall -Wextra -Werror
+READLINE_FLAGS = -lreadline
 
 SRC_DIR = src
 OBJ_DIR = obj
-INC_DIR = include
 
-SOURCES = 	minishell.c\
-			lexer.c\
+VPATH =	$(SRC_DIR):$(SRC_DIR)/init:$(SRC_DIR)/token:$(SRC_DIR)/parse_ast:$(SRC_DIR)/exec:\
+		$(SRC_DIR)/builtins:$(SRC_DIR)/signals:$(SRC_DIR)/gc:$(SRC_DIR)/term
+
+SOURCES =	minishell.c\
+			init.c\
+			tokenizer.c\
+			token_make.c\
+			token_expand_env.c\
 			parser.c\
+			parse_cmd.c\
+			parse_pipe.c\
+			parse_redir.c\
+			free_ast.c\
+			executor.c\
+			pipe.c\
+			redirect_heredoc.c\
+			redirect_in.c\
+			redirect_out.c\
+			redirect.c\
+			command_binary.c\
+			command_builtin.c\
+			cd.c\
+			echo.c\
+			env_utils.c\
+			env_utils2.c\
+			env_utils3.c\
+			env.c\
+			exit.c\
+			export_utils.c\
+			export_utils2.c\
+			export.c\
+			hepler_utils.c\
+			minishell.h\
+			pwd.c\
+			unset.c\
+			gc_itoa.c\
+			gc_list_utils.c\
+			gc_malloc_free.c\
+			gc_split.c\
+			gc_strdup.c\
+			gc_strjoin.c\
+			gc_strtrim.c\
+			gc_substr.c\
+			signal_handler.c\
+			error_exit.c\
 			handle_error.c\
-			garbage_collector.c
-OBJECTS = $(SOURCES:.c=.o)
-HEADER = minishell.h
+			term.c
+
+OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)/%.o)
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 all : $(NAME)
 
-$(NAME) : $(OBJECTS) $(LIBFT)
-	cc $(CFLAGS) $(OBJECTS) -L$(LIBFT_DIR) -lft -lreadline -o $(NAME)
+$(NAME) : $(OBJ_DIR) $(OBJECTS) $(LIBFT)
+	cc $(CFLAGS) $(OBJECTS) -L$(LIBFT_DIR) -lft $(READLINE_FLAGS) -o $(NAME)
 
-%.o: %.c $(HEADER)
-	cc $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: %.c
+	cc $(CFLAGS) -I$(LIBFT_DIR) -Iinc -c $< -o $@
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
 
 clean : 
-	rm -f $(OBJECTS)
+	rm -rf $(OBJ_DIR)
 	make clean -C $(LIBFT_DIR)
 
 fclean : clean

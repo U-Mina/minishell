@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 16:48:28 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:12:22 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	make_eof_token(t_token *token)
 }
 
 //extracts a word (delimited by spaces) from the input and fills the token variables according to this
-void	make_word_token(t_token *token, char *input, int *exit_status)
+void	make_word_token(t_token *token, char *input, int *ex_st)
 {
 	char		*word;
 	int			word_len;
@@ -33,7 +33,7 @@ void	make_word_token(t_token *token, char *input, int *exit_status)
 	while (!ft_isspace(input[word_len]) && input[word_len] != '\0')
 	{
 		if (input[word_len] == '$')
-			get_env_val(input, &env_var, word_len, exit_status);
+			get_env_val(input, &env_var, word_len, ex_st);
 			//check error??
 		word_len++;
 	}
@@ -50,7 +50,7 @@ void	make_word_token(t_token *token, char *input, int *exit_status)
 
 //have in mind the handling of unclosed quotes????
 //extracts a quote (delimited by quote_symbol (" or ')) from the input and fills the token variables according to this
-void	make_quote_token(t_token *token, char *input, char symbol, int *exit_status)
+void	make_quote_token(t_token *token, char *input, int *ex_st)
 {
 	char		*quote;
 	int			quote_len;
@@ -59,17 +59,17 @@ void	make_quote_token(t_token *token, char *input, char symbol, int *exit_status
 	quote_len = 1;
 	env_var.val_len = 0;
 	token->type = QUOTE;
-	while (input[quote_len] != symbol && input[quote_len] != '\0')
+	while (input[quote_len] != input[0] && input[quote_len] != '\0')
 	{
-		if (symbol == '\"' && input[quote_len] == '$')
-			get_env_val(input, &env_var, quote_len, exit_status);
+		if (input[0] == '\"' && input[quote_len] == '$')
+			get_env_val(input, &env_var, quote_len, ex_st);
 			//check error??
 		quote_len++;
 	}
-	if (input[quote_len] == symbol)
+	if (input[quote_len] == input[0])
 		quote_len++;
 	//handle unclosed quotes here, as errors?!?!?
-	// if (input[quote_len] != symbol)
+	// if (input[quote_len] != input[0])
 	// 	handle_error();
 	quote = gc_malloc((quote_len + env_var.val_len + 1) * sizeof(char));
 	// if (!quote)
@@ -102,8 +102,8 @@ void	make_redir_token(t_token *token, char *input)
 	token->i_len = redir_len;
 }
 
-//be aware of input checking. What do we expect / not exect after pipe??
-//extracts a pip operator from the input and fills the token variables according to this
+//be aware of input checking. What do we expect / not expect after pipe??
+//extracts a pipe operator from the input and fills the token variables according to this
 void	make_pipe_token(t_token *token)
 {
 	char	*pipe;

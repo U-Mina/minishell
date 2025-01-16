@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:25:37 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 17:25:37 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:01:29 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	free_double_pointer(char **str)
 	gc_free(str);
 }
 
-void	free_ast(t_astnode* ast_node)
+void	free_ast(t_astnode *ast_node)
 {
 	if (ast_node->token->type == PIPE)
 	{

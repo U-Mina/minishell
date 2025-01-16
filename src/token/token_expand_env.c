@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_make_env.c                                   :+:      :+:    :+:   */
+/*   token_expand_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:05:00 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 16:47:56 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:10:34 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //expands the environmental variable found at the i_start position of a string (input) to its value
 //fills a t_env_var structure with the info about the start, end and len of the variable in the input string
 //returns a pointer to the allocated string representing the value
-void	get_env_val(char *input, t_env_var *env_var, int i_start, int *exit_status)
+void	env_val(char *input, t_env_var *env_var, int i_start, int *ex_st)
 {
 	int		i;
 	char	*env_val;
@@ -23,7 +23,7 @@ void	get_env_val(char *input, t_env_var *env_var, int i_start, int *exit_status)
 	env_var->start = i_start;
 	i = i_start + 1;
 	if (input[i] == '?')
-		env_var->val = gc_itoa(*exit_status); // (as int or as char* ???)
+		env_var->val = gc_itoa(*ex_st); // (as int or as char* ???)
 	else
 	{
 		while (ft_isalnum(input[i]) || input[i] == '_')

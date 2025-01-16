@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 17:28:43 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:02:06 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ t_astnode	*parse(t_token *tokens)
 
 	current_token = 0;
 	if (tokens[current_token].type == WORD || tokens[current_token].type == QUOTE)
-		root = parse_command(tokens, &current_token);
+		root = parse_cmd(tokens, &current_token);
 	while (tokens[current_token].type != TOKEN_EOF)
 	{
 		if (tokens[current_token].type == PIPE)
 			root = parse_pipe(tokens, &current_token, root);
 		if (tokens[current_token].type == REDIRECTION)
-			root = parse_redirection(tokens, &current_token, root);
+			root = parse_redir(tokens, &current_token, root);
 	}
 	return (root);
 }

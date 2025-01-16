@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 17:28:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:11:52 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	grow_tokenizer(t_tokenizer *tokenizer)
 }
 
 //creates and allocates a token in the tokenizer and assigns the type, the value, and the len according to the input.
-void	create_token(t_tokenizer *tokenizer, char *input, int *exit_status)
+void	create_token(t_tokenizer *tokenizer, char *input, int *ex_st)
 {
 	t_token	*token;
 
@@ -88,10 +88,10 @@ void	create_token(t_tokenizer *tokenizer, char *input, int *exit_status)
 	else if (*input == '>' || *input == '<')
 		make_redir_token(token, input);
 //	else if (*input == '$')
-//		make_env_var_token(token, input, exit_status);
+//		make_env_var_token(token, input, ex_st);
 	else if (*input == '\"' || *input == '\'')
-		make_quote_token(token, input, *input, exit_status);
+		make_quote_token(token, input, ex_st);
 	else
-		make_word_token(token, input, exit_status);;
+		make_word_token(token, input, ex_st);
 	tokenizer->count++;
 }
