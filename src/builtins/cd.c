@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 11:46:06 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:08:30 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 /**
  * update PWD n' OLDPWD
  * @case: no arg/ abs/relativ path / cd 'wrong input(more than one arg etc)'
  */
  //idea: make this nonstatic and use it in *create_env()
-char *cur_path(int *exit_status)
+char	*cur_path(int *exit_status)
 {
-	int i;
-	char *tmp;
-	char *res;
-	
+	int		i;
+	char	*tmp;
+	char	*res;
+
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
 	{
@@ -40,12 +40,12 @@ char *cur_path(int *exit_status)
 	return (res);
 }
 
-void ch_pwd_oldpwd(char **env, int flag, int *exit_status)
+void	ch_pwd_oldpwd(char **env, int flag, int *exit_status)
 {
-	int i;
-	char *tmp;
-	char *n_path;
-	
+	int		i;
+	char	*tmp;
+	char	*n_path;
+
 	i = 0;
 	tmp = cur_path(exit_status);
 	while (i < varlen(env))
@@ -66,10 +66,10 @@ void ch_pwd_oldpwd(char **env, int flag, int *exit_status)
 	free(tmp);
 }
 
-char *cd_home(char **env, int *exit_status)
+char	*cd_home(char **env, int *exit_status)
 {
-	char *hm;
-	
+	char	*hm;
+
 	hm = env_value(env, "HOME");
 	if (hm == NULL)
 	{
@@ -94,7 +94,7 @@ int ft_cd(char **args, char ***env, int *exit_status)
 		cd_home(*env, exit_status);
 		return (0);	
 	}
-	tmp = args[0];//the argument from input
+	tmp = args[0]; //the argument from input
 	if (chdir(tmp) == -1)
 	{
 		print_err("minishell: cd", tmp, "No such file or directory");

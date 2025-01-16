@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 12:12:22 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:55:26 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	make_word_token(t_token *token, char *input, int *ex_st)
 	while (!ft_isspace(input[word_len]) && input[word_len] != '\0')
 	{
 		if (input[word_len] == '$')
-			get_env_val(input, &env_var, word_len, ex_st);
+			env_val(input, &env_var, word_len, ex_st);
 			//check error??
 		word_len++;
 	}
@@ -43,7 +43,7 @@ void	make_word_token(t_token *token, char *input, int *ex_st)
 	if (env_var.val_len != 0)
 		comb_lit_env(word, input, &env_var);
 	else
-		ft_strlcpy(word, input, quote_len + 1);
+		ft_strlcpy(word, input, word_len + 1);
 	token->value = word;
 	token->i_len = word_len;
 }
@@ -62,7 +62,7 @@ void	make_quote_token(t_token *token, char *input, int *ex_st)
 	while (input[quote_len] != input[0] && input[quote_len] != '\0')
 	{
 		if (input[0] == '\"' && input[quote_len] == '$')
-			get_env_val(input, &env_var, quote_len, ex_st);
+			env_val(input, &env_var, quote_len, ex_st);
 			//check error??
 		quote_len++;
 	}

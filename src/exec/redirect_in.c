@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_in.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 21:55:00 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 13:40:00 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:08:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 static int in_or_heredoc(t_redir *redir, int fd, int *exit_status)
 {

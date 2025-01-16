@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 13:38:54 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:08:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 //todo: ft handle_redir(), this ft will do error_check for fd(<0?) and clean and direct to exec_redir
 /**

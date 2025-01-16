@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 12:45:15 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:08:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 //todo: in heredoc, $home etc case need to be handlesd!!!
 

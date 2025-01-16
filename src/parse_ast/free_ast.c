@@ -6,9 +6,11 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:25:37 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 12:01:29 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:07:43 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 //to use after tokens have been used. Frees each allocated value in the token structure array and frees the whole array
 void	free_tokens(t_token *tokens)

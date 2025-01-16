@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 13:52:51 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:16:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 /**
  * - create pipi
@@ -19,7 +19,7 @@
  */
 
 //to do fork_err() or just print_err()?
-static pid_t fork_err(pid_t id, int fd[2], int *exit_status)
+static pid_t	fork_err(pid_t id, int fd[2], int *exit_status)
 {
 	id = fork();
 	if (id < 0)
@@ -33,31 +33,31 @@ static pid_t fork_err(pid_t id, int fd[2], int *exit_status)
 	return (id);
 }
 
-int create_pip(int fd[2], int *exit_status)
+int	create_pip(int fd[2], int *exit_status)
 {
-	int pip;
-	
+	int	pip;
+
 	pip = pipe(fd);
 	if (pip == 0)
 	{
 		*exit_status = 0;
-		return 0;
+		return (0);
 	}
 	print_err("pipe", NULL, strerror(errno));
 	*exit_status = 1;
-	return -1;
+	return (-1);
 }
 
-int left_node(t_astnode *astnode, int fd[2], int *exit_status)
+int	left_node(t_astnode *astnode, int fd[2], int *exit_status)
 {
-	pid_t left;
+	pid_t	left;
 
 	left = fork_err(left, fd, exit_status);
 	if (left == -1)
-		return -1;
+		return (-1);
 	if (left == 0)
 	{
-		cloe(fd[0]);
+		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
 		exec_ast(astnode, exit_status);
@@ -69,16 +69,16 @@ int left_node(t_astnode *astnode, int fd[2], int *exit_status)
 	return (left);
 }
 
-int right_node(t_astnode *astnode, int fd[2], int *exit_status)
+int	right_node(t_astnode *astnode, int fd[2], int *exit_status)
 {
-	pid_t right;
+	pid_t	right;
 
 	right = fork_err(right, fd, exit_status);
 	if (right == -1)
-		return -1;
+		return (-1);
 	if (right == 0)
 	{
-		cloe(fd[1]);
+		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 		exec_ast(astnode, exit_status);
@@ -87,13 +87,13 @@ int right_node(t_astnode *astnode, int fd[2], int *exit_status)
 	return (right);
 }
 
-void exec_pipe(t_data *data)
+void	exec_pipe(t_data *data)
 {
-	int fd[2];
-	pid_t left;
-	pid_t right;
-	t_pipe *p_node;
-	
+	int		fd[2];
+	pid_t	left;
+	pid_t	right;
+	t_pipe	*p_node;
+
 	p_node = data->ast_root->node_type.pipe;
 	if (create_pip(fd, data->exit_status) < 0)
 		return ;
@@ -107,7 +107,7 @@ void exec_pipe(t_data *data)
 	close(fd[1]);
 	waitpid(left, data->exit_status, 0);
 	waitpid(right, data->exit_status, 0);
-	exit (data->exit_status);
+	exit (*(data->exit_status));
 }
 
 //too many lines, split into several fts

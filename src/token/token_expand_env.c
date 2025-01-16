@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:05:00 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 12:10:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:04:53 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ void	env_val(char *input, t_env_var *env_var, int i_start, int *ex_st)
 	env_var->val = gc_malloc(env_var->val_len + 1);
 	// if (!env_var->val)
 	// 	gc_malloc_error();
-	ft_strlcpy(alloc_val, env_val, env_var->val_len + 1);
-	env_var->val_len = ft_strlen(env_val);
+	ft_strlcpy(env_var->val, env_val, env_var->val_len + 1);
 }
 
 //combines literal text from quotes with expanded env var value

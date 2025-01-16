@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 12:12:43 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:06:26 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ typedef struct s_minishell
 
 typedef struct s_env_var
 {
-	char				*val;
-	int					start;
-	int					end;
-	int					name_len;
-	int					val_len;
-}						t_env_var;
+	char	*val;
+	int		start;
+	int		end;
+	int		name_len;
+	int		val_len;
+}			t_env_var;
 
 typedef enum e_tokentype
 {
@@ -74,6 +74,7 @@ typedef struct s_token
 {
 	t_tokentype	type;
 	char		*value;
+	int			i_len;
 }				t_token;
 
 typedef struct s_tokenizer
@@ -173,7 +174,7 @@ int			ft_env(char **env, int *exit_status);
 void		ft_exit(char **args, int *exit_status);
 
 // cd helper
-static char	*cur_path(int *exit_status);
+char		*cur_path(int *exit_status); //changed to non static to use in create_env
 void		ch_pwd_oldpwd(char **env, int flag, int *exit_status);
 char		*cd_home(char **env, int *exit_status);
 
@@ -228,6 +229,8 @@ char		**gc_split(char const *s, char c);
 char		*gc_strdup(const char *s1);
 char		*gc_strjoin(char const *s1, char const *s2);
 char		*gc_substr(char const *s, unsigned int start, size_t len);
+char		*gc_strtrim(char const *s1, char const *set);
+char		*gc_itoa(int n);
 
 // redirect
 int			handle_redir_fd(t_data *data);
@@ -268,6 +271,7 @@ t_astnode	*create_astnode(t_token *token);
 t_astnode	*parse_cmd(t_token *tokens, int *curr_tok);
 char		**get_cmd_args(t_astnode *cmd_node, t_token *tokens, int *curr_tok);
 t_cmdtype	get_cmd_type(char *cmd);
+void		del_cmd_quotes(t_token *tokens, int *curr_tok);
 t_astnode	*parse_pipe(t_token *tokens, int *curr_tok, t_astnode *left_node);
 t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node);
 t_redirtype	get_redir_type(char *redir);

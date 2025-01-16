@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   hepler_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 11:45:02 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:09:07 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 /**
  * hlper ft from libft

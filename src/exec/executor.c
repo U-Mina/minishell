@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/15 14:44:28 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/16 13:12:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 void exec_at_top(t_data *data)
 {
@@ -41,8 +41,8 @@ void exec_after_top(t_data *data)
 		return ;
 	if (data->ast_root->node_type.cmd->argv && data->ast_root->node_type.cmd->argv[0] == NULL)
 	{
-		free(data->ast_root->node_type.cmd->argv);
-		data->ast_root->node_type.cmd->argv == NULL;
+		gc_free(data->ast_root->node_type.cmd->argv);
+		data->ast_root->node_type.cmd->argv = NULL;
 	}
 	if (data->ast_root->node_type.cmd->argv && data->ast_root->node_type.cmd->argv[0])
 	{
@@ -56,7 +56,7 @@ void exec_after_top(t_data *data)
 		else
 		{
 			print_err("minishell", data->ast_root->token->value, "command not found");
-			data->ast_root->node_type.cmd->exit_status = 1;
+			*(data->ast_root->node_type.cmd->exit_status) = 1;
 			return ;
 		}
 	}
@@ -76,7 +76,7 @@ void child_proc(t_data *data)
 	if (pid == -1)
 	{
 		print_err("fork", NULL, strerror(errno));
-		data->exit_status = 1;
+		*(data->exit_status) = 1;
 		return ;
 	}
 	if (pid == 0)
