@@ -6,9 +6,11 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:19:09 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:58:57 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 //expands the environmental variable found at the i_start position of a string (str) to its value
 //fills a t_env_var structure with the info about the start, end and len of the variable in the str string
@@ -62,17 +64,15 @@ char	*expand_env(char *str, int *ex_st)
 	{
 		if (str[i] == '$')
 		{
-			if (env_val(str, &env_var, i, ex_st))
-			{
-				tmp = gc_malloc((str_len + env_var.val_len + 1) * sizeof(char));
-				// if (!tmp)
-				// 	gc_malloc_error();
-				comb_lit_env(tmp, str, &env_var);
-				gc_free(str); //gc will have to check that str is really in gc list, because for the content in redir heredoc, it is allocated with readline, and will not be in gc list
-				str = tmp;
-				i = i + env_var.val_len;
-				str_len = ft_strlen(str);
-			}
+			env_val(str, &env_var, i, ex_st);
+			tmp = gc_malloc((str_len + env_var.val_len + 1) * sizeof(char));
+			// if (!tmp)
+			// 	gc_malloc_error();
+			comb_lit_env(tmp, str, &env_var);
+			gc_free(str); //gc will have to check that str is really in gc list, because for the content in redir heredoc, it is allocated with readline, and will not be in gc list
+			str = tmp;
+			i = i + env_var.val_len;
+			str_len = ft_strlen(str);
 		}
 		i++;
 	}

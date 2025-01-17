@@ -18,6 +18,7 @@ SOURCES =	minishell.c\
 			parse_pipe.c\
 			parse_redir.c\
 			free_ast.c\
+			expand_env.c\
 			executor.c\
 			exec_cmd.c\
 			exec_cmd_binary.c\
