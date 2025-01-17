@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 13:14:32 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:10:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ int	exec_builtins(t_cmd *cmd, t_data *data)
 	if (ft_strncmp(low_cmd, "echo", 5) == 0)
 		return (ft_echo(args, data->exit_status), 0);
 	else if (ft_strncmp(args[0], "cd", 3) == 0)
-		return (ft_cd(args, &cmd->env, data->exit_status), 0);
+		return (ft_cd(args, &data->env, data->exit_status), 0);
 	else if (ft_strncmp(low_cmd, "pwd", 4) == 0)
 		return (ft_pwd(data->exit_status), 0);
 	else if (ft_strncmp(args[0], "export", 7) == 0)
-		return (ft_export(&cmd->env, args, data->exit_status), 0);
+		return (ft_export(&data->env, args, data->exit_status), 0);
 	else if (ft_strncmp(args[0], "unset", 6) == 0)
-		return (ft_unset(args, &cmd->env, data->exit_status), 0);
+		return (ft_unset(args, &data->env, data->exit_status), 0);
 	else if (ft_strncmp(low_cmd, "env", 4) == 0)
-		return (ft_env(cmd->env, data->exit_status), 0);
+		return (ft_env(data->env, data->exit_status), 0);
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (ft_exit(args, data->exit_status), 0);
 	return -2;//set -2 for error check

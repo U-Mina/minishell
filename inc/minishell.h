@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 16:50:48 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/17 17:08:00 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ typedef struct s_cmd
 	int			arg_nb;
 	char		**argv;
 	char		*path;
-	int			*exit_status;
-	char 		**env; // or wherever it is
+	// int			*exit_status;
+	// char 		**env; // or wherever it is
 }				t_cmd;
 
 typedef struct s_pipe
@@ -151,9 +151,9 @@ void		init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 void		init_minishell(t_minishell *minishell);
 void		term_minishell(t_minishell *minishell, int rv);
 void		init_data(char **envp, t_data *data, int *exit_status);
-void *init_cmd_node(t_cmd *cmd_node);
-void *init_redir_node(t_redir *redir_node);
-void *init_pip_node(t_pipe *pipe_node);
+void		init_cmd_node(t_cmd *cmd_node);
+void		init_redir_node(t_redir *redir_node);
+void		init_pipe_node(t_pipe *pipe_node);
 
 // lexer-tokenizer
 t_token		*tokenizer(char *input);

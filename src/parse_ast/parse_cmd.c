@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 17:06:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:09:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
 		// if (!cmd_node)
 		// 	return (handle_error(gc_list));
 		cmd_node->node_type.cmd->type = get_cmd_type(tokens[*curr_tok].value);
-		cmd_node->node_type.cmd->exit_status = 0;
 		//check: cmd_node->node_type.cmd->exit_status = data->ex_st??
 		(*curr_tok)++;
 		cmd_node->node_type.cmd->argv = get_cmd_args(cmd_node, tokens, curr_tok, ex_st);

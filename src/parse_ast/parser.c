@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 16:51:46 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/17 17:08:28 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_astnode	*create_astnode(t_token *token)
 		new_node->node_type.pipe = gc_malloc(sizeof(t_pipe));
 		// if (!new_node->node_type.pipe)
 		// 	return (handle_error(gc_list));
-		init_pip_node(new_node->node_type.pipe);
+		init_pipe_node(new_node->node_type.pipe);
 	}
 	if (new_node->token->type == REDIRECTION)
 	{

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:25:37 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 11:57:15 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:09:31 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,6 @@ void	free_ast(t_astnode *ast_node)
 			free_double_pointer(ast_node->node_type.cmd->argv);
 		if (ast_node->node_type.cmd->path)
 			gc_free(ast_node->node_type.cmd->path);
-		if (ast_node->node_type.cmd->env)
-			free_double_pointer(ast_node->node_type.cmd->env);
-		gc_free(ast_node->node_type.cmd->exit_status); //not sure if we need to free this or is the same as in main!!!!????
 	}
 	// gc_free(ast_node->fd);//??
 	gc_free(ast_node);
