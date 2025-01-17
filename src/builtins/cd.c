@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:30 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:29:17 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  //idea: make this nonstatic and use it in *create_env()
 char	*cur_path(int *exit_status)
 {
-	int		i;
+	size_t		i;
 	char	*tmp;
 	char	*res;
 
@@ -70,7 +70,7 @@ char	*cd_home(char **env, int *exit_status)
 {
 	char	*hm;
 
-	hm = env_value(env, "HOME");
+	hm = env_var_value(env, "HOME");
 	if (hm == NULL)
 	{
 		print_err("minishell", "cd", "HOME not set");

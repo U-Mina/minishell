@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 11:56:01 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  */
 
 //rename as *var_value()
-char *env_value(char **env, const char *key)
+char *env_var_value(char **env, const char *key)
 {
 	int i;
 	int len;
@@ -39,7 +39,7 @@ char *env_value(char **env, const char *key)
 void del_val(char **env, char *key)
 {
 	int i;
-	size_t len;
+	int len;
 
 	i = 0;
 	len = ft_strlen(key);
@@ -59,7 +59,7 @@ void del_val(char **env, char *key)
 void mod_val(char **env, char *key, char *val)
 {
 	int i;
-	size_t len;
+	int len;
 	char *tmp;
 
 	i = 0;

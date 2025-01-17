@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 18:58:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:26:57 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ char		*cd_home(char **env, int *exit_status);
 
 // env helper ft
 char		**create_env(void);
-size_t		varlen(char **env);
+int		varlen(char **env);
 char		**cpy_env(char **env);
 void		change_shlvl_oldpwd(char ***env, char *key1, char *key2);
 int			find_env_var(char **env, const char *key);
@@ -197,24 +197,24 @@ char		*env_var_value(char **env, const char *key);
 
 // export hlper
 char		*smallest(char **tmp);
-size_t		nonull_varlen(char **env);
-char		**nonull_cpy(char **env, size_t len);
-char		**sort_env(char **env);
+int		nonull_varlen(char **env);
+char		**nonull_cpy(char **env, int len);
+char		**sort_env(char **env, char **sorted);
 int			exp_only(char **env, int *exit_status);
 int			exp_with_arg(char ***env, char *arg);
 int			withsigh(char ***env, char *arg, char *sign);
 int			nosign(char ***env, char *arg);
-bool		valid_exp(const char *arg);
+bool		valid_exp(char *arg);
 
 // unset hpler
-bool		valid_unset(const char *arg);
+bool		valid_unset(char *arg);
 int			unset_env(char ***env, char *arg);
 
 // general hlper n' wrapper
 char		*safe_join(char *s1, char *s2);
 void		*safe_malloc(size_t size);
 void		*ft_realloc(void *ptr, size_t old, size_t new);
-size_t		args_nbr(char **arr);
+int		args_nbr(char **arr);
 
 // error, free, clean, exit
 // void		ft_exit_status(int exit_code);

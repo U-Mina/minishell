@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 11:55:36 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ char *create_newvar(const char *key, char *val)
 		n_var = ft_strdup(key);
 	else
 	{
-		tmp = safe_join(key, "=");
+		tmp = safe_join((char *)key, "=");
+		//make "key" not constant char??
 		n_var = safe_join(tmp, val);
 		free(tmp);
 	}
@@ -69,7 +70,7 @@ char *create_newvar(const char *key, char *val)
  */
 void put_var(char ***env, char *n_var)
 {
-	size_t i;
+	int i;
 	char **n_env;
 	
 	i = varlen(*env);
@@ -88,13 +89,14 @@ void	del_var(char ***env, char *key)
 {
 	int i;
 	int pos;
-	size_t len;
+	int len;
 	
 	pos = find_env_var(*env, key);
 	if (pos < 0)
 		return ; // no such var
 	free((*env)[pos]);
 	len = varlen(*env);
+	//cat size_t to int to do comparison??
 	i = pos;
 	while (i < len - 1)
 	{
