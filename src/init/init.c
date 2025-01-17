@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 18:19:06 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:52:01 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,25 @@ void	init_data(char **envp, t_data *data, int *exit_status)
 		}
 		change_shlvl_oldpwd(&data->env, "SHLVL", "OLDPWD");
 	}
+}
+
+//check: try bad input
+//debug: not sure what para to pass
+void *init_cmd_node(t_cmd *cmd_node)
+{
+	cmd_node->arg_nb = 0;
+	cmd_node->argv = NULL;
+	cmd_node->path = NULL;
+}
+
+void *init_redir_node(t_redir *redir_node)
+{
+	redir_node->left = NULL;
+	redir_node->right = NULL;
+}
+
+void *init_pip_node(t_pipe *pipe_node)
+{
+	pipe_node->left = NULL;
+	pipe_node->right = NULL;
 }

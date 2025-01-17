@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 14:18:56 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:06:35 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,14 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	char			builtins[7][7];
 	int				i;
 
-	ft_strlcpy(builtins[0], "echo", 7);
-	ft_strlcpy(builtins[1], "cd", 7);
-	ft_strlcpy(builtins[2], "pwd", 7);
+	ft_strlcpy(builtins[0], "echo", 5);
+	ft_strlcpy(builtins[1], "cd", 3);
+	ft_strlcpy(builtins[2], "pwd", 4);
 	ft_strlcpy(builtins[3], "export", 7);
-	ft_strlcpy(builtins[4], "unset", 7);
-	ft_strlcpy(builtins[5], "env", 7);
-	ft_strlcpy(builtins[6], "exit", 7);
+	ft_strlcpy(builtins[4], "unset", 6);
+	ft_strlcpy(builtins[5], "env", 4);
+	ft_strlcpy(builtins[6], "exit", 5);
+	//check: size change
 	cmd_type = COMMAND_BINARY;
 	i = 0;
 	while (i <= 6)
@@ -106,6 +107,7 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
 		// 	return (handle_error(gc_list));
 		cmd_node->node_type.cmd->type = get_cmd_type(tokens[*curr_tok].value);
 		cmd_node->node_type.cmd->exit_status = 0;
+		//check: cmd_node->node_type.cmd->exit_status = data->ex_st??
 		(*curr_tok)++;
 		cmd_node->node_type.cmd->argv = get_cmd_args(cmd_node, tokens, curr_tok, ex_st);
 		if (tokens[*curr_tok].type == REDIRECTION)
@@ -113,3 +115,5 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
 	}
 	return (cmd_node);
 }
+//check: do we need to init the lefe var in t_cmd:
+//idea: such as: arg_nv = 0, **env = data->env?? in the init() part??

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_heredoc.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:35:58 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:33:21 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 //todo: in heredoc, $home etc case need to be handlesd!!!
 
-//changed to non-static
-// static int create_pip(int fd[2], int *exit_status)
+// static int	heredoc(t_redir *redir, int fd, int *exit_status)
 // {
-// 	int pip;
-// 	pip = pipe(fd);
-// 	if (pip == 0)
+// 	if (fd != 0)
+// 		close(fd);
+// 	fd = redir->heredoc_fd;
+// 	if (fd != -1)
 // 	{
 // 		*exit_status = 0;
-// 		return 0;
+// 		return (fd);
 // 	}
-// 	print_err("pipe", NULL, strerror(errno));
+// 	print_err("heredoc", redir->left, strerror(errno));
 // 	*exit_status = 1;
-// 	return -1;
+// 	return (-1);
 // }
 
 static char	*read_here(char *de, int *exit_status)
