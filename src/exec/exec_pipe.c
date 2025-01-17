@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 18:52:19 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:35:54 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,7 @@ static pid_t	fork_err(int *fd, int *exit_status)
 	return (id);
 }
 
-void	exec_pipe(t_pipe *p_node, t_data *data)
-{
-	int		fd[2];
-	pid_t	left;
-	pid_t	right;
-
-	if (create_pipe(fd, data->exit_status) < 0)
-		return ;
-	left = left_node(p_node->left, fd, data);
-	if (left < 0)
-		return ;
-	right = right_node(p_node->right, fd, data);
-	if (right < 0)
-		return ;
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(left, data->exit_status, 0);
-	waitpid(right, data->exit_status, 0);
-	exit (*(data->exit_status));
-}
-
-int	right_node(t_astnode *ast_node, int *fd, t_data *data)
+static int	right_node(t_astnode *ast_node, int *fd, t_data *data)
 {
 	pid_t	right;
 
@@ -75,7 +54,7 @@ int	right_node(t_astnode *ast_node, int *fd, t_data *data)
 	return (right);
 }
 
-int	left_node(t_astnode *ast_node, int *fd, t_data *data)
+static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 {
 	pid_t	left;
 
@@ -109,6 +88,27 @@ int	create_pipe(int *fd, int *exit_status)
 	print_err("pipe", NULL, strerror(errno));
 	*exit_status = 1;
 	return (-1);
+}
+
+void	exec_pipe(t_pipe *p_node, t_data *data)
+{
+	int		fd[2];
+	pid_t	left;
+	pid_t	right;
+
+	if (create_pipe(fd, data->exit_status) < 0)
+		return ;
+	left = left_node(p_node->left, fd, data);
+	if (left < 0)
+		return ;
+	right = right_node(p_node->right, fd, data);
+	if (right < 0)
+		return ;
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(left, data->exit_status, 0);
+	waitpid(right, data->exit_status, 0);
+	exit (*(data->exit_status));
 }
 
 //too many lines, split into several fts

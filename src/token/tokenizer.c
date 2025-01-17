@@ -6,38 +6,13 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 12:11:52 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:28:20 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself
-t_token	*tokenizer(char *input, int *exit_status)
-{
-	int			current_token;
-	t_token		*tokens;
-	t_tokenizer	*tokenizer;
-
-	tokenizer = init_tokenizer();
-	tokens = tokenizer->tokens;
-	current_token = 0;
-	while (*input != '\0')
-	{
-		while (ft_isspace(*input))
-			input++;
-		if (*input == '\0')
-			break ;
-		else
-			create_token(tokenizer, input, exit_status);
-		input = input + tokens[current_token].i_len;
-		current_token++;
-	}
-	create_token(tokenizer, input, exit_status);
-	return (tokens); // or if data is passed for exit status, have here data->tokens = tokens; and make the function void and in the main, the data->tokens will be passed to the parsing part
-}
-
-t_tokenizer	*init_tokenizer(void)
+static t_tokenizer	*init_tokenizer(void)
 {
 	t_tokenizer	*tokenizer;
 
@@ -53,7 +28,7 @@ t_tokenizer	*init_tokenizer(void)
 	return (tokenizer);
 }
 
-int	grow_tokenizer(t_tokenizer *tokenizer)
+static int	grow_tokenizer(t_tokenizer *tokenizer)
 {
 	int		new_capacity;
 	t_token	*new_tokens;
@@ -73,7 +48,7 @@ int	grow_tokenizer(t_tokenizer *tokenizer)
 }
 
 //creates and allocates a token in the tokenizer and assigns the type, the value, and the len according to the input.
-void	create_token(t_tokenizer *tokenizer, char *input, int *ex_st)
+static void	create_token(t_tokenizer *tokenizer, char *input)
 {
 	t_token	*token;
 
@@ -87,11 +62,34 @@ void	create_token(t_tokenizer *tokenizer, char *input, int *ex_st)
 		make_pipe_token(token);
 	else if (*input == '>' || *input == '<')
 		make_redir_token(token, input);
-//	else if (*input == '$')
-//		make_env_var_token(token, input, ex_st);
 	else if (*input == '\"' || *input == '\'')
-		make_quote_token(token, input, ex_st);
+		make_quote_token(token, input);
 	else
-		make_word_token(token, input, ex_st);
+		make_word_token(token, input);
 	tokenizer->count++;
+}
+
+//lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself
+t_token	*tokenizer(char *input)
+{
+	int			current_token;
+	t_token		*tokens;
+	t_tokenizer	*tokenizer;
+
+	tokenizer = init_tokenizer();
+	tokens = tokenizer->tokens;
+	current_token = 0;
+	while (*input != '\0')
+	{
+		while (ft_isspace(*input))
+			input++;
+		if (*input == '\0')
+			break ;
+		else
+			create_token(tokenizer, input);
+		input = input + ft_strlen(tokens[current_token].value);
+		current_token++;
+	}
+	create_token(tokenizer, input);
+	return (tokens); // or if data is passed for exit status, have here data->tokens = tokens; and make the function void and in the main, the data->tokens will be passed to the parsing part
 }

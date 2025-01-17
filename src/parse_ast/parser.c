@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 18:19:17 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:30:28 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@
 //check error handling
 
 //parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
-t_astnode	*parse(t_token *tokens)
+t_astnode	*parse(t_token *tokens, int *ex_st)
 {
 	t_astnode	*root;
 	int			current_token;
 
 	current_token = 0;
 	if (tokens[current_token].type == WORD || tokens[current_token].type == QUOTE)
-		root = parse_cmd(tokens, &current_token);
+		root = parse_cmd(tokens, &current_token, ex_st);
 	while (tokens[current_token].type != TOKEN_EOF)
 	{
 		if (tokens[current_token].type == PIPE)
-			root = parse_pipe(tokens, &current_token, root);
+			root = parse_pipe(tokens, &current_token, root, ex_st);
 		if (tokens[current_token].type == REDIRECTION)
-			root = parse_redir(tokens, &current_token, root);
+			root = parse_redir(tokens, &current_token, root, ex_st);
 	}
 	return (root);
 }

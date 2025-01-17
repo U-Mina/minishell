@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 18:20:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:28:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ int	main(int ac, char **av, char **envp)
 		{
 			add_history(input);
 			//Split into categorized tokens
-			tokens = tokenizer(input, &exit_status);
+			tokens = tokenizer(input);
 			//free(input);//free at the end for all cases
 			//check lexer
 			print_tokens(tokens);
 			//Create AST with hierarchized tokens
-			data.ast_root = parse(tokens);
+			data.ast_root = parse(tokens, &exit_status);
 			//check parser
 			print_ast(data.ast_root, 0);
 			//execution

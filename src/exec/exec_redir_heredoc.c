@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 19:00:01 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:35:58 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ static char	*read_here(char *de, int *exit_status)
 		*exit_status = 0;
 		return (NULL);
 	}
-	//here to add '$' sign handler(after comparing with the de, which has to be literal). If no matching env var is found, just a new line is taken
 	retval = safe_join(content, "\n");
+	retval = expand_env(retval, exit_status);
 	free(content);
 	return (retval);
 }

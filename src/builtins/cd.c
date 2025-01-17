@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:30 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:55:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ char	*cur_path(int *exit_status)
 		*exit_status = 1;
 		return (NULL);
 	}
-	res = safe_malloc(sizeof(char) * (ft_strlen(tmp) + 1));
+	res = gc_malloc(sizeof(char) * (ft_strlen(tmp) + 1));
 	i = 0;
 	while (tmp[i++])
-		res[i] = tmp[i];
+		res[i] = tmp[i]; //not sure if this will give seg fault...??
 	free(tmp);
 	res[i] = '\0';
 	*exit_status = 0;
@@ -48,7 +48,7 @@ void	ch_pwd_oldpwd(char **env, int flag, int *exit_status)
 
 	i = 0;
 	tmp = cur_path(exit_status);
-	while (i < varlen(env))
+	while (i < (int)varlen(env))
 	{
 		if (flag == 0 && env[i] && (ft_strncmp(env[i], "OLDPWD", 6) == 0))
 		{
@@ -82,19 +82,19 @@ char	*cd_home(char **env, int *exit_status)
 }
 
 //args here is the token val
-int ft_cd(char **args, char ***env, int *exit_status)
+int	ft_cd(char **args, char ***env, int *exit_status)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	ch_pwd_oldpwd(*env, 0, exit_status);
 	if (args_nbr(args) == 0)
 	{
 		cd_home(*env, exit_status);
-		return (0);	
+		return (0);
 	}
-	tmp = args[0]; //the argument from input
+	tmp = args[1]; //the argument from input
 	if (chdir(tmp) == -1)
 	{
 		print_err("minishell: cd", tmp, "No such file or directory");

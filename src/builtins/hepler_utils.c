@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:09:07 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:27:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*safe_join(char *s1, char *s2)
 	// 	return (NULL);
 	l1 = ft_strlen(s1);
 	l2 = ft_strlen(s2);
-	res = safe_malloc(sizeof(char) * (l1 + l2 + 1));
+	res = gc_malloc(sizeof(char) * (l1 + l2 + 1));
 	ft_memcpy((char *)res, s1, l1);
 	ft_memcpy((char *)(res + l1), s2, l2);
 	res[l1 + l2] = '\0';

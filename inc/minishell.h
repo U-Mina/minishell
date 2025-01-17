@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 18:58:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:35:35 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_token
 {
 	t_tokentype	type;
 	char		*value;
-	int			i_len;
+	int			env_var;
 }				t_token;
 
 typedef struct s_tokenizer
@@ -152,17 +152,37 @@ void		init_minishell(t_minishell *minishell);
 void		term_minishell(t_minishell *minishell, int rv);
 void		init_data(char **envp, t_data *data, int *exit_status);
 
+// lexer-tokenizer
+t_token		*tokenizer(char *input);
+void		make_eof_token(t_token *token);
+void		make_word_token(t_token *token, char *input);
+void		make_quote_token(t_token *token, char *input);
+void		make_redir_token(t_token *token, char *input);
+void		make_pipe_token(t_token *token);
+
+// parser
+t_astnode	*parse(t_token *tokens, int *ex_st);
+t_astnode	*create_astnode(t_token *token);
+t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st);
+t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
+				int *ex_st);
+t_astnode	*parse_pipe(t_token *tokens, int *curr_tok, t_astnode *left_node,
+				int *ex_st);
+
+// free ast
+void		free_tokens(t_token *tokens);
+void		free_double_pointer(char **str);
+void		free_ast(t_astnode *ast_node);
+
 // exec
 void		exec_ast(t_astnode *ast_node, t_data *data);
-void		exec_pipe(t_pipe *p_node, t_data *data);
-int			right_node(t_astnode *ast_node, int *fd, t_data *data);
-int			left_node(t_astnode *ast_node, int *fd, t_data *data);
-int			create_pipe(int *fd, int *exit_status);
+void		exec_cmd(t_astnode *cmd_node, t_data *data);
 int			exec_redir(t_redir *redir, t_data *data);
 void		exec_heredoc(char *de, int *exit_status, t_data *data);
 int			exec_in(t_redir *redir, t_data *data);
 int			exec_out(t_redir *redir, t_data *data);
-void		exec_cmd(t_astnode *cmd_node, t_data *data);
+void		exec_pipe(t_pipe *p_node, t_data *data);
+int			create_pipe(int *fd, int *exit_status);
 int			exec_builtins(t_cmd *cmd, t_data *data);
 int			get_path(char *cmd, t_cmd *c_node, t_data *data);
 void		child_proc(t_cmd *cmd, t_data *data);
@@ -240,39 +260,17 @@ char		*gc_itoa(int n);
 // int ft_strncmp(char *s1, char *s2);
 // char *ft_strdup(char *s);
 
-// lexer-tokenizer
-t_token		*tokenizer(char *input, int *exit_status);
-t_tokenizer	*init_tokenizer(void);
-int			grow_tokenizer(t_tokenizer *tokenizer);
-void		create_token(t_tokenizer *tokenizer, char *input, int *ex_st);
-void		make_eof_token(t_token *token);
-void		make_word_token(t_token *token, char *input, int *ex_st);
-void		make_quote_token(t_token *token, char *input, int *ex_st);
-void		make_redir_token(t_token *token, char *input);
-void		make_pipe_token(t_token *token);
-void		env_val(char *input, t_env_var *env_var, int i_start, int *ex_st);
-void		comb_lit_env(char *lit, char *input, t_env_var *env_var);
-int			ft_isspace(char c);
-
-// parser
-t_astnode	*parse(t_token *tokens);
-t_astnode	*create_astnode(t_token *token);
-t_astnode	*parse_cmd(t_token *tokens, int *curr_tok);
-char		**get_cmd_args(t_astnode *cmd_node, t_token *tokens, int *curr_tok);
-t_cmdtype	get_cmd_type(char *cmd);
-void		del_cmd_quotes(t_token *tokens, int *curr_tok);
-t_astnode	*parse_pipe(t_token *tokens, int *curr_tok, t_astnode *left_node);
-t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node);
-t_redirtype	get_redir_type(char *redir);
-void		free_tokens(t_token *tokens);
-void		free_double_pointer(char **str);
-void		free_ast(t_astnode *ast_node);
-
 // signal_handler
 void		init_signal_inter(struct sigaction *sa, struct sigaction *old_sa);
 void		signal_handler(int signum);
 void		restore_signal(struct sigaction *old_sa);
 void		init_signal_exec(void);
+
+//expand_env
+char		*expand_env(char *str, int *ex_st);
+
+//utils
+int			ft_isspace(char c);
 
 // TO BE DELETED AT THE END
 // comprovations
