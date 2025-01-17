@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 18:47:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:14:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	to_lower_str(char *str, char *low_cmd)
 		low_cmd[i] = ft_tolower(str[i]);
 		i++;
 	}
+	low_cmd[i] = '\0';
 }
 
 int	exec_builtins(t_cmd *cmd, t_data *data)
