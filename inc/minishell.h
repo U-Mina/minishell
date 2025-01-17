@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:06:26 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:58:34 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,13 +126,14 @@ typedef struct s_astnode
 {
 	t_token		*token;
 	t_nodetype	node_type;
-	int			fd[2];
 }				t_astnode;
 
 typedef struct s_data
 {
 	int			*exit_status;
 	char		**env;
+	int			heredoc_fd;
+	int			fd[2];
 	t_astnode	*ast_root;
 }				t_data;
 
@@ -151,18 +152,20 @@ void		init_minishell(t_minishell *minishell);
 void		term_minishell(t_minishell *minishell, int rv);
 void		init_data(char **envp, t_data *data, int *exit_status);
 
-// cmd exec ft
-void		get_path(t_data *data);
-
-// organize ft
-void		exec_at_top(t_data *data);
-void		exec_with_pipe(t_data *data);
-void		exec_after_top(t_data *data);
-
-void		child_proc(t_data *data);
-// void	exec_ast(t_astnode *ast_node, int *exit_status);
-// int exec_command(t_astnode *astnode, int *exit_status);
-int			exec_builtins(t_data *data);
+// exec
+void		exec_ast(t_astnode *ast_node, t_data *data);
+void		exec_pipe(t_pipe *p_node, t_data *data);
+int			right_node(t_astnode *ast_node, int *fd, t_data *data);
+int			left_node(t_astnode *ast_node, int *fd, t_data *data);
+int			create_pipe(int *fd, int *exit_status);
+int			exec_redir(t_redir *redir, t_data *data);
+void		exec_heredoc(char *de, int *exit_status, t_data *data);
+int			exec_in(t_redir *redir, t_data *data);
+int			exec_out(t_redir *redir, t_data *data);
+void		exec_cmd(t_astnode *cmd_node, t_data *data);
+int			exec_builtins(t_cmd *cmd, t_data *data);
+int			get_path(char *cmd, t_cmd *c_node, t_data *data);
+void		child_proc(t_cmd *cmd, t_data *data);
 
 // builtin ft
 void		ft_echo(char **args, int *exit_status);
@@ -231,20 +234,6 @@ char		*gc_strjoin(char const *s1, char const *s2);
 char		*gc_substr(char const *s, unsigned int start, size_t len);
 char		*gc_strtrim(char const *s1, char const *set);
 char		*gc_itoa(int n);
-
-// redirect
-int			handle_redir_fd(t_data *data);
-int			check_redir(t_data *data);
-int			ft_out(t_data *data);
-int			ft_in(t_data *data);
-int			here_doc(char *de, int *exit_status);
-//void		exec_redir(t_astnode *astnode, int *exit_status);
-
-// pipe
-int			create_pip(int fd[2], int *exit_status);
-int			left_node(t_astnode *astnode, int fd[2], int *exit_status);
-int			right_node(t_astnode *astnode, int fd[2], int *exit_status);
-void		exec_pipe(t_data *data);
 
 // temporary prototype
 // char *ft_strchr(char *s, char c);

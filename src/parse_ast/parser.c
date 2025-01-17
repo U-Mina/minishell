@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 12:02:06 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:19:17 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ t_astnode	*create_astnode(t_token *token)
 	// 	return(handle_error(gc_list));
 	new_node->token = token;
 	//fd[2] init
-	new_node->fd[0] = STDIN_FILENO;
-	new_node->fd[1] = STDOUT_FILENO;
+	// new_node->fd[0] = STDIN_FILENO;
+	// new_node->fd[1] = STDOUT_FILENO;
 	if (new_node->token->type == COMMAND)
 	{
 		new_node->node_type.cmd = gc_malloc(sizeof(t_cmd));

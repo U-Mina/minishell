@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 12:52:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:19:06 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	init_minishell(t_minishell	*minishell)
 void	init_data(char **envp, t_data *data, int *exit_status)
 {
 	data->exit_status = exit_status;
+	data->fd[0] = STDIN_FILENO;
+	data->fd[1] = STDOUT_FILENO;
 	//^^ being set in parse_cmd alreadt
 	if (!envp[0])
 	{

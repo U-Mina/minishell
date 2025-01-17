@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 12:48:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:20:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int	main(int ac, char **av, char **envp)
 	//t_astnode	*ast_root;
 	t_minishell	minishell;
 
-	exit_status = 0;
 	(void)ac;
 	(void)av;
-	init_data(envp, &data, &exit_status);
 	init_minishell(&minishell);
+	exit_status = 0;
+	init_data(envp, &data, &exit_status);
 	while (1)
 	{
 		//Display a prompt when waiting for a new command
@@ -47,7 +47,7 @@ int	main(int ac, char **av, char **envp)
 			//check parser
 			print_ast(data.ast_root, 0);
 			//execution
-			//exec_ast(ast_root);
+			exec_ast(data.ast_root, &data);
 			//free allocated memory
 			free_tokens(tokens);
 			free_ast(data.ast_root);
@@ -59,6 +59,7 @@ int	main(int ac, char **av, char **envp)
 			// exec(command);
 		}
 		free(input);
+		//reset_data();
 		rl_on_new_line();
 	}
 	term_minishell(&minishell, 0);

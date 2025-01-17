@@ -20,13 +20,14 @@ SOURCES =	minishell.c\
 			parse_redir.c\
 			free_ast.c\
 			executor.c\
-			pipe.c\
-			redirect_heredoc.c\
-			redirect_in.c\
-			redirect_out.c\
-			redirect.c\
-			command_binary.c\
-			command_builtin.c\
+			exec_cmd.c\
+			exec_cmd_binary.c\
+			exec_cmd_builtin.c\
+			exec_pipe.c\
+			exec_redir.c\
+			exec_redir_heredoc.c\
+			exec_redir_in.c\
+			exec_redir_out.c\
 			cd.c\
 			echo.c\
 			env_utils.c\
@@ -38,7 +39,6 @@ SOURCES =	minishell.c\
 			export_utils2.c\
 			export.c\
 			hepler_utils.c\
-			minishell.h\
 			pwd.c\
 			unset.c\
 			gc_itoa.c\
