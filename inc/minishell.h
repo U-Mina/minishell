@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:45:11 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:50:48 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,9 @@ void		init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 void		init_minishell(t_minishell *minishell);
 void		term_minishell(t_minishell *minishell, int rv);
 void		init_data(char **envp, t_data *data, int *exit_status);
+void *init_cmd_node(t_cmd *cmd_node);
+void *init_redir_node(t_redir *redir_node);
+void *init_pip_node(t_pipe *pipe_node);
 
 // lexer-tokenizer
 t_token		*tokenizer(char *input);

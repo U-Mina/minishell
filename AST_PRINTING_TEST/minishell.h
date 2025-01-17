@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/15 16:03:36 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:45:36 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ typedef struct s_cmd
 	int			arg_nb;
 	char		**argv;
 	char		*path;
-	int			*exit_status;
-	char		**env; //or wherever it is
+	// int			*exit_status;
+	// char		**env; //or wherever it is
 }				t_cmd;
 
 typedef union u_nodetype
@@ -130,6 +130,8 @@ typedef struct s_data
 {
 	int					*exit_status;
 	char				**env;
+	int			heredoc_fd;
+	int			fd[2];
 	t_astnode			*ast_root;
 }						t_data;
 

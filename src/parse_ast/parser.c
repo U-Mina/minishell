@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:30:28 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:51:46 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,21 @@ t_astnode	*create_astnode(t_token *token)
 		new_node->node_type.cmd = gc_malloc(sizeof(t_cmd));
 		// if (!new_node->node_type.cmd)
 		// 	return (handle_error(gc_list));
+		init_cmd_node(new_node->node_type.cmd);
 	}
 	if (new_node->token->type == PIPE)
 	{
 		new_node->node_type.pipe = gc_malloc(sizeof(t_pipe));
 		// if (!new_node->node_type.pipe)
 		// 	return (handle_error(gc_list));
+		init_pip_node(new_node->node_type.pipe);
 	}
 	if (new_node->token->type == REDIRECTION)
 	{
 		new_node->node_type.redir = gc_malloc(sizeof(t_redir));
 		// if (!new_node->node_type.redirect)
 		// 	return (handle_error(gc_list));
+		init_redir_node(new_node->node_type.redir);
 	}
 	return (new_node);
 }
