@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 14:55:04 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 15:50:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:00:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	**free_split(char **arr, size_t i)
 {
 	while (i > 0)
 	{
-		free(arr[i]);
+		gc_free(arr[i]);
 		i--;
 	}
 	gc_free(arr[0]);
@@ -75,7 +75,7 @@ char	**gc_split(char const *s, char c)
 	while (word < word_count)
 	{
 		i = get_start(s, i, c);
-		arr[word] = ft_substr(s, i, get_len(s, i, c));
+		arr[word] = gc_substr(s, i, get_len(s, i, c));
 		if (arr[word] == NULL)
 			return (free_split(arr, word));
 		word++;

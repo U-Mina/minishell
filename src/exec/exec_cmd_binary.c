@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 18:35:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:11:31 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ static char	*get_binary_name(char *cmd)
 	int		i;
 	char	**split;
 
-	split = ft_split(cmd, '/');
+	split = gc_split(cmd, '/');
 	// if (!split)
 	// 	handle_error(gc_list);
 	i = 0;
 	while(split[i + 1])
 	{
-		free(split[i]);
+		gc_free(split[i]);
 		i++;
 	}
 	cmd_name = split[i];
-	free(split);
+	gc_free(split);
 	return (cmd_name);
 }
 
@@ -42,13 +42,13 @@ static char	*search_in_path(char *cmd)
 	int		i;
 
 	paths = getenv("PATH");
-	split_paths = ft_split(paths, ':');
+	split_paths = gc_split(paths, ':');
 	// if (!split_paths)
 	// 	handle_error(gc_list);
 	i = 0;
 	while(split_paths[i])
 	{
-		full_path = ft_strjoin(ft_strjoin(split_paths[i], "/"), cmd);
+		full_path = gc_strjoin(gc_strjoin(split_paths[i], "/"), cmd);
 		// if (!full_path) //somehow handle when the first ft_strjoin fails
 		// 	handle_error(gc_list);
 		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
@@ -56,7 +56,7 @@ static char	*search_in_path(char *cmd)
 			free_double_pointer(split_paths);
 			return (full_path);
 		}
-		free(full_path);
+		gc_free(full_path);
 		i++;
 	}
 	free_double_pointer(split_paths);
@@ -120,5 +120,4 @@ void	child_proc(t_cmd *cmd, t_data *data)
 		execv(cmd->path, cmd->argv);
 	}
 	waitpid(pid, data->exit_status, 0);
-	free(env);//needed???
 }
