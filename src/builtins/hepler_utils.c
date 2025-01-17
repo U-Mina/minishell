@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 16:27:12 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:48:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,18 @@
  * tmp used as notes
  */
 
-//review: some helpler ft from libft
-char	*ft_strchr(char *s, char c);
-int	ft_strncmp(char *s1, char *s2);// CHECK return 0 if ==
-char	*ft_strdup(char *s); // check: add a clean ft inside, NO-NEED
-size_t	ft_strlen(char *s);
-char	*ft_strjoin(char *dst, char *src);
-int	ft_isdigit(int i);//check: rerurn 1 if all digit
-
+// //review: some helpler ft from libft
+// char	*ft_strchr(char *s, char c);
+// int	ft_strncmp(char *s1, char *s2);// CHECK return 0 if ==
+// char	*ft_strdup(char *s); // check: add a clean ft inside, NO-NEED
+// size_t	ft_strlen(char *s);
+// char	*ft_strjoin(char *dst, char *src);
+// int	ft_isdigit(int i);//check: rerurn 1 if all digit
 
 //args function
-size_t args_nbr(char **arr)
+int args_nbr(char **arr)
 {
-	size_t i;
+	int i;
 
 	i = 0;
 	while (arr[i])

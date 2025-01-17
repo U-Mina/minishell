@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:09:32 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:27:11 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int ft_unset(char **args, char ***env, int *exit_status)
 	*exit_status = 0;
 	while (i < args_nbr(args))
 	{
-		if (unset_env(*env, args[i]))
+		if (unset_env(env, args[i]))
 		{
 			*exit_status = 1;
 			return (-1);
@@ -35,7 +35,7 @@ int ft_unset(char **args, char ***env, int *exit_status)
 /**
  * del the var/val added by 'export', update *cpenv
  */
-bool valid_unset(const char *arg)
+bool valid_unset(char *arg)
 {
 	int i;
 	

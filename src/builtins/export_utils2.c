@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:09:00 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:22:44 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //grammar check
-bool valid_exp(const char *arg)
+//idea: change para from 'const char *arg' to 'char *arg'
+bool valid_exp(char *arg)
 {
 	int i;
 	

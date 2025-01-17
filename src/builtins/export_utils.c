@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:56 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:21:07 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char *smallest(char **tmp)
 }
 
 //count non-null var in env (with a value and '=' sign)
-size_t nonull_varlen(char **env)
+int nonull_varlen(char **env)
 {
 	int i;
 	int j;
@@ -59,10 +59,10 @@ size_t nonull_varlen(char **env)
 	return (i - j);
 }
 
-char **nonull_cpy(char **env, size_t len)
+char **nonull_cpy(char **env, int len)
 {
-	size_t i;
-	size_t j;
+	int i;
+	int j;
 	char **nonull;
 
 	nonull = safe_malloc(sizeof(char*) * (len + 1));
@@ -78,19 +78,21 @@ char **nonull_cpy(char **env, size_t len)
 		else
 			j++;
 	}
-	return (nonull[i] = NULL);
+	nonull[i] = NULL;
+	return (nonull);
 }
 
-char **sort_env(char **env)
+char **sort_env(char **env, char **sorted)
 {
-	size_t i;
-	size_t var_nb;
+	int i;
+	int var_nb;
 	char **tmp;
-	char **sorted;
+	// char **sorted;
 
 	i = 0;
 	var_nb = nonull_varlen(env);
 	tmp = nonull_cpy(env, var_nb);
+	// need a +1 len for NULL???
 	while (i < var_nb)
 	{
 		sorted[i] = smallest(tmp);
@@ -103,28 +105,30 @@ char **sort_env(char **env)
 int exp_only(char **env, int *exit_status)
 {
 	int i;
-	char **sorted;
+	char **ret_sort;
 	char *sign;
 
 	i = 0;
-	sorted = sort_env(env);
-	if (!sort_env)
-		return (perror("malloc"), *exit_status = 1, -1);
-	while (sorted[i])
+	ret_sort = safe_malloc(sizeof(char *) * (nonull_varlen(env) + 1));
+	// if (!ret_sort)
+	// 	return (perror("malloc"), *exit_status = 1, -1);
+	ret_sort = sort_env(env, ret_sort);
+	//idea: alloc mem for **ret_sort and pass to sorting function
+	while (ret_sort[i])
 	{
-		sign = ft_strchr(sorted[i], '=');
+		sign = ft_strchr(ret_sort[i], '=');
 		if (sign)
 		{
 			*sign = '\0';
-			printf("declare -x %s=\"%s\"\n", sorted[i], sign + 1);
+			printf("declare -x %s=\"%s\"\n", ret_sort[i], sign + 1);
 			*sign = '=';
 		}
 		else
-			printf("declare -x %s\n", sorted[i]);
-		free(sorted[i]);
+			printf("declare -x %s\n", ret_sort[i]);
+		free(ret_sort[i]);
 		i++;
 	}
-	free(sorted);
+	free(ret_sort);
 	*exit_status = 0;
 	return (0);
 }

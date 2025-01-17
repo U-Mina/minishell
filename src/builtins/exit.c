@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:52 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/17 11:54:10 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,25 @@
  * end cur shell, clean everything
  * no arg, nbr args, word args
  */
-//check: handle 'args[1]:' print, or ft_exit_status?
+
+//to coustomize ft_isdigit() to pass string instead int as para
+static int	is_digit(char *s)
+{
+	while (*s)
+	{
+		if (!(*s >= '0' && *s <= '9'))
+			return -1;
+		s++;
+	}
+	return 0;
+}
+
 void ft_exit(char **args, int *exit_status)
 {
 	printf("exit\n");
 	if (args_nbr(args) > 1)
 	{
-		if (!ft_isdigit(args[1]))
+		if (is_digit(args[1]) == -1)
 		{
 			print_err("minishell", args[1], "numeric argument required" );
 			exit(255);
