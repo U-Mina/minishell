@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 17:09:03 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:53:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	ft_strlcpy(builtins[4], "unset", 6);
 	ft_strlcpy(builtins[5], "env", 4);
 	ft_strlcpy(builtins[6], "exit", 5);
-	//check: size change
 	cmd_type = COMMAND_BINARY;
 	i = 0;
 	while (i <= 6)
@@ -67,6 +66,11 @@ static t_cmdtype	get_cmd_type(char *cmd)
 		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
 		{
 			cmd_type = COMMAND_BUILTIN;
+			break ;
+		}
+		else if (ft_strncmp(cmd, "minishell", ft_strlen(cmd)) == 0)
+		{
+			cmd_type = COMMAND_MINI;
 			break ;
 		}
 		else

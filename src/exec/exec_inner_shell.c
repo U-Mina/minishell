@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 14:50:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:41:01 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:49:17 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	exec_inner_shell(t_data *data)
 	pid_t	nest_pid;
 	char	exec_path[12];
 
+	//check that no arguments are passed, and see if it should work with pipes, etc (reproduce bash behavior)
 	ft_strlcpy(exec_path, "./minishell", 12);
 	nest_pid = fork_err(&data->exit_status);
 	if (nest_pid == 0)

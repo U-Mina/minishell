@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:35:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:50:59 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ typedef enum e_redirtype
 typedef enum e_cmdtype
 {
 	COMMAND_BUILTIN,
-	COMMAND_BINARY
+	COMMAND_BINARY,
+	COMMAND_MINI
 }						t_cmdtype;
 
 typedef struct s_token
