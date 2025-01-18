@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 14:30:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:20:31 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,10 @@ typedef struct s_astnode
 
 typedef struct s_data
 {
-	int			*exit_status;
+	int			exit_status;
 	char		**env;
 	int			heredoc_fd;
+	int			o_fd[2];
 	int			fd[2];
 	t_token		*tokens;
 	t_astnode	*ast_root;

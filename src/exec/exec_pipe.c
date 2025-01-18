@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 11:14:53 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:21:49 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	right_node(t_astnode *ast_node, int *fd, t_data *data)
 {
 	pid_t	right;
 
-	right = fork_err(fd, data->exit_status);
+	right = fork_err(fd, &data->exit_status);
 	if (right == -1)
 		return (-1);
 	if (right == 0)
@@ -49,7 +49,7 @@ static int	right_node(t_astnode *ast_node, int *fd, t_data *data)
 		dup2(fd[0], STDIN_FILENO);
 		// close(fd[0]);
 		exec_ast(ast_node, data);
-		exit(*(data->exit_status));
+		exit(data->exit_status);
 	}
 	return (right);
 }
@@ -58,7 +58,7 @@ static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 {
 	pid_t	left;
 
-	left = fork_err(fd, data->exit_status);
+	left = fork_err(fd, &data->exit_status);
 	if (left == -1)
 		return (-1);
 	if (left == 0)
@@ -70,7 +70,7 @@ static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 		//maybe while loop is better than recursion**
 //now: pass pipe_node, and specify in exec_pipe 
 //or specify here exec_ast(pipe_node->left, exit_status);
-		exit(*(data->exit_status));
+		exit(data->exit_status);
 	}
 	return (left);
 }
@@ -96,7 +96,7 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	pid_t	left;
 	pid_t	right;
 
-	if (create_pipe(fd, data->exit_status) < 0)
+	if (create_pipe(fd, &data->exit_status) < 0)
 		return ;
 	left = left_node(p_node->left, fd, data);
 	if (left < 0)
@@ -106,8 +106,8 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 		return ;
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(left, data->exit_status, 0);
-	waitpid(right, data->exit_status, 0);
+	waitpid(left, &data->exit_status, 0);
+	waitpid(right, &data->exit_status, 0);
 }
 
 //too many lines, split into several fts

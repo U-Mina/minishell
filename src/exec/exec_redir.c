@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 18:58:51 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:31:25 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ static int	update_fd(t_data *data)
 {
 	if (data->fd[0] != 0) //being overwrite by new_fd, change with stdin
 	{
-		if (dup_err(data->fd[0], 0, data->exit_status) == -1)//stdin_fileno
+		if (dup_err(data->fd[0], STDIN_FILENO, &data->exit_status) == -1)//stdin_fileno
 			return (-1);
 		close(data->fd[0]);
 	}
 	if (data->fd[1] != 1)
 	{
-		if (dup_err(data->fd[1], 1, data->exit_status) == -1)//stdout_fileno
+		if (dup_err(data->fd[1], STDOUT_FILENO, &data->exit_status) == -1)//stdout_fileno
 			return (-1);
 		close(data->fd[1]);
 	}
-	*(data->exit_status) = 0;
+	data->exit_status = 0;
 	return (0);
 }
 
@@ -49,7 +49,7 @@ int	exec_redir(t_redir *redir, t_data *data)
 {
 	if (redir->type == HEREDOC)
 	{
-		exec_heredoc(redir->left, data->exit_status, data);
+		exec_heredoc(redir->left, &data->exit_status, data);
 		if (data->heredoc_fd < 0)
 			return (-1);
 	}
@@ -65,7 +65,7 @@ int	exec_redir(t_redir *redir, t_data *data)
 	}
 	if (!update_fd(data))//proper error handling
 	{
-		*(data->exit_status) = 0;
+		data->exit_status = 0;
 		exec_ast(redir->right, data);
 		return (0);
 	}

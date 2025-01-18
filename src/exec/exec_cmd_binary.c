@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 15:11:31 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:14:45 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 		else
 		{
 			print_err("minishell: ", cmd, ": No such file or directory");
-			*(data->exit_status) = 1;
+			data->exit_status = 1;
 			return (0);
 		}
 	}
@@ -92,7 +92,7 @@ int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 		if (!c_node->path)
 		{
 			print_err("minishell: ", cmd, ": command not found");
-			*(data->exit_status) = 1;
+			data->exit_status = 1;
 			return (0);
 		}
 		return (1);
@@ -111,7 +111,7 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	if (pid == -1)
 	{
 		print_err("fork", NULL, strerror(errno));
-		*(data->exit_status) = 1;
+		data->exit_status = 1;
 		return ;
 	}
 	if (pid == 0)
@@ -119,5 +119,5 @@ void	child_proc(t_cmd *cmd, t_data *data)
 		//signal()??
 		execv(cmd->path, cmd->argv);
 	}
-	waitpid(pid, data->exit_status, 0);
+	waitpid(pid, &data->exit_status, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 20:58:40 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 19:01:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:23:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ int	exec_out(t_redir *redir, t_data *data)
 	int	fd;
 
 	fd = 1;
-	while (redir)
+	if (redir)
 	{
-		fd = out_or_append(redir, fd, data->exit_status);
+		fd = out_or_append(redir, fd, &data->exit_status);
 		if (fd < 0)
+		{
+			data->fd[1] = 1;
 			return (-1);
-		redir = redir->right->node_type.redir;
+		}
 	}
 	data->fd[1] = fd;
 	return (0);

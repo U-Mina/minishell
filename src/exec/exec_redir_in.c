@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 21:55:00 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 19:01:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:17:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ int	exec_in(t_redir *redir, t_data *data)
 	fd = 0;
 	if (redir)
 	{
-		fd = input(redir, fd, data->exit_status);
+		fd = input(redir, fd, &data->exit_status);
 		if (fd < 0)
 			return (-1);
-		redir = redir->right->node_type.redir;
 	}
 	data->fd[0] = fd;
 	return (0);

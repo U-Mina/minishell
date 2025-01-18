@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 14:31:05 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:20:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **envp)
 			add_history(input);
 			data.tokens = tokenizer(input);
 			//print_tokens(data.tokens); //check lexer
-			data.ast_root = parse(data.tokens, data.exit_status);
+			data.ast_root = parse(data.tokens, &data.exit_status);
 			//print_ast(data.ast_root, 0); //check parser
 			exec_ast(data.ast_root, &data);
 			reset_data(&data);
