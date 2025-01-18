@@ -6,17 +6,19 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 17:07:47 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:30:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //disables the printing of Ctrl as ^ (ECHOCTL flag) and sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
-void	init_minishell(t_minishell	*minishell)
+void	init_minishell(t_minishell	*minishell, int ac, char **av)
 {
 	struct termios	term;
 
+	(void)ac;
+	(void)av;
 	init_signal_inter(minishell->sa, minishell->old_sa);
 	tcgetattr(STDIN_FILENO, &(minishell->old_term));
 	tcgetattr(STDIN_FILENO, &term);
@@ -30,11 +32,12 @@ void	init_minishell(t_minishell	*minishell)
 //so this works also for checking and referrencing
 
 /** init and pass env to t_cmd */
-void	init_data(char **envp, t_data *data, int *exit_status)
+void	init_data(char **envp, t_data *data)
 {
-	data->exit_status = exit_status;
+	*(data->exit_status) = 0;
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
+	data->heredoc_fd = 0;
 	//^^ being set in parse_cmd alreadt
 	if (!envp[0])
 	{
@@ -55,6 +58,15 @@ void	init_data(char **envp, t_data *data, int *exit_status)
 		}
 		change_shlvl_oldpwd(&data->env, "SHLVL", "OLDPWD");
 	}
+}
+
+void	reset_data(t_data *data)
+{
+	data->heredoc_fd = 0;
+	data->fd[0] = STDIN_FILENO;
+	data->fd[1] = STDOUT_FILENO;
+	free_ast(data->ast_root);
+	gc_free(data->tokens);
 }
 
 //check: try bad input

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 12:56:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:31:05 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,11 @@
 int	main(int ac, char **av, char **envp)
 {
 	char		*input;
-	t_token		*tokens;
 	t_data		data;
-	int			exit_status; //can we have it directly into data without having it here? also tokens and input could be stored into data?
 	t_minishell	minishell;
 
-	(void)ac;
-	(void)av;
-	init_minishell(&minishell);
-	exit_status = 0;
-	init_data(envp, &data, &exit_status);
+	init_minishell(&minishell, ac, av);
+	init_data(envp, &data);
 	while (1)
 	{
 		input = readline("Prompt>");
@@ -35,16 +30,14 @@ int	main(int ac, char **av, char **envp)
 		if (*input != '\0')
 		{
 			add_history(input);
-			tokens = tokenizer(input);
-			print_tokens(tokens); //check lexer
-			data.ast_root = parse(tokens, &exit_status);
-			print_ast(data.ast_root, 0); //check parser
+			data.tokens = tokenizer(input);
+			//print_tokens(data.tokens); //check lexer
+			data.ast_root = parse(data.tokens, data.exit_status);
+			//print_ast(data.ast_root, 0); //check parser
 			exec_ast(data.ast_root, &data);
-			free_ast(data.ast_root);
-			gc_free(tokens);
+			reset_data(&data);
 		}
 		free(input);
-		//reset_data();
 		rl_on_new_line();
 	}
 	term_minishell(&minishell, 0);
