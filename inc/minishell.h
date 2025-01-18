@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:35:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:35:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ int			exec_out(t_redir *redir, t_data *data);
 void		exec_pipe(t_pipe *p_node, t_data *data);
 int			create_pipe(int *fd, int *exit_status);
 int			exec_builtins(t_cmd *cmd, t_data *data);
-void exec_inner_shell(t_data *data);
+void		exec_inner_shell(t_data *data);
 int			get_path(char *cmd, t_cmd *c_node, t_data *data);
 void		child_proc(t_cmd *cmd, t_data *data);
 

@@ -23,6 +23,7 @@ SOURCES =	minishell.c\
 			exec_cmd.c\
 			exec_cmd_binary.c\
 			exec_cmd_builtin.c\
+			exec_inner_shell.c\
 			exec_pipe.c\
 			exec_redir.c\
 			exec_redir_heredoc.c\

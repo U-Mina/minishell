@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_inner_shell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 14:50:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:11:00 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/18 16:41:01 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	to_lower_str(char *str, char *low_cmd);
 // 	return false;
 // } command_type == minishll
 
-static pid_t fork_err(int *exit_status)
+static pid_t	fork_err(int *exit_status)
 {
-	pid_t nest_pid;
-	
+	pid_t	nest_pid;
+
 	nest_pid = fork();
 	if (nest_pid == -1)
 	{
@@ -36,15 +36,16 @@ static pid_t fork_err(int *exit_status)
 		perror("fork");
 		exit(*exit_status);
 	}
+	return (nest_pid);
 }
 
-void exec_inner_shell(t_data *data)
+void	exec_inner_shell(t_data *data)
 {
-	pid_t nest_pid;
-	char exec_path[12];
-	
-	exec_path[12] = "./minishell";
-	nest_pid = fork_err(data->exit_status);
+	pid_t	nest_pid;
+	char	exec_path[12];
+
+	ft_strlcpy(exec_path, "./minishell", 12);
+	nest_pid = fork_err(&data->exit_status);
 	if (nest_pid == 0)
 	{
 		//execve take char *file_path,
@@ -56,5 +57,5 @@ void exec_inner_shell(t_data *data)
 		}
 	}
 	else if (nest_pid > 0)
-		waitpid(nest_pid, data->exit_status, 0);
+		waitpid(nest_pid, &data->exit_status, 0);
 }
