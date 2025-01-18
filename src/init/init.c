@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 14:30:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:39:17 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	init_data(char **envp, t_data *data)
 	*(data->exit_status) = 0;
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
-	data->heredoc_fd = 0;
+	data->heredoc_fd = 1;
 	//^^ being set in parse_cmd alreadt
 	if (!envp[0])
 	{
@@ -62,7 +62,7 @@ void	init_data(char **envp, t_data *data)
 
 void	reset_data(t_data *data)
 {
-	data->heredoc_fd = 0;
+	data->heredoc_fd = -1;
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
 	free_ast(data->ast_root);
