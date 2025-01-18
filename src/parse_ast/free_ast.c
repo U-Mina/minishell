@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:25:37 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 12:57:41 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 13:22:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static void	free_cmd_node(t_astnode *ast_node)
 	arg_flag = 0;
 	if (ast_node->node_type.cmd->argv)
 	{
-		arg_flag = 1;
+		if (ast_node->node_type.cmd->argv[0] == ast_node->token->value)
+			arg_flag = 1;
 		free_double_pointer(ast_node->node_type.cmd->argv);
 	}
 	if (ast_node->node_type.cmd->path)
