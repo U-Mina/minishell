@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:28:03 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 12:56:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int	main(int ac, char **av, char **envp)
 	char		*input;
 	t_token		*tokens;
 	t_data		data;
-	int			exit_status;
-	//t_astnode	*ast_root;
+	int			exit_status; //can we have it directly into data without having it here? also tokens and input could be stored into data?
 	t_minishell	minishell;
 
 	(void)ac;
@@ -30,33 +29,19 @@ int	main(int ac, char **av, char **envp)
 	init_data(envp, &data, &exit_status);
 	while (1)
 	{
-		//Display a prompt when waiting for a new command
 		input = readline("Prompt>");
 		if(!input)
 			break ;
 		if (*input != '\0')
 		{
 			add_history(input);
-			//Split into categorized tokens
 			tokens = tokenizer(input);
-			//free(input);//free at the end for all cases
-			//check lexer
-			print_tokens(tokens);
-			//Create AST with hierarchized tokens
+			print_tokens(tokens); //check lexer
 			data.ast_root = parse(tokens, &exit_status);
-			//check parser
-			print_ast(data.ast_root, 0);
-			//execution
+			print_ast(data.ast_root, 0); //check parser
 			exec_ast(data.ast_root, &data);
-			//free allocated memory
-			free_tokens(tokens);
 			free_ast(data.ast_root);
-			// //execute the command saved into ast
-			// //depending on the type of command: 
-			// //1. search in files and exec the program
-			// //2. create pipe, whatever
-			// //3. exec a builtin function
-			// exec(command);
+			gc_free(tokens);
 		}
 		free(input);
 		//reset_data();

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 17:08:00 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 12:57:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,6 @@ typedef struct s_cmd
 	int			arg_nb;
 	char		**argv;
 	char		*path;
-	// int			*exit_status;
-	// char 		**env; // or wherever it is
 }				t_cmd;
 
 typedef struct s_pipe
@@ -173,7 +171,6 @@ t_astnode	*parse_pipe(t_token *tokens, int *curr_tok, t_astnode *left_node,
 				int *ex_st);
 
 // free ast
-void		free_tokens(t_token *tokens);
 void		free_double_pointer(char **str);
 void		free_ast(t_astnode *ast_node);
 

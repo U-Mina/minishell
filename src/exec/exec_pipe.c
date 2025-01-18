@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:35:54 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 11:14:53 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	right_node(t_astnode *ast_node, int *fd, t_data *data)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
+		// close(fd[0]);
 		exec_ast(ast_node, data);
 		exit(*(data->exit_status));
 	}
@@ -65,7 +65,7 @@ static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
+		// close(fd[1]);
 		exec_ast(ast_node, data);
 		//maybe while loop is better than recursion**
 //now: pass pipe_node, and specify in exec_pipe 
@@ -108,7 +108,6 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	close(fd[1]);
 	waitpid(left, data->exit_status, 0);
 	waitpid(right, data->exit_status, 0);
-	exit (*(data->exit_status));
 }
 
 //too many lines, split into several fts
