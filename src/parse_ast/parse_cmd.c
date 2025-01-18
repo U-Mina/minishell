@@ -6,11 +6,27 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 16:53:23 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/18 17:22:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//removes the quotes of the the token value and converts it to a WORD token, so it can be processed as a command
+static void	del_cmd_quotes(t_token *tokens, int *curr_tok)
+{
+	char	*trimmed;
+	char	quote[2];
+
+	if (tokens[*curr_tok].type != QUOTE)
+		return ;
+	quote[0] = tokens[*curr_tok].value[0];
+	quote[1] = '\0';
+	trimmed = gc_strtrim(tokens[*curr_tok].value, quote);
+	gc_free(tokens[*curr_tok].value);
+	tokens[*curr_tok].value = trimmed;
+	tokens[*curr_tok].type = WORD;
+}
 
 //returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
 //updates the number of arguments of a cmd_node
@@ -29,13 +45,14 @@ static char	**get_cmd_args(t_astnode *cmd_node, t_token *tokens, int *curr_tok,
 	argv = (char **)gc_malloc((cmd->arg_nb + 2) * sizeof(char *));
 	// if (!argv)
 	// 	return (handle_error(gc_list));
-	if (tokens[*curr_tok].env_var > 0)
-		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, ex_st);
 	argv[0] = cmd_node->token->value;
 	i = 1;
 	while (tokens[*curr_tok].type == WORD \
 			|| tokens[*curr_tok].type == QUOTE)
 	{
+		del_cmd_quotes(tokens, curr_tok); //??? should handle the exception that should keep the quotes: when passing shell commands as arguments to another shell interpreter (such as: sh -c "echo hello")!?!?!?!??!?
+		if (tokens[*curr_tok].env_var > 0)
+			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, ex_st);
 		tokens[*curr_tok].type = ARGUMENT;
 		argv[i] = tokens[*curr_tok].value;
 		(*curr_tok)++;
@@ -79,20 +96,6 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	return (cmd_type);
 }
 
-//removes the quotes of the the token value and converts it to a WORD token, so it can be processed as a command
-static void	del_cmd_quotes(t_token *tokens, int *curr_tok)
-{
-	char	*trimmed;
-	char	quote[2];
-
-	quote[0] = tokens[*curr_tok].value[0];
-	quote[1] = '\0';
-	trimmed = gc_strtrim(tokens[*curr_tok].value, quote);
-	gc_free(tokens[*curr_tok].value);
-	tokens[*curr_tok].value = trimmed;
-	tokens[*curr_tok].type = WORD;
-}
-
 //creates AST nodes for commands
 t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
 {
@@ -101,8 +104,7 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
 	cmd_node = NULL;
 	if (tokens[*curr_tok].env_var > 0)
 		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, ex_st);
-	if (tokens[*curr_tok].type == QUOTE)
-		del_cmd_quotes(tokens, curr_tok);
+	del_cmd_quotes(tokens, curr_tok);
 	if (tokens[*curr_tok].type == WORD)
 	{
 		tokens[*curr_tok].type = COMMAND;
