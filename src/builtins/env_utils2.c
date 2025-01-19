@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 11:55:36 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 12:58:04 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ void	del_var(char ***env, char *key)
 }
 
 //after any change in env (add/del of var/val), updtae **env array
+// flg == true, change to n_val
+//the pass para *val is the value to be assign to var
 int update_env (char ***env, const char *key, char *val, bool flg)
 {
 	int pos;

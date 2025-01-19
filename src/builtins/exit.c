@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 11:54:10 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 13:48:15 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,20 @@ void ft_exit(char **args, int *exit_status)
 		if (is_digit(args[1]) == -1)
 		{
 			print_err("minishell", args[1], "numeric argument required" );
-			exit(255);
+			*exit_status = 255;
+			exit(*exit_status);
 		}
 		else
 		{
 			if (args_nbr(args) == 2)
-				exit(ft_atoi(args[1]));
+			{
+				*exit_status = ft_atoi(args[1]);
+				exit(*exit_status);
+			}
 			else
 			{
 				print_err("minishell", "exit", "too many arguments" );
 				*exit_status = 1;
-				return ;
 			}
 		}
 	}
