@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 16:20:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 13:09:28 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int ac, char **av, char **envp)
 		input = readline("Prompt>");
 		if(!input)
 			break ;
-		if (*input != '\0')
+		if (*input != '\0' && *gc_strtrim(input, " \t\n\v\f\r") != '\0')
 		{
 			add_history(input);
 			data.tokens = tokenizer(input);
