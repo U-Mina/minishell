@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 16:14:45 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 12:45:42 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 		}
 		else
 		{
-			print_err("minishell: ", cmd, ": No such file or directory");
+			print_err("minishell", cmd, "No such file or directory");
 			data->exit_status = 1;
 			return (0);
 		}
@@ -91,7 +91,7 @@ int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 		c_node->path = search_in_path(cmd);
 		if (!c_node->path)
 		{
-			print_err("minishell: ", cmd, ": command not found");
+			print_err("minishell", cmd, "command not found");
 			data->exit_status = 1;
 			return (0);
 		}

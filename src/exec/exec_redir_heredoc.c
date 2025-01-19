@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_heredoc.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 14:33:21 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 11:32:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@
 // 	return (-1);
 // }
 
-static char	*read_here(char *de, int *exit_status)
+static char	*read_here(char *de, int *exit_status, t_data *data)
 {
 	char	*content;
 	char	*retval;
 
+	data->fd[0] =  dup(STDIN_FILENO);
+	data->fd[1] =  dup(STDOUT_FILENO);
+	dup2(data->o_fd[0], STDIN_FILENO);
+	dup2(data->o_fd[1], STDOUT_FILENO);
 	content = readline("> ");
 	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1)) 
 	{
@@ -42,11 +46,15 @@ static char	*read_here(char *de, int *exit_status)
 		free(content);
 		content = NULL;
 		*exit_status = 0;
+		dup2(data->fd[0], STDIN_FILENO);
+		dup2(data->fd[1], STDOUT_FILENO);
 		return (NULL);
 	}
 	retval = safe_join(content, "\n");
 	retval = expand_env(retval, exit_status);
 	free(content);
+	dup2(data->fd[0], STDIN_FILENO);
+	dup2(data->fd[1], STDOUT_FILENO);
 	return (retval);
 }
 
@@ -76,7 +84,7 @@ void	exec_heredoc(char *de, int *exit_status, t_data *data)
 	}
 	while (1)
 	{
-		line = read_here(de, exit_status);
+		line = read_here(de, exit_status, data);
 		if (line == NULL)//finished reading(EOF) or meet delim
 			break ;
 		if (write_pipe(fd, line, exit_status) < 0)

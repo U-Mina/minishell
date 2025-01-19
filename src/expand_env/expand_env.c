@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:58:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 13:08:51 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,29 @@ static void	env_val(char *str, t_env_var *env_var, int i_start, int *ex_st)
 	env_var->start = i_start;
 	i = i_start + 1;
 	if (str[i] == '?')
+	{
 		env_var->val = gc_itoa(*ex_st); // (as int or as char* ???)
+		// if (!env_var->val)
+		// 	gc_malloc_error();
+		env_var->end = i + 1;
+		env_var->name_len = env_var->end - env_var->start - 1;
+		env_var->val_len = ft_strlen(env_var->val);
+	}
 	else
 	{
 		while (ft_isalnum(str[i]) || str[i] == '_')
 			i++;
 		env_var->end = i;
 		env_var->name_len = env_var->end - env_var->start - 1;
+		env_val = getenv(gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
+		if (!env_val)// is this the expected behavior!?!
+			env_val = "\0";
+		env_var->val_len = ft_strlen(env_val);
+		env_var->val = gc_malloc(env_var->val_len + 1);
+		// if (!env_var->val)
+		// 	gc_malloc_error();
+		ft_strlcpy(env_var->val, env_val, env_var->val_len + 1);
 	}
-	env_val = getenv(gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
-	if (!env_val)// is this the expected behavior!?!
-		env_val = "\0";
-	env_var->val_len = ft_strlen(env_val);
-	env_var->val = gc_malloc(env_var->val_len + 1);
-	// if (!env_var->val)
-	// 	gc_malloc_error();
-	ft_strlcpy(env_var->val, env_val, env_var->val_len + 1);
 }
 
 //combines literal text from quotes with expanded env var value
