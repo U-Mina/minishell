@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:16:51 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 13:27:34 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:09:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //idea: **env == **cpenv, with shlvl+1 and OLDPWD changed
-int ft_env(char **env, int *exit_status)
+int	ft_env(char **env, int *exit_status)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (env == NULL || env[0] == NULL)

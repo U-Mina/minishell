@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 13:48:15 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:09:39 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static int	is_digit(char *s)
 	while (*s)
 	{
 		if (!(*s >= '0' && *s <= '9'))
-			return -1;
+			return (-1);
 		s++;
 	}
-	return 0;
+	return (0);
 }
 
-void ft_exit(char **args, int *exit_status)
+void	ft_exit(char **args, int *exit_status)
 {
 	printf("exit\n");
 	if (args_nbr(args) > 1)

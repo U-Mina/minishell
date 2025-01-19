@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 11:56:01 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:09:14 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
  */
 
 //rename as *var_value()
-char *env_var_value(char **env, const char *key)
+char	*env_var_value(char **env, const char *key)
 {
-	int i;
-	int len;
-	
+	int	i;
+	int	len;
+
 	if (!env || !key)
 		return (NULL);
 	i = 0;
@@ -36,10 +36,10 @@ char *env_var_value(char **env, const char *key)
 	return (NULL);
 }
 
-void del_val(char **env, char *key)
+void	del_val(char **env, char *key)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = ft_strlen(key);
@@ -56,11 +56,11 @@ void del_val(char **env, char *key)
 	}
 }
 
-void mod_val(char **env, char *key, char *val)
+void	mod_val(char **env, char *key, char *val)
 {
-	int i;
-	int len;
-	char *tmp;
+	int		i;
+	int		len;
+	char	*tmp;
 
 	i = 0;
 	len = ft_strlen(key);

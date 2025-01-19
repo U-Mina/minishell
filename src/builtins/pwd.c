@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:32:49 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:09:29 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 16:13:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
  * todo: use 'args' or 'int* exit_code' as para?
  * or make higher exit_code ft to check retval of each ft: retval (-1)/(0) 
 */
-void ft_pwd(int *exit_status)
+void	ft_pwd(int *exit_status)
 {
-	char *cur_dir;
-	
+	char	*cur_dir;
+
 	cur_dir = getcwd(NULL, 0);
 	if (cur_dir == NULL)
 	{

@@ -6,13 +6,13 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:23:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:37 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 16:06:40 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool check_flag(char *arg)
+static bool	check_flag(char *arg)
 {
 	if (!*arg)
 		return (false);
@@ -27,10 +27,10 @@ static bool check_flag(char *arg)
 	return (true);
 }
 
-void ft_echo(char **args, int* exit_status)
+void	ft_echo(char **args, int *exit_status)
 {
-	bool flag;
-	
+	bool	flag;
+
 	flag = false;
 	args++;
 	while (*args && check_flag(*args))
@@ -42,7 +42,7 @@ void ft_echo(char **args, int* exit_status)
 	{
 		printf("%s", *args++);
 		if (*args)
-		printf(" ");
+			printf(" ");
 	}
 	if (flag == false)
 		printf("\n");

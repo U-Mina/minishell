@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 11:55:27 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:07:40 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 //if no env var is passed, create a var list for it
 //HOME, PWD, OLDPWD, SHLVL, _=, NULL
 //check: ?? to add executable path
-char **create_env(void)
+char	**create_env(void)
 {
-	char **env;
-	char *_cwd;
-	char *hm_usr;
-	char *exec_path;
-	
+	char	**env;
+	char	*_cwd;
+	char	*hm_usr;
+	char	*exec_path;
+
 	env = safe_malloc(sizeof(char *) * 6);
 	_cwd = getcwd(NULL, 0);
 	if (_cwd == NULL)
-		return NULL;
+		return (NULL);
 	// _cwd = cur_path();
 	hm_usr = getenv("HOME");
 	if (!hm_usr)
@@ -48,9 +48,9 @@ char **create_env(void)
 }
 
 // count num of var in env, and allocate mem accordingly for cpy_env
-int varlen(char **env)
+int	varlen(char **env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env[i])
@@ -60,11 +60,11 @@ int varlen(char **env)
 
 //todo: to change all safe-malloc() to gc_malloc()??
 // hard cp **envp vars to **cpenv
-char **cpy_env(char **env)
+char	**cpy_env(char **env)
 {
-	int i;
-	int len;
-	char **cpenv;
+	int		i;
+	int		len;
+	char	**cpenv;
 
 	i = 0;
 	len = varlen(env);
@@ -85,12 +85,12 @@ char **cpy_env(char **env)
 }
 
 //key1->"SHLVL", key2->"OLDPWD": shlvl + 1, modify OLDPWD
-void change_shlvl_oldpwd(char ***env, char *key1, char *key2)
+void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 {
-	char *val;
-	char *var_pwd;
-	int pos1;
-	int pos2;
+	char	*val;
+	char	*var_pwd;
+	int		pos1;
+	int		pos2;
 
 	var_pwd = NULL;
 	pos1 = find_env_var(*env, key1);

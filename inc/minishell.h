@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 14:35:54 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 15:38:08 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 # include <errno.h>
 # include <fcntl.h> // for read()
 # include <limits.h>
+# include <stdio.h>
 # include <readline/history.h> //readline()
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <termios.h>
 # include <unistd.h>
 
-struct s_data;
+struct	s_data;
 
 // original_state and signal handling
 typedef struct s_minishell
@@ -87,7 +87,7 @@ typedef struct s_tokenizer
 	int					count;
 }						t_tokenizer;
 
-struct s_astnode;
+struct	s_astnode;
 
 // heredoc_fd is specially for heredoc<<
 // heredoc need a tmp fd to hold the content,
@@ -96,7 +96,7 @@ typedef struct s_redir
 {
 	t_redirtype			type;
 	int					heredoc_fd;
-	char *left; // the filename
+	char				*left; // the filename
 	struct s_astnode	*right;
 }						t_redir;
 
