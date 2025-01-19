@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:31:25 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 12:07:48 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ static int	update_fd(t_data *data)
 		if (dup_err(data->fd[0], STDIN_FILENO, &data->exit_status) == -1)//stdin_fileno
 			return (-1);
 		close(data->fd[0]);
+		data->fd[0] = 0;
 	}
 	if (data->fd[1] != 1)
 	{
 		if (dup_err(data->fd[1], STDOUT_FILENO, &data->exit_status) == -1)//stdout_fileno
 			return (-1);
 		close(data->fd[1]);
+		data->fd[1] = 1;
 	}
 	data->exit_status = 0;
 	return (0);
