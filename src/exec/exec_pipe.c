@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:21:49 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 05:01:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static int	right_node(t_astnode *ast_node, int *fd, t_data *data)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		// close(fd[0]);
+		//handle the other pipe first
+		ast_node = handle_redir(ast_node);//dont know if in the right part is also needed??
 		exec_ast(ast_node, data);
 		exit(data->exit_status);
 	}
@@ -66,6 +68,10 @@ static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		// close(fd[1]);
+
+		//include another pipe for communication purpose
+		ast_node = handle_redir(ast_node);
+		//close communication pipe
 		exec_ast(ast_node, data);
 		//maybe while loop is better than recursion**
 //now: pass pipe_node, and specify in exec_pipe 

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/16 17:56:03 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 04:41:08 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ void	exec_ast(t_astnode *ast_node, t_data *data)
 		return ;
 	if (ast_node->token->type == PIPE)
 		exec_pipe(ast_node->node_type.pipe, data);
-	else if (ast_node->token->type == REDIRECTION)
-		exec_redir(ast_node->node_type.redir, data);
+	else if (ast_node->token->type == REDIRECTION)//think of possible data races in data struct everytime we fork.
+	{
+		ast_node = handle_redir(ast_node, data);
+		exec_ast(ast_node, data);
+	}
 	else if (ast_node->token->type == COMMAND)
 		exec_cmd(ast_node, data);
 	//clean and free function needed to clean 'data'??
