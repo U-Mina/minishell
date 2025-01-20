@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 15:38:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:02:25 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <errno.h>
 # include <fcntl.h> // for read()
 # include <limits.h>
@@ -183,7 +185,7 @@ void					free_ast(t_astnode *ast_node);
 // exec
 void					exec_ast(t_astnode *ast_node, t_data *data);
 void					exec_cmd(t_astnode *cmd_node, t_data *data);
-int						exec_redir(t_redir *redir, t_data *data);
+t_astnode				*handle_redir_fd(t_astnode *ast_node, t_data *data);
 void					exec_heredoc(char *de, int *exit_status, t_data *data);
 int						exec_in(t_redir *redir, t_data *data);
 int						exec_out(t_redir *redir, t_data *data);

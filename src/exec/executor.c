@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:45:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/20 04:41:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 10:05:30 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	exec_ast(t_astnode *ast_node, t_data *data)
 		exec_pipe(ast_node->node_type.pipe, data);
 	else if (ast_node->token->type == REDIRECTION)//think of possible data races in data struct everytime we fork.
 	{
-		ast_node = handle_redir(ast_node, data);
+		ast_node = handle_redir_fd(ast_node, data);
 		exec_ast(ast_node, data);
 	}
 	else if (ast_node->token->type == COMMAND)

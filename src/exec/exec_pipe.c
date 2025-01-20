@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/20 05:01:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:01:47 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,7 @@ static pid_t	fork_err(int *fd, int *exit_status)
 	return (id);
 }
 
-static int	right_node(t_astnode *ast_node, int *fd, t_data *data)
-{
-	pid_t	right;
-
-	right = fork_err(fd, &data->exit_status);
-	if (right == -1)
-		return (-1);
-	if (right == 0)
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		// close(fd[0]);
-		//handle the other pipe first
-		ast_node = handle_redir(ast_node);//dont know if in the right part is also needed??
-		exec_ast(ast_node, data);
-		exit(data->exit_status);
-	}
-	return (right);
-}
-
-static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
+static int	left_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 {
 	pid_t	left;
 
@@ -65,13 +45,12 @@ static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 		return (-1);
 	if (left == 0)
 	{
+		close(sync_fd[0]);
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
-		// close(fd[1]);
-
-		//include another pipe for communication purpose
-		ast_node = handle_redir(ast_node);
-		//close communication pipe
+		ast_node = handle_redir_fd(ast_node, data);
+		write(sync_fd[1], "done", 4);
+		close(sync_fd[1]);
 		exec_ast(ast_node, data);
 		//maybe while loop is better than recursion**
 //now: pass pipe_node, and specify in exec_pipe 
@@ -79,6 +58,34 @@ static int	left_node(t_astnode *ast_node, int *fd, t_data *data)
 		exit(data->exit_status);
 	}
 	return (left);
+}
+
+static int	right_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
+{
+	pid_t	right;
+	char	buffer[5];
+	size_t	bytes_read;
+
+	right = fork_err(fd, &data->exit_status);
+	if (right == -1)
+		return (-1);
+	if (right == 0)
+	{
+		close(sync_fd[1]);
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		bytes_read = read(sync_fd[0], buffer, 5);
+		if (bytes_read != 4 || ft_strncmp(buffer, "done", 4) != 0)
+		{
+			perror("Pipe synchronization failed");
+			exit(1);
+		}
+		close(sync_fd[0]);
+		// ast_node = handle_redir_fd(ast_node, data);//dont know if in the right part is also needed??
+		exec_ast(ast_node, data);
+		exit(data->exit_status);
+	}
+	return (right);
 }
 
 int	create_pipe(int *fd, int *exit_status)
@@ -99,17 +106,22 @@ int	create_pipe(int *fd, int *exit_status)
 void	exec_pipe(t_pipe *p_node, t_data *data)
 {
 	int		fd[2];
+	int		sync_fd[2];
 	pid_t	left;
 	pid_t	right;
 
 	if (create_pipe(fd, &data->exit_status) < 0)
 		return ;
-	left = left_node(p_node->left, fd, data);
+	if (create_pipe(sync_fd, &data->exit_status) < 0)
+		return ;
+	left = left_node(p_node->left, fd, sync_fd, data);
 	if (left < 0)
 		return ;
-	right = right_node(p_node->right, fd, data);
+	right = right_node(p_node->right, fd, sync_fd, data);
 	if (right < 0)
 		return ;
+	close(sync_fd[0]);
+	close(sync_fd[1]);
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(left, &data->exit_status, 0);
