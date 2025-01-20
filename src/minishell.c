@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/19 13:09:28 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:26:37 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av, char **envp)
 	t_minishell	minishell;
 
 	init_minishell(&minishell, ac, av);
-	init_data(envp, &data);
+	init_data(envp, &data, &minishell);
 	while (1)
 	{
 		input = readline("Prompt>");

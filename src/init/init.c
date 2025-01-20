@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:21:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:25:48 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	init_minishell(t_minishell	*minishell, int ac, char **av)
 //so this works also for checking and referrencing
 
 /** init and pass env to t_cmd */
-void	init_data(char **envp, t_data *data)
+void	init_data(char **envp, t_data *data, t_minishell *minishell)
 {
 	data->exit_status = 0;
 	data->o_fd[0] = dup(STDIN_FILENO);
@@ -40,6 +40,7 @@ void	init_data(char **envp, t_data *data)
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
 	data->heredoc_fd = 1;
+	data->minishell = minishell;
 	//^^ being set in parse_cmd alreadt
 	if (!envp[0])
 	{
@@ -69,8 +70,10 @@ void	reset_data(t_data *data)
 	data->fd[0] = STDIN_FILENO;
 	dup2(data->o_fd[1], STDOUT_FILENO);
 	data->fd[1] = STDOUT_FILENO;
-	free_ast(data->ast_root);
-	gc_free(data->tokens);
+	if (data->ast_root)
+		free_ast(data->ast_root);
+	if (data->tokens)
+		gc_free(data->tokens);
 }
 
 //check: try bad input

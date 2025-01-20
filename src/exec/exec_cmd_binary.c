@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/19 12:45:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:30:45 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,10 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	}
 	if (pid == 0)
 	{
-		//signal()??
+		init_signal_exec();
 		execv(cmd->path, cmd->argv);
 	}
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->exit_status, 0);
+	init_signal_inter(data->minishell->sa, data->minishell->old_sa);
 }

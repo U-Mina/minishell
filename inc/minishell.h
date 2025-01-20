@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/20 11:02:25 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:24:34 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ typedef struct s_data
 	int					fd[2];
 	t_token				*tokens;
 	t_astnode			*ast_root;
+	t_minishell			*minishell;
 }						t_data;
 
 // gc_list
@@ -155,7 +156,7 @@ void					init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 void					init_minishell(t_minishell *minishell, int ac,
 							char **av);
 void					term_minishell(t_minishell *minishell, int rv);
-void					init_data(char **envp, t_data *data);
+void					init_data(char **envp, t_data *data, t_minishell *minishell);
 void					reset_data(t_data *data);
 void					init_cmd_node(t_cmd *cmd_node);
 void					init_redir_node(t_redir *redir_node);

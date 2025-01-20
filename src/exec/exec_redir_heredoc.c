@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 11:32:16 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:35:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*read_here(char *de, int *exit_status, t_data *data)
 	dup2(data->o_fd[0], STDIN_FILENO);
 	dup2(data->o_fd[1], STDOUT_FILENO);
 	content = readline("> ");
-	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1)) 
+	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1) || *content < 0) //check properly the behavior when Ctrl-D is pressed (*content < 0) if we should set error different, exit status???
 	{
 		if (errno != 0)
 			return (print_err("readline", NULL, strerror(errno)), *exit_status = 1, NULL);
