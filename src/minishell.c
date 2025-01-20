@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/19 13:09:28 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 15:27:35 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av, char **envp)
 	t_minishell	minishell;
 
 	init_minishell(&minishell, ac, av);
-	init_data(envp, &data);
+	init_data(envp, &data, &minishell);//to pass minishell to data
 	while (1)
 	{
 		input = readline("Prompt>");

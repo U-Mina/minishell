@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 11:55:27 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/20 09:03:31 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	// if (pos1 < 0) ??
 	//check: the error check necesary or not? just created above
 	free((*env)[pos1]);
-	val = ft_itoa(ft_atoi(env_var_value(*env, key1) + 1));
+	val = ft_itoa(ft_atoi(env_var_value(*env, key1))+ 1);
 	(*env)[pos1] = safe_join("SHLVL=", val);
 	//check: is var_create() funtion necessary?
 	free(val);

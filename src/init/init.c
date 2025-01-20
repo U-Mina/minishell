@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:21:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 15:27:06 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	init_minishell(t_minishell	*minishell, int ac, char **av)
 //so this works also for checking and referrencing
 
 /** init and pass env to t_cmd */
-void	init_data(char **envp, t_data *data)
+void	init_data(char **envp, t_data *data, t_minishell *minishell)
 {
 	data->exit_status = 0;
 	data->o_fd[0] = dup(STDIN_FILENO);
@@ -40,6 +40,7 @@ void	init_data(char **envp, t_data *data)
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
 	data->heredoc_fd = 1;
+	data->minishell = minishell;
 	//^^ being set in parse_cmd alreadt
 	if (!envp[0])
 	{

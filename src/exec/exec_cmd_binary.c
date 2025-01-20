@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_binary.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/19 12:45:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 14:54:47 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 		if (!c_node->path)
 		{
 			print_err("minishell", cmd, "command not found");
-			data->exit_status = 1;
+			data->exit_status = 127;
 			return (0);
 		}
 		return (1);
