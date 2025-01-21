@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 16:06:07 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:26:59 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ bool	check_err_go_dir(char *path, int *exit_status)
 	*exit_status = 0;
 	return	(true);
 }
-	// if (access(path, X_OK) != 0)
-	// {
-	// 	print_err("minishell: cd", path, "Permission denied");
-	// 	return (*exit_status = 1, false);
-	// }
+// if (access(path, X_OK) != 0)
+// {
+// 	print_err("minishell: cd", path, "Permission denied");
+// 	return (*exit_status = 1, false);
+// }
 
 char	*cur_path(int *exit_status)
 {
@@ -59,10 +59,11 @@ char	*cur_path(int *exit_status)
 	i = 0;
 	while (tmp[i])
 	{
-		res[i] = tmp[i]; //not sure if this will give seg fault...??
+		res[i] = tmp[i];
 		i++;
 	}
-	free(tmp);
+	//free(tmp);
+	gc_free(tmp);
 	res[i] = '\0';
 	*exit_status = 0;
 	return (res);
@@ -90,12 +91,6 @@ int	ft_cd(char **args, char ***env, int *exit_status)
 	char	*cur;
 	bool	retval;
 
-	// if (getcwd(cur, sizeof(cur)) == NULL)
-	// {
-	// 	perror("gercwd: ");
-	// 	*exit_status = 1;
-	// 	return (-1);
-	// }
 	cur = cur_path(exit_status);
 	if (cur == NULL)
 		return (-1);
@@ -113,22 +108,16 @@ void	handle_pwd(char *o_pwd, char ***env, int *exit_status)
 	char	*cur;
 	char	*n_var;
 
-	// if (getcwd(cur, sizeof(cur)) == NULL)
-	// {
-	// 	perror("gercwd: ");
-	// 	*exit_status = 1;
-	// }
 	cur = cur_path(exit_status);
 	if (find_env_var(*env, "OLDPWD") < 0)//no OLDPWD exist, create one
 	{
 		n_var = create_newvar("OLDPWD", o_pwd);
-		// put_var(env, n_var);//check: error check needed??
+		// put_var(env, n_var);
+		//check: error check needed??
 		update_env(env, "OLDPWD", n_var, true);
 	}
 	else//OLDPWD exist, change it to o_pwd
 		update_env(env, "OLDPWD", o_pwd, true);
-		//mod_val(*env, "OLDPWD", o_pwd);
-	//mod_val(*env, "PWD", cur);
 	update_env(env, "PWD", cur, true);
 }
 

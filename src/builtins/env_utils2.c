@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 16:08:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:29:06 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*create_newvar(const char *key, char *val)
 
 	//export cmd without '='/value
 	if (val == NULL) 
-		n_var = ft_strdup(key);
+		n_var = gc_strdup(key);
 	else
 	{
 		tmp = safe_join((char *)key, "=");
@@ -74,7 +74,7 @@ void	put_var(char ***env, char *n_var)
 	char	**n_env;
 
 	i = varlen(*env);
-	n_env = ft_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
+	n_env = gc_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
 	if (!n_env)
 	{
 		free(n_env);
@@ -96,14 +96,13 @@ void	del_var(char ***env, char *key)
 		return ; // no such var
 	free((*env)[pos]);
 	len = varlen(*env);
-	//cat size_t to int to do comparison??
 	i = pos;
 	while (i < len - 1)
 	{
 		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
 		i++;
 	}(*env)[len - 1] = NULL;
-	*env = ft_realloc(*env, sizeof(char *) * (len
+	*env = gc_realloc(*env, sizeof(char *) * (len
 					+ 1), sizeof(char *) * len);
 }
 
@@ -123,11 +122,11 @@ int	update_env(char ***env, const char *key, char *val, bool flg)
 	{
 		if (flg == true)
 		{
-			free((*env)[pos]);
+			gc_free((*env)[pos]);
 			(*env)[pos] = n_var;
 		}
 		else
-			free(n_var);
+			gc_free(n_var);
 		return (0);
 	}
 	put_var(env, n_var);
