@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:29:06 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 14:36:24 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*create_newvar(const char *key, char *val)
 		tmp = safe_join((char *)key, "=");
 		//make "key" not constant char??
 		n_var = safe_join(tmp, val);
-		free(tmp);
+		gc_free(tmp);
 	}
 	return (n_var);
 }

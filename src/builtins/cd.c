@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:26:59 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 14:35:21 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*cur_path(int *exit_status)
 		i++;
 	}
 	//free(tmp);
-	gc_free(tmp);
+	free(tmp);
 	res[i] = '\0';
 	*exit_status = 0;
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:32:49 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:30:47 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 14:11:04 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_pwd(int *exit_status)
 	}
 	printf("%s\n", cur_dir);
 	*exit_status = 0;
-	gc_free(cur_dir);
+	free(cur_dir);
 }
 
 // case(arg)
