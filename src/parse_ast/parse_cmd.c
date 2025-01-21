@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 17:22:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:38:42 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	del_cmd_quotes(t_token *tokens, int *curr_tok)
 //returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
 //updates the number of arguments of a cmd_node
 static char	**get_cmd_args(t_astnode *cmd_node, t_token *tokens, int *curr_tok,
-							int *ex_st)
+							t_data *data)
 {
 	char		**argv;
 	t_cmd		*cmd;
@@ -52,7 +52,7 @@ static char	**get_cmd_args(t_astnode *cmd_node, t_token *tokens, int *curr_tok,
 	{
 		del_cmd_quotes(tokens, curr_tok); //??? should handle the exception that should keep the quotes: when passing shell commands as arguments to another shell interpreter (such as: sh -c "echo hello")!?!?!?!??!?
 		if (tokens[*curr_tok].env_var > 0)
-			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, ex_st);
+			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
 		tokens[*curr_tok].type = ARGUMENT;
 		argv[i] = tokens[*curr_tok].value;
 		(*curr_tok)++;
@@ -80,14 +80,9 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	i = 0;
 	while (i <= 6)
 	{
-		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
+		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd) + 1) == 0)
 		{
 			cmd_type = COMMAND_BUILTIN;
-			break ;
-		}
-		else if (ft_strncmp(cmd, "minishell", ft_strlen(cmd)) == 0)
-		{
-			cmd_type = COMMAND_MINI;
 			break ;
 		}
 		else
@@ -97,13 +92,13 @@ static t_cmdtype	get_cmd_type(char *cmd)
 }
 
 //creates AST nodes for commands
-t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
+t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 {
 	t_astnode	*cmd_node;
 
 	cmd_node = NULL;
 	if (tokens[*curr_tok].env_var > 0)
-		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, ex_st);
+		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
 	del_cmd_quotes(tokens, curr_tok);
 	if (tokens[*curr_tok].type == WORD)
 	{
@@ -114,9 +109,9 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st)
 		cmd_node->node_type.cmd->type = get_cmd_type(tokens[*curr_tok].value);
 		//check: cmd_node->node_type.cmd->exit_status = data->ex_st??
 		(*curr_tok)++;
-		cmd_node->node_type.cmd->argv = get_cmd_args(cmd_node, tokens, curr_tok, ex_st);
+		cmd_node->node_type.cmd->argv = get_cmd_args(cmd_node, tokens, curr_tok, data);
 		if (tokens[*curr_tok].type == REDIRECTION)
-			return (parse_redir(tokens, curr_tok, cmd_node, ex_st));
+			return (parse_redir(tokens, curr_tok, cmd_node, data));
 	}
 	return (cmd_node);
 }

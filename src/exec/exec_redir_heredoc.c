@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/20 13:35:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:44:30 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static char	*read_here(char *de, int *exit_status, t_data *data)
 		return (NULL);
 	}
 	retval = safe_join(content, "\n");
-	retval = expand_env(retval, exit_status);
+	retval = expand_env(retval, data);
 	free(content);
 	dup2(data->fd[0], STDIN_FILENO);
 	dup2(data->fd[1], STDOUT_FILENO);

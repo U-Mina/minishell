@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:38:11 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 16:54:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:43:09 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,5 @@ void	exec_cmd(t_astnode *cmd_node, t_data *data)
 			if (get_path(cmd_node->token->value, cmd_node->node_type.cmd, data))
 				child_proc(cmd, data);
 		}
-		else if (cmd->type == COMMAND_MINI)
-			exec_inner_shell(data);
 	}
 }
