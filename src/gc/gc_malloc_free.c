@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_malloc_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 10:39:59 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/11 15:50:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:23:51 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	*gc_malloc(size_t size)
 }
 
 //handle allocation failure using gc_malloc, forcing exit and cleaning everything before
+//if malloc fails, exit whole program
 void	gc_malloc_error(void)
 {
 	t_gc_list	**gc_list;
@@ -34,7 +35,7 @@ void	gc_malloc_error(void)
 	{
 		gc_clean();
 		perror ("Heap allocation fail\n");
-		exit (1);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -78,4 +79,25 @@ void	gc_clean(void)
 	}
 	free(current->allocated);
 	free(current);
+}
+
+void	*gc_realloc(void *ptr, size_t old, size_t new)
+{
+	void	*new_ptr;
+	size_t	cpy;
+
+	if (new == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+	if (ptr == NULL)
+		return (gc_malloc(new));
+	new_ptr = gc_malloc(new);
+	cpy = new;
+	if (old < new)
+		cpy = old;
+	ft_memcpy(new_ptr, ptr, cpy);
+	free(ptr);
+	return (new_ptr);
 }

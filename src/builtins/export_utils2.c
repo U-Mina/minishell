@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 16:11:10 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:41:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	withsigh(char ***env, char *arg, char *sign)
 	char	*n_val;
 
 	len = sign - arg;
-	n_key = safe_malloc(sizeof(char) * (len + 1));
+	n_key = gc_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(n_key, arg, len + 1);
-	n_val = ft_strdup(sign + 1);
+	n_val = gc_strdup(sign + 1);
 	if (!n_key || !n_val)
 		return (perror("malloc fail"), -1);
 	if (update_env(env, n_key, n_val, true) != 0)

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 10:12:45 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 11:33:18 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,16 @@ char	**create_env(void)
 	char	*hm_usr;
 	char	*exec_path;
 
-	env = safe_malloc(sizeof(char *) * 6);
+	env = gc_malloc(sizeof(char *) * 6);
 	_cwd = getcwd(NULL, 0);
 	if (_cwd == NULL)
 		return (NULL);
-	// _cwd = cur_path();
 	hm_usr = getenv("HOME");
 	if (!hm_usr)
 		hm_usr = "/";
 	env[0] = safe_join("HOME=", hm_usr);
 	env[1] = safe_join("PWD=", _cwd);
-	env[2] = ft_strdup("OLDPWD"); //empty at the begining
+	env[2] = gc_strdup("OLDPWD"); //empty at the begining
 	env[3] = safe_join("SHLVL=", "1");
 	exec_path = safe_join("_=", _cwd);
 	env[4] = safe_join(exec_path, "/./minishell");
@@ -68,10 +67,10 @@ char	**cpy_env(char **env)
 
 	i = 0;
 	len = varlen(env);
-	cpenv = safe_malloc(sizeof(char *) * (len + 1));
-	while (i < len)//todo: or make coustomize strdup to check inside??
+	cpenv = gc_malloc(sizeof(char *) * (len + 1));
+	while (i < len)
 	{
-		cpenv[i] = ft_strdup(env[i]);
+		cpenv[i] = gc_strdup(env[i]);
 		if (!cpenv[i]) //safe check
 		{
 			while (i-- > 0)
@@ -97,13 +96,13 @@ void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	// if (pos1 < 0) ??
 	//check: the error check necesary or not? just created above
 	free((*env)[pos1]);
-	val = ft_itoa(ft_atoi(env_var_value(*env, key1))+ 1);
+	val = gc_itoa(ft_atoi(env_var_value(*env, key1))+ 1);
 	(*env)[pos1] = safe_join("SHLVL=", val);
 	//check: is var_create() funtion necessary?
 	free(val);
 	pos2 = find_env_var(*env, key2);
 	free((*env)[pos2]);
-	(*env)[pos2] = ft_strdup(key2);
+	(*env)[pos2] = gc_strdup(key2);
 }
 
 //ini the struct of t_env, maybe move to *main.c/init.c*

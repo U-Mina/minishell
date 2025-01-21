@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 16:10:36 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:40:47 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ char	*smallest(char **tmp)
 	pos = 0;
 	while (tmp[i])
 	{
-		if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap)) > 0) 
 		//cheap > tmp[i], swap
+		if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap)) > 0) 
 		{
 			cheap = tmp[i];
 			pos = i;
@@ -65,14 +65,14 @@ char	**nonull_cpy(char **env, int len)
 	int		j;
 	char	**nonull;
 
-	nonull = safe_malloc(sizeof(char*) * (len + 1));
+	nonull = gc_malloc(sizeof(char*) * (len + 1));
 	i = 0;
 	j = 0;
 	while (i < len)
 	{
 		if (env[i + j] && env[i + j][0])
 		{
-			nonull[i] = ft_strdup(env[i+j]);
+			nonull[i] = gc_strdup(env[i+j]);
 			i++;
 		}
 		else
@@ -109,7 +109,7 @@ int	exp_only(char **env, int *exit_status)
 	char	*sign;
 
 	i = 0;
-	ret_sort = safe_malloc(sizeof(char *) * (nonull_varlen(env) + 1));
+	ret_sort = gc_malloc(sizeof(char *) * (nonull_varlen(env) + 1));
 	// if (!ret_sort)
 	// 	return (perror("malloc"), *exit_status = 1, -1);
 	ret_sort = sort_env(env, ret_sort);
