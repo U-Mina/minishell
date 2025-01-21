@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:33:18 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:28:49 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ char	**create_env(void)
 	exec_path = safe_join("_=", _cwd);
 	env[4] = safe_join(exec_path, "/./minishell");
 	env[5] = NULL;
-	free(_cwd);
+	//use free() or gc_free(), wait for checking
+	gc_free(_cwd);
 	return (env);
 }
 
@@ -74,8 +75,8 @@ char	**cpy_env(char **env)
 		if (!cpenv[i]) //safe check
 		{
 			while (i-- > 0)
-				free(cpenv[i]);
-			return (free(cpenv), NULL);
+				gc_free(cpenv[i]);
+			return (gc_free(cpenv), NULL);
 		}
 		i++;
 	}
@@ -95,13 +96,13 @@ void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	pos1 = find_env_var(*env, key1);
 	// if (pos1 < 0) ??
 	//check: the error check necesary or not? just created above
-	free((*env)[pos1]);
+	gc_free((*env)[pos1]);
 	val = gc_itoa(ft_atoi(env_var_value(*env, key1))+ 1);
 	(*env)[pos1] = safe_join("SHLVL=", val);
 	//check: is var_create() funtion necessary?
-	free(val);
+	gc_free(val);
 	pos2 = find_env_var(*env, key2);
-	free((*env)[pos2]);
+	gc_free((*env)[pos2]);
 	(*env)[pos2] = gc_strdup(key2);
 }
 

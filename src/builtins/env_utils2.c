@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:34:33 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:29:06 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,11 @@ int	update_env(char ***env, const char *key, char *val, bool flg)
 	{
 		if (flg == true)
 		{
-			free((*env)[pos]);
+			gc_free((*env)[pos]);
 			(*env)[pos] = n_var;
 		}
 		else
-			free(n_var);
+			gc_free(n_var);
 		return (0);
 	}
 	put_var(env, n_var);

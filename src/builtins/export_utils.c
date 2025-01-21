@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:40:47 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:30:05 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char	**sort_env(char **env, char **sorted)
 		sorted[i] = smallest(tmp);
 		i++;
 	}
-	free(tmp);
+	gc_free(tmp);
 	return (sorted);
 }
 
@@ -125,10 +125,10 @@ int	exp_only(char **env, int *exit_status)
 		}
 		else
 			printf("declare -x %s\n", ret_sort[i]);
-		free(ret_sort[i]);
+		gc_free(ret_sort[i]);
 		i++;
 	}
-	free(ret_sort);
+	gc_free(ret_sort);
 	*exit_status = 0;
 	return (0);
 }

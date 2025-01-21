@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:34:57 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:29:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	del_val(char **env, char *key)
 	{
 		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
 		{
-			free(env[i]);
+			gc_free(env[i]);
 			env[i] = gc_strdup(key);
 			//check: null check for env[i] or not?
 			break ;
@@ -68,10 +68,10 @@ void	mod_val(char **env, char *key, char *val)
 	{
 		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
 		{
-			free(env[i]);
+			gc_free(env[i]);
 			tmp = safe_join(key, "=");
 			env[i] = safe_join(tmp, val);
-			free(tmp);
+			gc_free(tmp);
 			return ;
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:41:41 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:30:27 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int	withsigh(char ***env, char *arg, char *sign)
 		return (perror("malloc fail"), -1);
 	if (update_env(env, n_key, n_val, true) != 0)
 		return (perror("malloc fail"), -1);
-	free(n_key);
-	free(n_val);
+	gc_free(n_key);
+	gc_free(n_val);
 	return (0);
 }
 
