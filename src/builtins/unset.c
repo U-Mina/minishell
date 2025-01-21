@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:44:57 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 13:30:07 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,14 @@ bool	valid_unset(char *arg)
 		return (false);	
 	}
 	i = 1;
-	while (arg[i++])
+	while (arg[i])
 	{
 		if (!(ft_isalnum(arg[i]) == 1 || arg[i] == '_'))
 		{
 			print_err("minishell: unset", arg, "not a valid identifier");
 			return (false);
 		}
+		i++;
 	}
 	return (true);
 }
