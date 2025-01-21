@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:32:15 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:02:59 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static t_redirtype	get_redir_type(char *redir)
 
 //parses redirection when present, creating a redirection node, being the left node the filename or the delimiter and the left node the command node or redirections to be further executed
 t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
-						int *ex_st)
+						t_data *data)
 {
 	t_astnode	*redir_node;
 
@@ -43,12 +43,12 @@ t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 	{
 		if (redir_node->node_type.redir->type != HEREDOC \
 			&& tokens[*curr_tok].env_var > 0)
-			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, ex_st);
+			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
 		redir_node->node_type.redir->left = tokens[*curr_tok].value;
 		(*curr_tok)++;
 		if (tokens[*curr_tok].type == REDIRECTION)
 			redir_node->node_type.redir->right = \
-				parse_redir(tokens, curr_tok, right_node, ex_st);
+				parse_redir(tokens, curr_tok, right_node, data);
 		else
 			redir_node->node_type.redir->right = right_node;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_binary.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 10:14:04 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:43:01 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*get_binary_name(char *cmd)
 	// if (!split)
 	// 	handle_error(gc_list);
 	i = 0;
-	while(split[i + 1])
+	while (split[i + 1])
 	{
 		gc_free(split[i]);
 		i++;
@@ -32,6 +32,21 @@ static char	*get_binary_name(char *cmd)
 	cmd_name = split[i];
 	gc_free(split);
 	return (cmd_name);
+}
+
+static char	*search_inner(char *cmd)
+{
+	char	*paths;
+	char	*full_path;
+
+	paths = getenv("PWD");
+	full_path = gc_strjoin(gc_strjoin(paths, "/"), cmd);
+	// if (!full_path) //somehow handle when the first ft_strjoin fails
+	// 	handle_error(gc_list);
+	if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
+		return (full_path);
+	gc_free(full_path);
+	return (NULL);
 }
 
 static char	*search_in_path(char *cmd)
@@ -46,7 +61,7 @@ static char	*search_in_path(char *cmd)
 	// if (!split_paths)
 	// 	handle_error(gc_list);
 	i = 0;
-	while(split_paths[i])
+	while (split_paths[i])
 	{
 		full_path = gc_strjoin(gc_strjoin(split_paths[i], "/"), cmd);
 		// if (!full_path) //somehow handle when the first ft_strjoin fails
@@ -60,7 +75,7 @@ static char	*search_in_path(char *cmd)
 		i++;
 	}
 	free_double_pointer(split_paths);
-	return(NULL);
+	return (NULL);
 }
 
 //PENDING: create a path variable (char *) in the ast_node structure, and save it there?
@@ -90,6 +105,8 @@ int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 	{
 		c_node->path = search_in_path(cmd);
 		if (!c_node->path)
+			c_node->path = search_inner(cmd);
+		if (!c_node->path)
 		{
 			print_err("minishell", cmd, "command not found");
 			data->exit_status = 127;
@@ -117,7 +134,12 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	if (pid == 0)
 	{
 		init_signal_exec();
-		execv(cmd->path, cmd->argv);
+		if (execve(cmd->path, cmd->argv, data->env) < 0)
+		{
+			data->exit_status = 1;
+			perror("execve");
+			exit(data->exit_status);
+		}
 	}
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->exit_status, 0);

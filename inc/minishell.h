@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:25:56 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:51:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,13 +172,13 @@ void					make_redir_token(t_token *token, char *input);
 void					make_pipe_token(t_token *token);
 
 // parser
-t_astnode				*parse(t_token *tokens, int *ex_st);
+t_astnode				*parse(t_token *tokens, t_data *data);
 t_astnode				*create_astnode(t_token *token);
-t_astnode				*parse_cmd(t_token *tokens, int *curr_tok, int *ex_st);
+t_astnode				*parse_cmd(t_token *tokens, int *curr_tok, t_data *data);
 t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
-							t_astnode *right_node, int *ex_st);
+							t_astnode *right_node, t_data *data);
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
-							t_astnode *left_node, int *ex_st);
+							t_astnode *left_node, t_data *data);
 
 // free ast
 void					free_double_pointer(char **str);
@@ -194,7 +194,7 @@ int						exec_out(t_redir *redir, t_data *data);
 void					exec_pipe(t_pipe *p_node, t_data *data);
 int						create_pipe(int *fd, int *exit_status);
 int						exec_builtins(t_cmd *cmd, t_data *data);
-void					exec_inner_shell(t_data *data);
+// void					exec_inner_shell(t_data *data);
 int						get_path(char *cmd, t_cmd *c_node, t_data *data);
 void					child_proc(t_cmd *cmd, t_data *data);
 
@@ -285,7 +285,7 @@ void					restore_signal(struct sigaction *old_sa);
 void					init_signal_exec(void);
 
 // expand_env
-char					*expand_env(char *str, int *ex_st);
+char					*expand_env(char *str, t_data *data);
 
 // utils
 int						ft_isspace(char c);

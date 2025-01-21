@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 10:12:39 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 12:32:02 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **envp)
 			add_history(input);
 			data.tokens = tokenizer(input);
 			//print_tokens(data.tokens); //check lexer
-			data.ast_root = parse(data.tokens, &data.exit_status);
+			data.ast_root = parse(data.tokens, &data);
 			//print_ast(data.ast_root, 0); //check parser
 			exec_ast(data.ast_root, &data);
 			reset_data(&data);

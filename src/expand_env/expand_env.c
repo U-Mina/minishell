@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/19 13:08:51 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:18:02 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //expands the environmental variable found at the i_start position of a string (str) to its value
 //fills a t_env_var structure with the info about the start, end and len of the variable in the str string
 //returns a pointer to the allocated string representing the value
-static void	env_val(char *str, t_env_var *env_var, int i_start, int *ex_st)
+static void	env_val(char *str, t_env_var *env_var, int i_start, t_data *data)
 {
 	int		i;
 	char	*env_val;
@@ -24,7 +24,7 @@ static void	env_val(char *str, t_env_var *env_var, int i_start, int *ex_st)
 	i = i_start + 1;
 	if (str[i] == '?')
 	{
-		env_var->val = gc_itoa(*ex_st); // (as int or as char* ???)
+		env_var->val = gc_itoa(data->exit_status); // (as int or as char* ???)
 		// if (!env_var->val)
 		// 	gc_malloc_error();
 		env_var->end = i + 1;
@@ -37,7 +37,7 @@ static void	env_val(char *str, t_env_var *env_var, int i_start, int *ex_st)
 			i++;
 		env_var->end = i;
 		env_var->name_len = env_var->end - env_var->start - 1;
-		env_val = getenv(gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
+		env_val = env_var_value(data->env, gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
 		if (!env_val)// is this the expected behavior!?!
 			env_val = "\0";
 		env_var->val_len = ft_strlen(env_val);
@@ -58,7 +58,7 @@ static void	comb_lit_env(char *lit, char *str, t_env_var *env_var)
 	gc_free(env_var->val);
 }
 
-char	*expand_env(char *str, int *ex_st)
+char	*expand_env(char *str, t_data *data)
 {
 	int			i;
 	int			str_len;
@@ -71,7 +71,7 @@ char	*expand_env(char *str, int *ex_st)
 	{
 		if (str[i] == '$')
 		{
-			env_val(str, &env_var, i, ex_st);
+			env_val(str, &env_var, i, data);
 			tmp = gc_malloc((str_len + env_var.val_len + 1) * sizeof(char));
 			// if (!tmp)
 			// 	gc_malloc_error();
