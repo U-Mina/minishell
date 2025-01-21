@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 14:35:54 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 09:54:20 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 # include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h> // for read()
+# include <stdio.h>
 # include <limits.h>
 # include <readline/history.h> //readline()
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <termios.h>
@@ -202,7 +202,7 @@ int						ft_export(char ***env, char **args, int *exit_status);
 int						ft_unset(char **args, char ***env, int *exit_status);
 int						ft_env(char **env, int *exit_status);
 // char ***env, int *exit_status
-void					ft_exit(char **args, int *exit_status);
+void					ft_exit(t_data *data, char **args);
 
 // cd helper
 char					*cur_path(int *exit_status);

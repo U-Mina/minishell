@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_builtin.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/18 16:15:41 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 09:55:59 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	exec_builtins(t_cmd *cmd, t_data *data)
 	else if (ft_strncmp(low_cmd, "env", 4) == 0)
 		return (ft_env(data->env, &data->exit_status), 0);
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
-		return (ft_exit(args, &data->exit_status), 0);
+		return (ft_exit(data, args), 0);
 	return (-2);//set -2 for error check
 }
 //args = get_command_args(cmd_node) -->already done in parsing
