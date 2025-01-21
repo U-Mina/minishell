@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_inner_shell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 14:50:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:49:17 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 10:55:47 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,17 @@ void	exec_inner_shell(t_data *data)
 	if (nest_pid == 0)
 	{
 		//execve take char *file_path,
-		if (execve(exec_path, data->ast_root->node_type.cmd->argv, data->env) < 0)
-		{
-			data->exit_status = 1;
-			perror("execve");
-			exit(data->exit_status);
-		}
+		execve(exec_path, data->ast_root->node_type.cmd->argv, data->env);
+		// if (execve(exec_path, data->ast_root->node_type.cmd->argv, data->env) < 0)
+		// {
+		// 	data->exit_status = 1;
+		// 	perror("execve");
+		// 	// exit(data->exit_status);
+		// }
 	}
-	else if (nest_pid > 0)
-		waitpid(nest_pid, &data->exit_status, 0);
+	// else if (nest_pid > 0)
+	//check: error check not implemented now, may add exeve()<0 check later
+	waitpid(nest_pid, &data->exit_status, 0);
+	if (WIFEXITED(data->exit_status))
+		data->exit_status = WEXITSTATUS(data->exit_status);
 }
