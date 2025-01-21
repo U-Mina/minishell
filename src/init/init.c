@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 15:27:06 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 10:15:11 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ void	reset_data(t_data *data)
 	data->fd[0] = STDIN_FILENO;
 	dup2(data->o_fd[1], STDOUT_FILENO);
 	data->fd[1] = STDOUT_FILENO;
-	free_ast(data->ast_root);
-	gc_free(data->tokens);
+	if (data->ast_root)
+		free_ast(data->ast_root);
+	if (data->tokens)
+		gc_free(data->tokens);
 }
 
 //check: try bad input

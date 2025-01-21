@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 14:33:53 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:06:07 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * update PWD n' OLDPWD
  * @case: no arg/ abs/relativ path / cd 'wrong input(more than one arg etc)'
  */
-bool check_err_go_dir(char *path, int *exit_status)
+bool	check_err_go_dir(char *path, int *exit_status)
 {
 	if (access(path, F_OK) != 0)
 	{
@@ -34,7 +34,7 @@ bool check_err_go_dir(char *path, int *exit_status)
 		return (*exit_status = 1, false);
 	}
 	*exit_status = 0;
-	return true;
+	return	(true);
 }
 	// if (access(path, X_OK) != 0)
 	// {
@@ -47,7 +47,7 @@ char	*cur_path(int *exit_status)
 	int		i;
 	char	*tmp;
 	char	*res;
-	
+
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
 	{
@@ -60,7 +60,7 @@ char	*cur_path(int *exit_status)
 	while (tmp[i])
 	{
 		res[i] = tmp[i]; //not sure if this will give seg fault...??
-		i++;	
+		i++;
 	}
 	free(tmp);
 	res[i] = '\0';
@@ -77,7 +77,7 @@ bool	cd_home(char **env, int *exit_status)
 	{
 		print_err("minishell", "cd", "HOME not set");
 		*exit_status = 1;
-		return false;
+		return (false);
 	}
 	//*exit_status = 0;
 	return (check_err_go_dir(hm, exit_status));
@@ -98,17 +98,17 @@ int	ft_cd(char **args, char ***env, int *exit_status)
 	// }
 	cur = cur_path(exit_status);
 	if (cur == NULL)
-		return -1;
+		return (-1);
 	if (args_nbr(args) == 1) //only 'cd' cmd
 		retval = cd_home(*env, exit_status);
 	else
 		retval = check_err_go_dir(args[1], exit_status);
 	if (retval == true)
 		return (handle_pwd(cur, env, exit_status), 0);//change pwd and old after success, err checked needed later
-	return -1;
+	return (-1);
 }
 
-void handle_pwd(char *o_pwd, char ***env, int *exit_status)
+void	handle_pwd(char *o_pwd, char ***env, int *exit_status)
 {
 	char	*cur;
 	char	*n_var;
@@ -124,9 +124,8 @@ void handle_pwd(char *o_pwd, char ***env, int *exit_status)
 		n_var = create_newvar("OLDPWD", o_pwd);
 		// put_var(env, n_var);//check: error check needed??
 		update_env(env, "OLDPWD", n_var, true);
-		
 	}
-	else //OLDPWD exist, change it to o_pwd
+	else//OLDPWD exist, change it to o_pwd
 		update_env(env, "OLDPWD", o_pwd, true);
 		//mod_val(*env, "OLDPWD", o_pwd);
 	//mod_val(*env, "PWD", cur);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 12:58:04 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:08:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	find_env_var(char **env, const char *key)
 }
 
 //idea: not exist, create new var and update env
-char *create_newvar(const char *key, char *val)
+char	*create_newvar(const char *key, char *val)
 {
 	char	*tmp;
 	char	*n_var;
@@ -68,11 +68,11 @@ char *create_newvar(const char *key, char *val)
  * cpenv is an array, so everytime new var is added, 
  * new mem_space is needed to put new_var into **cpenv array
  */
-void put_var(char ***env, char *n_var)
+void	put_var(char ***env, char *n_var)
 {
-	int i;
-	char **n_env;
-	
+	int		i;
+	char	**n_env;
+
 	i = varlen(*env);
 	n_env = ft_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
 	if (!n_env)
@@ -87,10 +87,10 @@ void put_var(char ***env, char *n_var)
 
 void	del_var(char ***env, char *key)
 {
-	int i;
-	int pos;
-	int len;
-	
+	int	i;
+	int	pos;
+	int	len;
+
 	pos = find_env_var(*env, key);
 	if (pos < 0)
 		return ; // no such var
@@ -110,10 +110,10 @@ void	del_var(char ***env, char *key)
 //after any change in env (add/del of var/val), updtae **env array
 // flg == true, change to n_val
 //the pass para *val is the value to be assign to var
-int update_env (char ***env, const char *key, char *val, bool flg)
+int	update_env(char ***env, const char *key, char *val, bool flg)
 {
-	int pos;
-	char *n_var;
+	int		pos;
+	char	*n_var;
 
 	pos = find_env_var(*env, key);
 	n_var = create_newvar(key, val);//allocate mem for var

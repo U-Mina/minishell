@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:48:03 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/19 16:13:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@
 // int	ft_isdigit(int i);//check: rerurn 1 if all digit
 
 //args function
-int args_nbr(char **arr)
+int	args_nbr(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr[i])
@@ -84,7 +84,9 @@ void	*ft_realloc(void *ptr, size_t old, size_t new)
 	if (ptr == NULL)
 		return (safe_malloc(new));
 	new_ptr = safe_malloc(new);
-	cpy = (old < new) ? old : new;
+	cpy = new;
+	if (old < new)
+		cpy = old;
 	ft_memcpy(new_ptr, ptr, cpy);
 	free(ptr);
 	return (new_ptr);

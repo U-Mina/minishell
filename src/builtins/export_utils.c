@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:21:07 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:10:36 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
  * @fn: export cmd without argument, only print alphabetically
  */
 //find the smallest alphabetic num/letter
-char *smallest(char **tmp)
+char	*smallest(char **tmp)
 {
-	int i;
-	int pos;
-	char *cheap;
+	int		i;
+	int		pos;
+	char	*cheap;
 
 	cheap = tmp[0];
 	if (varlen(tmp) <= 1)
@@ -43,10 +43,10 @@ char *smallest(char **tmp)
 }
 
 //count non-null var in env (with a value and '=' sign)
-int nonull_varlen(char **env)
+int	nonull_varlen(char **env)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -59,11 +59,11 @@ int nonull_varlen(char **env)
 	return (i - j);
 }
 
-char **nonull_cpy(char **env, int len)
+char	**nonull_cpy(char **env, int len)
 {
-	int i;
-	int j;
-	char **nonull;
+	int		i;
+	int		j;
+	char	**nonull;
 
 	nonull = safe_malloc(sizeof(char*) * (len + 1));
 	i = 0;
@@ -82,11 +82,11 @@ char **nonull_cpy(char **env, int len)
 	return (nonull);
 }
 
-char **sort_env(char **env, char **sorted)
+char	**sort_env(char **env, char **sorted)
 {
-	int i;
-	int var_nb;
-	char **tmp;
+	int		i;
+	int		var_nb;
+	char	**tmp;
 	// char **sorted;
 
 	i = 0;
@@ -96,17 +96,17 @@ char **sort_env(char **env, char **sorted)
 	while (i < var_nb)
 	{
 		sorted[i] = smallest(tmp);
-		i++;	
+		i++;
 	}
 	free(tmp);
 	return (sorted);
 }
 
-int exp_only(char **env, int *exit_status)
+int	exp_only(char **env, int *exit_status)
 {
-	int i;
-	char **ret_sort;
-	char *sign;
+	int		i;
+	char	**ret_sort;
+	char	*sign;
 
 	i = 0;
 	ret_sort = safe_malloc(sizeof(char *) * (nonull_varlen(env) + 1));

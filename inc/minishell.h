@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 09:54:20 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 10:10:36 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <errno.h>
 # include <fcntl.h> // for read()
 # include <stdio.h>
 # include <limits.h>
+# include <stdio.h>
 # include <readline/history.h> //readline()
 # include <readline/readline.h>
 # include <signal.h>
@@ -27,7 +30,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-struct s_data;
+struct	s_data;
 
 // original_state and signal handling
 typedef struct s_minishell
@@ -87,7 +90,7 @@ typedef struct s_tokenizer
 	int					count;
 }						t_tokenizer;
 
-struct s_astnode;
+struct	s_astnode;
 
 // heredoc_fd is specially for heredoc<<
 // heredoc need a tmp fd to hold the content,
@@ -96,7 +99,7 @@ typedef struct s_redir
 {
 	t_redirtype			type;
 	int					heredoc_fd;
-	char *left; // the filename
+	char				*left; // the filename
 	struct s_astnode	*right;
 }						t_redir;
 
@@ -137,6 +140,7 @@ typedef struct s_data
 	int					fd[2];
 	t_token				*tokens;
 	t_astnode			*ast_root;
+	t_minishell			*minishell;
 }						t_data;
 
 // gc_list
@@ -153,7 +157,7 @@ void					init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 void					init_minishell(t_minishell *minishell, int ac,
 							char **av);
 void					term_minishell(t_minishell *minishell, int rv);
-void					init_data(char **envp, t_data *data);
+void					init_data(char **envp, t_data *data, t_minishell *minishell);
 void					reset_data(t_data *data);
 void					init_cmd_node(t_cmd *cmd_node);
 void					init_redir_node(t_redir *redir_node);
@@ -183,7 +187,7 @@ void					free_ast(t_astnode *ast_node);
 // exec
 void					exec_ast(t_astnode *ast_node, t_data *data);
 void					exec_cmd(t_astnode *cmd_node, t_data *data);
-int						exec_redir(t_redir *redir, t_data *data);
+t_astnode				*handle_redir_fd(t_astnode *ast_node, t_data *data);
 void					exec_heredoc(char *de, int *exit_status, t_data *data);
 int						exec_in(t_redir *redir, t_data *data);
 int						exec_out(t_redir *redir, t_data *data);

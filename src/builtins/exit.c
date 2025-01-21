@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/20 09:13:17 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 10:13:39 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ static int	is_digit(char *s)
 	while (*s)
 	{
 		if (!(*s >= '0' && *s <= '9'))
-			return -1;
+			return (-1);
 		s++;
 	}
-	return 0;
+	return (0);
 }
 
 void ft_exit(t_data *data, char **args)

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/19 14:54:47 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 10:14:04 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,10 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	}
 	if (pid == 0)
 	{
-		//signal()??
+		init_signal_exec();
 		execv(cmd->path, cmd->argv);
 	}
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->exit_status, 0);
+	init_signal_inter(data->minishell->sa, data->minishell->old_sa);
 }

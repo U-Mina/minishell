@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:27:11 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:13:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_unset(char **args, char ***env, int *exit_status)
+int	ft_unset(char **args, char ***env, int *exit_status)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (args_nbr(args) == 1 || !env || !(*env)[0])
@@ -35,10 +35,10 @@ int ft_unset(char **args, char ***env, int *exit_status)
 /**
  * del the var/val added by 'export', update *cpenv
  */
-bool valid_unset(char *arg)
+bool	valid_unset(char *arg)
 {
-	int i;
-	
+	int	i;
+
 	if (!arg || !*arg)
 		return (false);
 	if (!(ft_isalpha(arg[0]) == 1 || arg[0] == '_'))
@@ -58,9 +58,9 @@ bool valid_unset(char *arg)
 	return (true);
 }
 
-int unset_env(char ***env, char *arg)
+int	unset_env(char ***env, char *arg)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (valid_unset(arg) == false)

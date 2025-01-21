@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/17 12:22:44 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/19 16:11:10 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 //grammar check
 //idea: change para from 'const char *arg' to 'char *arg'
-bool valid_exp(char *arg)
+bool	valid_exp(char *arg)
 {
-	int i;
-	
+	int	i;
+
 	if (!arg || !*arg)
 		return (false);
 	if (!(ft_isalpha(arg[0]) == 1 || arg[0] == '_'))
 	{
 		print_err("minishell: export", arg, "not a valid identifier");
-		return (false);	
+		return (false);
 	}
 	i = 1;
 	while (arg[i] && arg[i] != '=')
@@ -42,10 +42,10 @@ bool valid_exp(char *arg)
  * @fn: export with args & values
  */
 //wrap fn for case choose
-int exp_with_arg(char ***env, char *arg)
+int	exp_with_arg(char ***env, char *arg)
 {
-	char *sign;
-	int res;
+	char	*sign;
+	int		res;
 
 	sign = ft_strchr(arg, '=');
 	if (sign)
@@ -56,11 +56,11 @@ int exp_with_arg(char ***env, char *arg)
 }
 
 //export with '=' sign
-int withsigh(char ***env, char *arg, char *sign)
+int	withsigh(char ***env, char *arg, char *sign)
 {
-	size_t len;
-	char *n_key;
-	char *n_val;
+	size_t	len;
+	char	*n_key;
+	char	*n_val;
 
 	len = sign - arg;
 	n_key = safe_malloc(sizeof(char) * (len + 1));
@@ -76,10 +76,10 @@ int withsigh(char ***env, char *arg, char *sign)
 }
 
 //export without '=' sign
-int nosign(char ***env, char *arg)
+int	nosign(char ***env, char *arg)
 {
-	char *n_key;
-	
+	char	*n_key;
+
 	n_key = arg;
 	if (find_env_var(*env, n_key) == -1)
 	{

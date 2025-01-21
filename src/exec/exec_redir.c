@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 12:07:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:02:11 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	update_fd(t_data *data)
 	return (0);
 }
 
-int	exec_redir(t_redir *redir, t_data *data)
+static int	exec_redir(t_redir *redir, t_data *data)
 {
 	if (redir->type == HEREDOC)
 	{
@@ -68,10 +68,20 @@ int	exec_redir(t_redir *redir, t_data *data)
 	if (!update_fd(data))//proper error handling
 	{
 		data->exit_status = 0;
-		exec_ast(redir->right, data);
+		//exec_ast(redir->right, data);
 		return (0);
 	}
 	return (-1);
+}
+
+t_astnode	*handle_redir_fd(t_astnode *ast_node, t_data *data)
+{
+	while(ast_node->token->type == REDIRECTION)
+	{
+		exec_redir(ast_node->node_type.redir, data);
+		ast_node = ast_node->node_type.redir->right;
+	}
+	return(ast_node);
 }
 
 
