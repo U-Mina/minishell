@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:53:14 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:00:20 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*read_here(char *de, int *exit_status, t_data *data)
 	{
 		if (errno != 0)
 			return (print_err("readline", NULL, strerror(errno)), *exit_status = 1, NULL);
-		gc_free(content);
+		free(content);
 		content = NULL;
 		*exit_status = 0;
 		dup2(data->fd[0], STDIN_FILENO);
@@ -52,7 +52,7 @@ static char	*read_here(char *de, int *exit_status, t_data *data)
 	}
 	retval = safe_join(content, "\n");
 	retval = expand_env(retval, data);
-	gc_free(content);
+	free(content);
 	dup2(data->fd[0], STDIN_FILENO);
 	dup2(data->fd[1], STDOUT_FILENO);
 	return (retval);
