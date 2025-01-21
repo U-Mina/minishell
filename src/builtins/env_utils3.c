@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:29:41 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 15:19:39 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	mod_val(char **env, char *key, char *val)
 		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
 		{
 			gc_free(env[i]);
-			tmp = safe_join(key, "=");
-			env[i] = safe_join(tmp, val);
+			tmp = gc_strjoin(key, "=");
+			env[i] = gc_strjoin(tmp, val);
 			gc_free(tmp);
 			return ;
 		}

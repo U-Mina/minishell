@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 14:25:51 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 14:57:14 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	unset_env(char ***env, char *arg)
 		return (-1);
 	while ((*env)[i])
 	{
-		if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg) + 1] == '=' || (*env)[i][ft_strlen(arg) + 1] == '\0'))
+		if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0'))
 		{
 			del_var(env, arg);
 			break ;

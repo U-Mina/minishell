@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:30:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 11:31:54 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 15:14:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,3 @@ char	*gc_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char	*safe_join(char *s1, char *s2)
-{
-	size_t	l1;
-	size_t	l2;
-	char	*res;
-
-	if (!s1 || !s2)
-		return (NULL);
-	l1 = ft_strlen(s1);
-	l2 = ft_strlen(s2);
-	res = gc_malloc(sizeof(char) * (l1 + l2 + 1));
-	ft_memcpy((char *)res, s1, l1);
-	ft_memcpy((char *)(res + l1), s2, l2);
-	res[l1 + l2] = '\0';
-	if (res == NULL)
-		return (NULL); 
-	return (res);
-}

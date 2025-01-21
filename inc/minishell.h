@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:51:23 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:17:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ char					**nonull_cpy(char **env, int len);
 char					**sort_env(char **env, char **sorted);
 int						exp_only(char **env, int *exit_status);
 int						exp_with_arg(char ***env, char *arg);
-int						withsigh(char ***env, char *arg, char *sign);
+int						withsign(char ***env, char *arg, char *sign);
 int						nosign(char ***env, char *arg);
 bool					valid_exp(char *arg);
 
@@ -251,7 +251,7 @@ void					print_err(char *s1, char *s2, char *s3);
 void					free_env(char **env);
 
 // general hlper n' wrapper
-char					*safe_join(char *s1, char *s2);//gc_malloc is used inside, so mem in gc_list
+//char					*safe_join(char *s1, char *s2);//gc_malloc is used inside, so mem in gc_list
 // void					*safe_malloc(size_t size);
 // void					*ft_realloc(void *ptr, size_t old, size_t new);
 int						args_nbr(char **arr);

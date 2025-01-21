@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_malloc_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 10:39:59 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 11:23:51 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 16:01:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	*gc_realloc(void *ptr, size_t old, size_t new)
 
 	if (new == 0)
 	{
-		free(ptr);
+		gc_free(ptr);
 		return (NULL);
 	}
 	if (ptr == NULL)
@@ -98,6 +98,6 @@ void	*gc_realloc(void *ptr, size_t old, size_t new)
 	if (old < new)
 		cpy = old;
 	ft_memcpy(new_ptr, ptr, cpy);
-	free(ptr);
+	gc_free(ptr);
 	return (new_ptr);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:30:27 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 15:23:48 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ int	exp_with_arg(char ***env, char *arg)
 
 	sign = ft_strchr(arg, '=');
 	if (sign)
-		res = withsigh(env, arg, sign);
+		res = withsign(env, arg, sign);
 	else
 		res = nosign(env, arg);
 	return (res);
 }
 
 //export with '=' sign
-int	withsigh(char ***env, char *arg, char *sign)
+int	withsign(char ***env, char *arg, char *sign)
 {
 	size_t	len;
 	char	*n_key;
@@ -83,7 +83,7 @@ int	nosign(char ***env, char *arg)
 	n_key = arg;
 	if (find_env_var(*env, n_key) == -1)
 	{
-		if (update_env(env, n_key, NULL, false) == -1)
+		if (update_env(env, n_key, NULL, false) != 0)
 			return (perror("malloc fail"), -1);
 	}
 	return (0);

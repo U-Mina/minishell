@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:28:49 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 15:38:31 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ char	**create_env(void)
 	hm_usr = getenv("HOME");
 	if (!hm_usr)
 		hm_usr = "/";
-	env[0] = safe_join("HOME=", hm_usr);
-	env[1] = safe_join("PWD=", _cwd);
+	env[0] = gc_strjoin("HOME=", hm_usr);
+	env[1] = gc_strjoin("PWD=", _cwd);
 	env[2] = gc_strdup("OLDPWD"); //empty at the begining
-	env[3] = safe_join("SHLVL=", "1");
-	exec_path = safe_join("_=", _cwd);
-	env[4] = safe_join(exec_path, "/./minishell");
+	env[3] = gc_strjoin("SHLVL=", "1");
+	exec_path = gc_strjoin("_=", _cwd);
+	env[4] = gc_strjoin(exec_path, "/./minishell");
 	env[5] = NULL;
 	//use free() or gc_free(), wait for checking
-	gc_free(_cwd);
+	free(_cwd);
 	return (env);
 }
 
@@ -98,7 +98,7 @@ void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	//check: the error check necesary or not? just created above
 	gc_free((*env)[pos1]);
 	val = gc_itoa(ft_atoi(env_var_value(*env, key1))+ 1);
-	(*env)[pos1] = safe_join("SHLVL=", val);
+	(*env)[pos1] = gc_strjoin("SHLVL=", val);
 	//check: is var_create() funtion necessary?
 	gc_free(val);
 	pos2 = find_env_var(*env, key2);

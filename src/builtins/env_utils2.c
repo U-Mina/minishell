@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 14:36:24 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 15:43:55 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ char	*create_newvar(const char *key, char *val)
 	char	*n_var;
 
 	//export cmd without '='/value
-	if (val == NULL) 
+	if (val == NULL)
 		n_var = gc_strdup(key);
 	else
 	{
-		tmp = safe_join((char *)key, "=");
+		tmp = gc_strjoin((char *)key, "=");
 		//make "key" not constant char??
-		n_var = safe_join(tmp, val);
+		n_var = gc_strjoin(tmp, val);
 		gc_free(tmp);
 	}
 	return (n_var);
@@ -76,10 +76,7 @@ void	put_var(char ***env, char *n_var)
 	i = varlen(*env);
 	n_env = gc_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
 	if (!n_env)
-	{
-		free(n_env);
 		return ;
-	}
 	n_env[i] = n_var;
 	n_env[i + 1] = NULL;
 	*env = n_env;
@@ -94,16 +91,16 @@ void	del_var(char ***env, char *key)
 	pos = find_env_var(*env, key);
 	if (pos < 0)
 		return ; // no such var
-	free((*env)[pos]);
+	gc_free((*env)[pos]);
 	len = varlen(*env);
 	i = pos;
 	while (i < len - 1)
 	{
 		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
 		i++;
-	}(*env)[len - 1] = NULL;
-	*env = gc_realloc(*env, sizeof(char *) * (len
-					+ 1), sizeof(char *) * len);
+	}
+	(*env)[len - 1] = NULL;
+	*env = gc_realloc(*env, sizeof(char *) * (len + 1), sizeof(char *) * len);
 }
 
 //after any change in env (add/del of var/val), updtae **env array
@@ -118,7 +115,7 @@ int	update_env(char ***env, const char *key, char *val, bool flg)
 	n_var = create_newvar(key, val);//allocate mem for var
 	if (n_var == NULL)
 		return (-1);
-	if (pos >= 0)//key doesnt exist
+	if (pos >= 0)//key does exist
 	{
 		if (flg == true)
 		{
