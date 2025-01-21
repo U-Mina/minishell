@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 15:19:39 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 21:01:09 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ char	*env_var_value(char **env, const char *key)
 	len = ft_strlen(key);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0
-			&& (env[i][len] == '='))
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '='))
 			return (env[i] + len + 1);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 15:38:31 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/21 21:13:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,21 +88,20 @@ char	**cpy_env(char **env)
 void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 {
 	char	*val;
-	char	*var_pwd;
 	int		pos1;
 	int		pos2;
 
-	var_pwd = NULL;
 	pos1 = find_env_var(*env, key1);
 	// if (pos1 < 0) ??
 	//check: the error check necesary or not? just created above
+	val = gc_itoa(ft_atoi(env_var_value(*env, key1)) + 1);
 	gc_free((*env)[pos1]);
-	val = gc_itoa(ft_atoi(env_var_value(*env, key1))+ 1);
 	(*env)[pos1] = gc_strjoin("SHLVL=", val);
 	//check: is var_create() funtion necessary?
 	gc_free(val);
 	pos2 = find_env_var(*env, key2);
-	gc_free((*env)[pos2]);
+	if (pos2 >= 0)
+		gc_free((*env)[pos2]);
 	(*env)[pos2] = gc_strdup(key2);
 }
 

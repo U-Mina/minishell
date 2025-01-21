@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:33:27 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 20:50:43 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,8 @@ void ft_exit(t_data *data, char **args)
 			return ;
 		}
 	}
-	else
-		data->exit_status = 0;
-		term_minishell(data->minishell, 0);
+	data->exit_status = 0;
+	term_minishell(data->minishell, 0);
 }
 
 // void ft_exit(char **args, int *exit_status)
