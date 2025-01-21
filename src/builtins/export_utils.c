@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:30:05 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/21 13:18:15 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ char	*smallest(char **tmp)
 	cheap = tmp[0];
 	if (varlen(tmp) <= 1)
 		tmp[0] = NULL;
-	i = 0;
+	i = 1;
 	pos = 0;
 	while (tmp[i])
 	{
 		//cheap > tmp[i], swap
-		if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap)) > 0) 
+		//if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap)) > 0) 
+		if (ft_strncmp(cheap, tmp[i], ft_strlen(cheap) + 1) > 0) 
 		{
 			cheap = tmp[i];
 			pos = i;
@@ -87,7 +88,6 @@ char	**sort_env(char **env, char **sorted)
 	int		i;
 	int		var_nb;
 	char	**tmp;
-	// char **sorted;
 
 	i = 0;
 	var_nb = nonull_varlen(env);
@@ -98,7 +98,7 @@ char	**sort_env(char **env, char **sorted)
 		sorted[i] = smallest(tmp);
 		i++;
 	}
-	gc_free(tmp);
+	free_double_pointer(tmp);
 	return (sorted);
 }
 
@@ -125,10 +125,12 @@ int	exp_only(char **env, int *exit_status)
 		}
 		else
 			printf("declare -x %s\n", ret_sort[i]);
-		gc_free(ret_sort[i]);
+		//gc_free(ret_sort[i]); 
+		//can just either keep gc_free(ret_sort[i]) or free_double_pointer(ret_sort);
+		//not both at the same time!
 		i++;
 	}
-	gc_free(ret_sort);
+	free_double_pointer(ret_sort);
 	*exit_status = 0;
 	return (0);
 }
