@@ -53,7 +53,8 @@ SOURCES =	minishell.c\
 			error_exit.c\
 			handle_error.c\
 			term.c\
-			ft_isspace.c
+			ft_isspace.c\
+			ft_issep.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)/%.o)
 

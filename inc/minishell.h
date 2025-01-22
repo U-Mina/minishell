@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 15:17:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:24:56 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,7 @@ char					*expand_env(char *str, t_data *data);
 
 // utils
 int						ft_isspace(char c);
+int						ft_issep(char c);
 
 // TO BE DELETED AT THE END
 // comprovations

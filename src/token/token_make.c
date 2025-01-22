@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:12:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:27:08 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	make_word_token(t_token *token, char *input)
 	word_len = 0;
 	token->env_var = 0;
 	token->type = WORD;
-	while (!ft_isspace(input[word_len]) && input[word_len] != '\0')
+	while (!ft_isspace(input[word_len]) && !ft_issep(input[word_len]) && input[word_len] != '\0')
 	{
 		if (input[word_len] == '$')
 			token->env_var++;
