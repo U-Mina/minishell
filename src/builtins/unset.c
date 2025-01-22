@@ -6,11 +6,13 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/22 14:34:58 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/22 14:41:53 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//debug: when type unset + correct var_name, segfault! with incorrect name, OK!
 
 int	ft_unset(char **args, char ***env, int *exit_status)
 {
