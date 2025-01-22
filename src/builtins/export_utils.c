@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 13:24:24 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/22 12:31:14 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,31 +106,60 @@ int	exp_only(char **env, int *exit_status)
 {
 	int		i;
 	char	**ret_sort;
-	char	*sign;
 
 	i = 0;
 	ret_sort = gc_malloc(sizeof(char *) * (nonull_varlen(env) + 1));
 	// if (!ret_sort)
 	// 	return (perror("malloc"), *exit_status = 1, -1);
+	//check: is this check unnecessary since gc_error() will EXIT_FAILURE directly if malloc failed
 	ret_sort = sort_env(env, ret_sort);
 	//idea: alloc mem for **ret_sort and pass to sorting function
 	while (ret_sort[i])
 	{
-		sign = ft_strchr(ret_sort[i], '=');
-		if (sign)
+		if (ret_sort[i])
 		{
-			*sign = '\0';
-			printf("declare -x %s=\"%s\"\n", ret_sort[i], sign + 1);
-			*sign = '=';
-		}
-		else
+			ret_sort[i] = print_export(ret_sort[i]);
 			printf("declare -x %s\n", ret_sort[i]);
-		//gc_free(ret_sort[i]); 
-		//can only keep gc_free(ret_sort[i]) or free_double_pointer(ret_sort);
-		//not both at the same time! -->segfault
+		}
 		i++;
 	}
 	free_double_pointer(ret_sort);
 	*exit_status = 0;
 	return (0);
 }
+//gc_free(ret_sort[i]); 
+//can only keep gc_free(ret_sort[i]) or free_double_pointer(ret_sort);
+//not both at the same time! -->segfault
+
+// int	exp_only(char **env, int *exit_status)
+// {
+// 	int		i;
+// 	char	**ret_sort;
+// 	char	*sign;
+
+// 	i = 0;
+// 	ret_sort = gc_malloc(sizeof(char *) * (nonull_varlen(env) + 1));
+// 	// if (!ret_sort)
+// 	// 	return (perror("malloc"), *exit_status = 1, -1);
+// 	ret_sort = sort_env(env, ret_sort);
+// 	//idea: alloc mem for **ret_sort and pass to sorting function
+// 	while (ret_sort[i])
+// 	{
+// 		sign = ft_strchr(ret_sort[i], '=');
+// 		if (sign)
+// 		{
+// 			*sign = '\0';
+// 			printf("declare -x %s=\"%s\"\n", ret_sort[i], sign + 1);
+// 			*sign = '=';
+// 		}
+// 		else
+// 			printf("declare -x %s\n", ret_sort[i]);
+// 		//gc_free(ret_sort[i]); 
+// 		//can only keep gc_free(ret_sort[i]) or free_double_pointer(ret_sort);
+// 		//not both at the same time! -->segfault
+// 		i++;
+// 	}
+// 	free_double_pointer(ret_sort);
+// 	*exit_status = 0;
+// 	return (0);
+// }

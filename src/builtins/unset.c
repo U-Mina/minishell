@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 14:57:14 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:41:53 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//debug: when type unset + correct var_name, segfault! with incorrect name, OK!
 
 int	ft_unset(char **args, char ***env, int *exit_status)
 {
@@ -23,19 +25,18 @@ int	ft_unset(char **args, char ***env, int *exit_status)
 	//while (i < args_nbr(args))
 	while (args[i])
 	{
-		if (unset_env(env, args[i]))
-		{
+		if (valid_unset(args[i]) == false)
 			*exit_status = 1;
-			return (-1);
-		}
+		else
+		{
+			if (unset_env(env, args[i]) == -1)
+				return (*exit_status = 1, -1);
+		} 
 		i++;
 	}
 	return (0);
 }
 
-/**
- * del the var/val added by 'export', update **cpenv
- */
 bool	valid_unset(char *arg)
 {
 	int	i;
@@ -60,6 +61,22 @@ bool	valid_unset(char *arg)
 	return (true);
 }
 
+//specific str-compare for unset
+
+static int unset_cmp(char *unset_var, char *env_var)
+{
+	int i;
+	int rv;
+
+	i = 0;
+	// if (unset_var == NULL || env_var == NULL)
+	// 	return -1;
+	while (env_var[i] && env_var[i + 1] && env_var[i] != '=' && unset_var[i] && unset_var[i] == env_var[i])
+		i++;
+	rv = ((unsigned char *)unset_var)[i] - ((unsigned char *)env_var)[i];
+	return rv;
+}
+
 //change fali retval from 1 to -1
 int	unset_env(char ***env, char *arg)
 {
@@ -70,9 +87,16 @@ int	unset_env(char ***env, char *arg)
 		return (-1);
 	while ((*env)[i])
 	{
-		if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0'))
+//ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0')
+		if (unset_cmp(arg, (*env)[i]) == 0)
 		{
-			del_var(env, arg);
+			//check: the del_var() result is not checked, add result check
+			int res = del_var(env, i);
+			if ( res == -1)
+			{
+				printf("debugging del_var()");
+				return (print_err("debugging del_var()", NULL, NULL), -1);
+			}
 			break ;
 		}
 		i++;

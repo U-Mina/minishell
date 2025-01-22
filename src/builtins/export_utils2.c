@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 15:23:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:13:11 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	exp_with_arg(char ***env, char *arg)
 	int		res;
 
 	sign = ft_strchr(arg, '=');
-	if (sign)
+	if (sign != NULL)
 		res = withsign(env, arg, sign);
 	else
 		res = nosign(env, arg);
@@ -66,9 +66,12 @@ int	withsign(char ***env, char *arg, char *sign)
 	n_key = gc_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(n_key, arg, len + 1);
 	n_val = gc_strdup(sign + 1);
-	if (!n_key || !n_val)
-		return (perror("malloc fail"), -1);
-	if (update_env(env, n_key, n_val, true) != 0)
+	if (n_key != NULL && n_val != NULL)
+	{
+		if (update_env(env, n_key, n_val, true) != 0)
+			return (perror("malloc fail"), -1);
+	}
+	else
 		return (perror("malloc fail"), -1);
 	gc_free(n_key);
 	gc_free(n_val);
@@ -87,4 +90,33 @@ int	nosign(char ***env, char *arg)
 			return (perror("malloc fail"), -1);
 	}
 	return (0);
+}
+
+char	*print_export(char *key)
+{
+	int i;
+	char	*retval;
+
+	i = 0;
+	retval = gc_malloc(sizeof(char *) * (ft_strlen(key) + 3));//"" + NULL --> 3
+	while (key[i])
+	{
+		retval[i] = key[i];
+		if (key[i] == '=')
+		{
+			retval[i + 1] = '"';
+			break ;
+		}
+		i++;
+	}
+	i = i + 1;
+	while (key[i])
+	{
+		retval[i + 1] = key[i];
+		i++;
+	}
+	retval[i + 1] = '"';
+	retval[i + 2] = '\0';
+	//free(key);
+	return (retval);
 }
