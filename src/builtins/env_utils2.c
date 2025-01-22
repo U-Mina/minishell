@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 15:43:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:35:45 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,40 +68,100 @@ char	*create_newvar(const char *key, char *val)
  * cpenv is an array, so everytime new var is added, 
  * new mem_space is needed to put new_var into **cpenv array
  */
+
 void	put_var(char ***env, char *n_var)
 {
 	int		i;
 	char	**n_env;
 
 	i = varlen(*env);
-	n_env = gc_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
-	if (!n_env)
-		return ;
+	n_env = gc_malloc((sizeof(char *) * (i + 2)));
+	// if (!n_env)
+	// 	return ;
+	i = 0;
+	while ((*env)[i])
+	{
+		n_env[i] = (*env)[i];
+		i++;
+	}
 	n_env[i] = n_var;
 	n_env[i + 1] = NULL;
 	*env = n_env;
+	//check
+	//free_double_pointer(n_env);
 }
 
-void	del_var(char ***env, char *key)
+// void	put_var(char ***env, char *n_var)
+// {
+// 	int		i;
+// 	char	**n_env;
+
+// 	i = varlen(*env);
+// 	n_env = gc_realloc(*env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
+// 	if (!n_env)
+// 		return ;
+// 	n_env[i] = n_var;
+// 	n_env[i + 1] = NULL;
+// 	*env = n_env;
+// }
+
+//void	del_var(char ***env, char *key)
+int	del_var(char ***env, int pos)
 {
 	int	i;
-	int	pos;
+	int	j;
+	//int	pos;
 	int	len;
+	char	**n_cpy;
 
-	pos = find_env_var(*env, key);
-	if (pos < 0)
-		return ; // no such var
-	gc_free((*env)[pos]);
+	i = -1;
+	j = 0;
 	len = varlen(*env);
-	i = pos;
-	while (i < len - 1)
+	//pos = find_env_var(*env, key);
+	// if (pos < 0)
+	// 	return -2; // no such var
+	n_cpy = (char **) gc_malloc(sizeof(char *) * len); //error checked
+	if (!n_cpy)
+		return -1;
+	//one element is deleted, so size*len;
+	while (++i < len)
 	{
-		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
-		i++;
+		if (i != pos)
+		//not the one to delete
+		{
+			n_cpy[j] = (*env)[i];
+			j++;
+		}
+		else
+			gc_free((*env)[i]);
 	}
-	(*env)[len - 1] = NULL;
-	*env = gc_realloc(*env, sizeof(char *) * (len + 1), sizeof(char *) * len);
+	n_cpy[j] = NULL;
+	free_double_pointer(*env);
+	*env = n_cpy;
+	return 0;
 }
+
+//this version is in-place shifting, try another way to create a new **env_arr and free old one
+// int	del_var(char ***env, char *key)
+// {
+// 	int	i;
+// 	int	pos;
+// 	int	len;
+
+// 	pos = find_env_var(*env, key);
+// 	if (pos < 0)
+// 		return -2; // no such var
+// 	gc_free((*env)[pos]);
+// 	len = varlen(*env);
+// 	i = pos;
+// 	while (i < len - 1)
+// 	{
+// 		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
+// 		i++;
+// 	}
+// 	(*env)[len - 1] = NULL;
+// 	*env = gc_realloc(*env, sizeof(char *) * (len + 1), sizeof(char *) * len);
+// }
 
 //after any change in env (add/del of var/val), updtae **env array
 // flg == true, change to n_val

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 15:17:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:19:12 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,8 @@ void					put_var(char ***env, char *n_var);
 int						update_env(char ***env, const char *key, char *val,
 							bool flg);
 void					mod_val(char **env, char *key, char *val);
-void					del_var(char ***env, char *key);
-void					del_val(char **env, char *key);
+int					del_var(char ***env, int pos);
+//void					del_val(char **env, char *key);
 char					*env_var_value(char **env, const char *key);
 
 // export hlper
@@ -239,6 +239,7 @@ int						exp_only(char **env, int *exit_status);
 int						exp_with_arg(char ***env, char *arg);
 int						withsign(char ***env, char *arg, char *sign);
 int						nosign(char ***env, char *arg);
+char	*print_export(char *key);
 bool					valid_exp(char *arg);
 
 // unset hpler

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_inner_shell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 14:50:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 12:52:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/22 10:22:59 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,8 @@
 // 	}
 // 	else if (nest_pid > 0)
 // 		waitpid(nest_pid, &data->exit_status, 0);
+	// if (WIFEXITED(data->exit_status))
+	// 	data->exit_status = WEXITSTATUS(data->exit_status);
+	// else
+	// 	data->exit_status = 1;
 // }
