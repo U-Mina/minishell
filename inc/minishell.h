@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 12:10:01 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 14:22:14 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,8 @@ char					*smallest(char **tmp);
 int						nonull_varlen(char **env);
 char					**nonull_cpy(char **env, int len);
 char					**sort_env(char **env, char **sorted);
-int						exp_only(char **env, int *exit_status);
+//int						exp_only(char **env, int *exit_status);
+int						exp_only(char **env);
 int						exp_with_arg(char ***env, char *arg);
 int						withsign(char ***env, char *arg, char *sign);
 int						nosign(char ***env, char *arg);

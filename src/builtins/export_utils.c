@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/22 12:31:14 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 14:21:08 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ char	**sort_env(char **env, char **sorted)
 	return (sorted);
 }
 
-int	exp_only(char **env, int *exit_status)
+//int	exp_only(char **env, int *exit_status)
+int	exp_only(char **env)
 {
 	int		i;
 	char	**ret_sort;
@@ -124,7 +125,7 @@ int	exp_only(char **env, int *exit_status)
 		i++;
 	}
 	free_double_pointer(ret_sort);
-	*exit_status = 0;
+	//*exit_status = 0;
 	return (0);
 }
 //gc_free(ret_sort[i]); 

@@ -1,3 +1,14 @@
+*0123*
+changing in redundant *exit_status
+	- env_utils1, 2, 3.c is clear, only pass ex_st for ft_env()
+	- export_u.c
+		* int	exp_only(char **env, int *exit_status)
+		changed to: int	exp_only(char **env)
+	- **cd.c** not clean, a bit talk later
+
+Wait for change:
+	- pipe.c
+	- redir.c 
 
 //TODO 0108
 
