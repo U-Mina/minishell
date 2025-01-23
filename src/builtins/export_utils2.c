@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/22 14:13:11 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 17:45:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,38 @@ int	exp_with_arg(char ***env, char *arg)
 	return (res);
 }
 
+// static char	*handle_quotes(char *str)
+// {
+// 	char	*res;
+// 	int		i;
+// 	int		j;
+// 	char	quote;
+
+// 	i = 0;
+// 	j = 0;
+// 	while (str[i] != '\0')
+// 	{
+// 		if (str[i] == '\'' || str[i] == '\"')
+
+// 			i = i + quote_len(str, i);
+// 		if (str[i] != '\'' && str[i] != '\"')
+// 			j++;
+// 		i++;
+// 	}
+// 	res = gc_malloc(j * sizeof(char));
+// 	while (i >= 0)
+// 	{
+// 		if (str[i] != '\'' && str[i] != '\"')
+// 		{
+// 			res[j] = str[i];
+// 			j--;
+// 		}
+// 		i--;
+// 	}
+// 	gc_free(str);
+// 	return (res);
+// }
+
 //export with '=' sign
 int	withsign(char ***env, char *arg, char *sign)
 {
@@ -66,6 +98,7 @@ int	withsign(char ***env, char *arg, char *sign)
 	n_key = gc_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(n_key, arg, len + 1);
 	n_val = gc_strdup(sign + 1);
+	//n_val = handle_quotes(n_val);
 	if (n_key != NULL && n_val != NULL)
 	{
 		if (update_env(env, n_key, n_val, true) != 0)

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 12:18:02 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:35:55 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ char	*expand_env(char *str, t_data *data)
 	i = 0;
 	while (str[i] != '\0')
 	{
+		if (str[i] == '\'')
+			i = i + quote_len(str, i);
 		if (str[i] == '$')
 		{
 			env_val(str, &env_var, i, data);

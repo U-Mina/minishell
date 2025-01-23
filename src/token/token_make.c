@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/22 12:27:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:36:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ void	make_eof_token(t_token *token)
 	token->env_var = 0;
 }
 
+int	quote_len(char *str, int i)
+{
+	int	j;
+
+	j = 1;
+	while (str[i + j] != str[i])
+		j++;
+	return (j);
+}
+
 //extracts a word (delimited by spaces) from the input and fills the token variables according to this
 void	make_word_token(t_token *token, char *input)
 {
@@ -31,6 +41,8 @@ void	make_word_token(t_token *token, char *input)
 	token->type = WORD;
 	while (!ft_isspace(input[word_len]) && !ft_issep(input[word_len]) && input[word_len] != '\0')
 	{
+		if (input[word_len] == '\'')
+			word_len = word_len + quote_len(input, word_len);
 		if (input[word_len] == '$')
 			token->env_var++;
 		word_len++;

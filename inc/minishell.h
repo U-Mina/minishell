@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 15:31:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:36:39 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
 							t_astnode *left_node, t_data *data);
 int						del_quotes(t_token *tokens, int *curr_tok);
+int						quote_len(char *str, int i);
 
 // free ast
 void					free_double_pointer(char **str);
