@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 13:09:26 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 17:19:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_unset(char **args, char ***env, int *exit_status)
 		{
 			if (unset_env(env, args[i]) == -1)
 				return (*exit_status = 1, -1);
-		} 
+		}
 		i++;
 	}
 	return (0);
@@ -46,10 +46,10 @@ bool	valid_unset(char *arg)
 	if (!(ft_isalpha(arg[0]) == 1 || arg[0] == '_'))
 	{
 		print_err("minishell: unset", arg, "not a valid identifier");
-		return (false);	
+		return (false);
 	}
-	i = 1;
-	while (arg[i])
+	i = 0;
+	while (arg[i] != '\0')
 	{
 		if (!(ft_isalnum(arg[i]) == 1 || arg[i] == '_'))
 		{
@@ -62,35 +62,37 @@ bool	valid_unset(char *arg)
 }
 
 //specific str-compare for unset
-static int unset_cmp(char *unset_var, char *env_var)
-{
-	int i;
-	int rv;
+// static int	unset_cmp(char *unset_var, char *env_var)
+// {
+// 	int	i;
+// 	int	rv;
 
-	i = 0;
-	// if (unset_var == NULL || env_var == NULL)
-	// 	return -1;
-	while (unset_var[i] == env_var[i] && unset_var[i] != '\0' && env_var[i] != '\0') // && env_var[i] != '='
-		i++;
-	rv = ((unsigned char *)unset_var)[i] - ((unsigned char *)env_var)[i];
-	return rv;
-}
+// 	i = 0;
+// 	// if (unset_var == NULL || env_var == NULL)
+// 	// 	return -1;
+// 	while (unset_var[i] == env_var[i] && unset_var[i] != '\0' && env_var[i] != '\0') // && env_var[i] != '='
+// 		i++;
+// 	rv = ((unsigned char *)unset_var)[i] - ((unsigned char *)env_var)[i];
+// 	return (rv);
+// }
 
 //change fali retval from 1 to -1
 int	unset_env(char ***env, char *arg)
 {
 	int	i;
+	int	res;
 
 	i = 0;
-	if (valid_unset(arg) == false)
-		return (-1);
+	//already teted before calling unset_env
+	// if (valid_unset(arg) == false)
+	// 	return (-1);
 	while ((*env)[i])
 	{
-		//if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0'))
-		if (unset_cmp(arg, (*env)[i]) == 0)
+		if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0'))
+		//if (unset_cmp(arg, (*env)[i]) == 0)
 		{
 			//check: the del_var() result is not checked, add result check
-			int res = del_var(env, arg);
+			res = del_var(env, arg);
 			if (res == -1)
 			{
 				printf("debugging del_var()");
