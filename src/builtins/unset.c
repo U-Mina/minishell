@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/22 14:41:53 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 12:10:15 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ bool	valid_unset(char *arg)
 }
 
 //specific str-compare for unset
-
 static int unset_cmp(char *unset_var, char *env_var)
 {
 	int i;
@@ -71,7 +70,7 @@ static int unset_cmp(char *unset_var, char *env_var)
 	i = 0;
 	// if (unset_var == NULL || env_var == NULL)
 	// 	return -1;
-	while (env_var[i] && env_var[i + 1] && env_var[i] != '=' && unset_var[i] && unset_var[i] == env_var[i])
+	while (unset_var[i] == env_var[i] && unset_var[i] && env_var[i] && env_var[i + 1] && env_var[i] != '=')
 		i++;
 	rv = ((unsigned char *)unset_var)[i] - ((unsigned char *)env_var)[i];
 	return rv;
@@ -87,12 +86,12 @@ int	unset_env(char ***env, char *arg)
 		return (-1);
 	while ((*env)[i])
 	{
-//ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0')
+		//if (ft_strncmp((*env)[i], arg, ft_strlen(arg)) == 0 && ((*env)[i][ft_strlen(arg)] == '=' || (*env)[i][ft_strlen(arg)] == '\0'))
 		if (unset_cmp(arg, (*env)[i]) == 0)
 		{
 			//check: the del_var() result is not checked, add result check
-			int res = del_var(env, i);
-			if ( res == -1)
+			int res = del_var(env, arg);
+			if (res == -1)
 			{
 				printf("debugging del_var()");
 				return (print_err("debugging del_var()", NULL, NULL), -1);
@@ -103,3 +102,43 @@ int	unset_env(char ***env, char *arg)
 	}
 	return (0);
 }
+
+// int	unset_env(char ***env, char *arg)
+// {
+// 	int	i;
+// 	int cmp_len;
+// 	char *sign;
+// 	char *var_2_del;
+	
+
+// 	i = 0;
+// 	if (valid_unset(arg) == false)
+// 		return (-1);
+// 	while ((*env)[i])
+// 	{
+// 		sign = ft_strchr((*env)[i], '=');
+// 		if (sign != NULL)
+// 		{
+// 			cmp_len = sign - (*env)[i];
+// 			var_2_del = gc_substr((*env)[i], 0, cmp_len);
+// 			if (ft_strncmp(var_2_del, arg, cmp_len) == 0) // len + 1?
+// 				del_var(env, i);
+// 		}
+// 		else
+// 		{
+// 			if (unset_cmp(arg, (*env)[i]) == 0)
+// 			{
+// 				//check: the del_var() result is not checked, add result check
+// 				int res = del_var(env, i);
+// 				if (res == -1)
+// 				{
+// 					printf("debugging del_var()");
+// 					return (print_err("debugging del_var()", NULL, NULL), -1);
+// 				}
+// 				break ;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }

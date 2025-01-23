@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/22 21:18:05 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:10:01 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,9 @@ void					put_var(char ***env, char *n_var);
 int						update_env(char ***env, const char *key, char *val,
 							bool flg);
 void					mod_val(char **env, char *key, char *val);
-int					del_var(char ***env, int pos);
-//void					del_val(char **env, char *key);
+//int					del_var(char ***env, int pos);
+int					del_var(char ***env, char *key);
+void					del_val(char **env, char *key);
 char					*env_var_value(char **env, const char *key);
 
 // export hlper

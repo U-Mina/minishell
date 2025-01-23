@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/22 14:35:45 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 12:09:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,62 +106,64 @@ void	put_var(char ***env, char *n_var)
 // }
 
 //void	del_var(char ***env, char *key)
-int	del_var(char ***env, int pos)
-{
-	int	i;
-	int	j;
-	//int	pos;
-	int	len;
-	char	**n_cpy;
-
-	i = -1;
-	j = 0;
-	len = varlen(*env);
-	//pos = find_env_var(*env, key);
-	// if (pos < 0)
-	// 	return -2; // no such var
-	n_cpy = (char **) gc_malloc(sizeof(char *) * len); //error checked
-	if (!n_cpy)
-		return -1;
-	//one element is deleted, so size*len;
-	while (++i < len)
-	{
-		if (i != pos)
-		//not the one to delete
-		{
-			n_cpy[j] = (*env)[i];
-			j++;
-		}
-		else
-			gc_free((*env)[i]);
-	}
-	n_cpy[j] = NULL;
-	free_double_pointer(*env);
-	*env = n_cpy;
-	return 0;
-}
-
-//this version is in-place shifting, try another way to create a new **env_arr and free old one
-// int	del_var(char ***env, char *key)
+// int	del_var(char ***env, int pos)
 // {
 // 	int	i;
-// 	int	pos;
+// 	int	j;
+// 	//int	pos;
 // 	int	len;
+// 	char	**n_cpy;
 
-// 	pos = find_env_var(*env, key);
-// 	if (pos < 0)
-// 		return -2; // no such var
-// 	gc_free((*env)[pos]);
+// 	i = -1;
+// 	j = 0;
 // 	len = varlen(*env);
-// 	i = pos;
-// 	while (i < len - 1)
+// 	//pos = find_env_var(*env, key);
+// 	// if (pos < 0)
+// 	// 	return -2; // no such var
+// 	n_cpy = (char **) gc_malloc(sizeof(char *) * len); //error checked
+// 	if (!n_cpy)
+// 		return -1;
+// 	//one element is deleted, so size*len;
+// 	while (++i < len)
 // 	{
-// 		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
-// 		i++;
+// 		if (i != pos)
+// 		//not the one to delete
+// 		{
+// 			n_cpy[j] = (*env)[i];
+// 			j++;
+// 		}
+// 		else
+// 			gc_free((*env)[i]);
 // 	}
-// 	(*env)[len - 1] = NULL;
-// 	*env = gc_realloc(*env, sizeof(char *) * (len + 1), sizeof(char *) * len);
+// 	n_cpy[j] = NULL;
+// 	free_double_pointer(*env);
+// 	*env = n_cpy;
+// 	return 0;
 // }
+
+//this version is in-place shifting, try another way to create a new **env_arr and free old one
+//int	del_var(char ***env, char *key)
+int	del_var(char ***env, char *key)
+{
+	int	i;
+	int	pos;
+	int	len;
+
+	pos = find_env_var(*env, key);
+	if (pos < 0)
+		return -2; // no such var
+	gc_free((*env)[pos]);
+	len = varlen(*env);
+	i = pos;
+	while (i < len - 1)
+	{
+		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
+		i++;
+	}
+	(*env)[len - 1] = NULL;
+	*env = gc_realloc(*env, sizeof(char *) * (len + 1), sizeof(char *) * len);
+	return 0;
+}
 
 //after any change in env (add/del of var/val), updtae **env array
 // flg == true, change to n_val
