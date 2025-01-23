@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_binary.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 12:43:01 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:02:55 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,4 +144,8 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->exit_status, 0);
 	init_signal_inter(data->minishell->sa, data->minishell->old_sa);
+	// if (WIFEXITED(data->exit_status))
+	// 	data->exit_status = WEXITSTATUS(data->exit_status);
+	// else
+	// 	data->exit_status = 1;
 }

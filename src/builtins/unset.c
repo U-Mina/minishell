@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 12:10:15 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 13:09:26 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int unset_cmp(char *unset_var, char *env_var)
 	i = 0;
 	// if (unset_var == NULL || env_var == NULL)
 	// 	return -1;
-	while (unset_var[i] == env_var[i] && unset_var[i] && env_var[i] && env_var[i + 1] && env_var[i] != '=')
+	while (unset_var[i] == env_var[i] && unset_var[i] != '\0' && env_var[i] != '\0') // && env_var[i] != '='
 		i++;
 	rv = ((unsigned char *)unset_var)[i] - ((unsigned char *)env_var)[i];
 	return rv;
