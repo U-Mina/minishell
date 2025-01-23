@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 14:22:14 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/23 15:31:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef enum e_redirtype
 	INPUT,
 	OUTPUT,
 	HEREDOC,
+	HEREDOC_Q,
 	APPEND
 }						t_redirtype;
 
@@ -179,6 +180,7 @@ t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
 							t_astnode *right_node, t_data *data);
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
 							t_astnode *left_node, t_data *data);
+int						del_quotes(t_token *tokens, int *curr_tok);
 
 // free ast
 void					free_double_pointer(char **str);
@@ -188,7 +190,7 @@ void					free_ast(t_astnode *ast_node);
 void					exec_ast(t_astnode *ast_node, t_data *data);
 void					exec_cmd(t_astnode *cmd_node, t_data *data);
 t_astnode				*handle_redir_fd(t_astnode *ast_node, t_data *data);
-void					exec_heredoc(char *de, int *exit_status, t_data *data);
+void					exec_heredoc(char *de, int *exit_status, t_data *data, bool quote);
 int						exec_in(t_redir *redir, t_data *data);
 int						exec_out(t_redir *redir, t_data *data);
 void					exec_pipe(t_pipe *p_node, t_data *data);
@@ -227,7 +229,7 @@ int						update_env(char ***env, const char *key, char *val,
 							bool flg);
 void					mod_val(char **env, char *key, char *val);
 //int					del_var(char ***env, int pos);
-int					del_var(char ***env, char *key);
+int						del_var(char ***env, char *key);
 void					del_val(char **env, char *key);
 char					*env_var_value(char **env, const char *key);
 

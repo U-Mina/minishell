@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 11:02:37 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:35:43 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_astnode	*parse(t_token *tokens, t_data *data)
 	int			current_token;
 
 	current_token = 0;
+	root = NULL;
 	if (tokens[current_token].type == WORD || tokens[current_token].type == QUOTE)
 		root = parse_cmd(tokens, &current_token, data);
 	while (tokens[current_token].type != TOKEN_EOF)

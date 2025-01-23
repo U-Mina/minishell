@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 11:02:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:34:51 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,22 @@ t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 		if (redir_node->node_type.redir->type != HEREDOC \
 			&& tokens[*curr_tok].env_var > 0)
 			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
+		if (redir_node->node_type.redir->type == HEREDOC)
+		{
+			if (del_quotes(tokens, curr_tok))
+				redir_node->node_type.redir->type = HEREDOC_Q;
+		}
 		redir_node->node_type.redir->left = tokens[*curr_tok].value;
 		(*curr_tok)++;
 		if (tokens[*curr_tok].type == REDIRECTION)
 			redir_node->node_type.redir->right = \
 				parse_redir(tokens, curr_tok, right_node, data);
+		else if (right_node == NULL || right_node->token->type != COMMAND)
+		{
+			if (tokens[*curr_tok].type == WORD || tokens[*curr_tok].type == QUOTE)
+				redir_node->node_type.redir->right = \
+					parse_cmd(tokens, curr_tok, data);
+		}
 		else
 			redir_node->node_type.redir->right = right_node;
 	}
