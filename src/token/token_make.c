@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/23 17:36:23 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:39:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,6 @@ void	make_eof_token(t_token *token)
 {
 	token->type = TOKEN_EOF;
 	token->value = NULL;
-	token->env_var = 0;
-}
-
-int	quote_len(char *str, int i)
-{
-	int	j;
-
-	j = 1;
-	while (str[i + j] != str[i])
-		j++;
-	return (j);
 }
 
 //extracts a word (delimited by spaces) from the input and fills the token variables according to this
@@ -37,14 +26,11 @@ void	make_word_token(t_token *token, char *input)
 	int			word_len;
 
 	word_len = 0;
-	token->env_var = 0;
 	token->type = WORD;
 	while (!ft_isspace(input[word_len]) && !ft_issep(input[word_len]) && input[word_len] != '\0')
 	{
-		if (input[word_len] == '\'')
+		if (input[word_len] == '\"' || input[word_len] == '\'')
 			word_len = word_len + quote_len(input, word_len);
-		if (input[word_len] == '$')
-			token->env_var++;
 		word_len++;
 	}
 	word = gc_malloc((word_len + 1) * sizeof(char));
@@ -62,14 +48,9 @@ void	make_quote_token(t_token *token, char *input)
 	int			quote_len;
 
 	quote_len = 1;
-	token->env_var = 0;
 	token->type = QUOTE;
 	while (input[quote_len] != input[0] && input[quote_len] != '\0')
-	{
-		if (input[0] == '\"' && input[quote_len] == '$')
-			token->env_var++;
 		quote_len++;
-	}
 	if (input[quote_len] == input[0])
 		quote_len++;
 	//handle unclosed quotes here, as errors?!?!?
@@ -90,7 +71,6 @@ void	make_redir_token(t_token *token, char *input)
 	char	symbol;
 
 	token->type = REDIRECTION;
-	token->env_var = 0;
 	redir_len = 1;
 	symbol = *input;
 	if (input[redir_len] == symbol)
@@ -114,5 +94,4 @@ void	make_pipe_token(t_token *token)
 	ft_strlcpy(pipe, "|", 2);
 	token->type = PIPE;
 	token->value = pipe;
-	token->env_var = 0;
 }

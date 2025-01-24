@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 17:45:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:20:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,12 @@ int	withsign(char ***env, char *arg, char *sign)
 	len = sign - arg;
 	n_key = gc_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(n_key, arg, len + 1);
+	if (valid_exp(n_key) == false)
+	{
+		gc_free(n_key);
+		return (-1);
+	}
 	n_val = gc_strdup(sign + 1);
-	//n_val = handle_quotes(n_val);
 	if (n_key != NULL && n_val != NULL)
 	{
 		if (update_env(env, n_key, n_val, true) != 0)

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/23 15:34:51 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:34:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,14 @@ t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 	(*curr_tok)++;
 	if (tokens[*curr_tok].type == WORD || tokens[*curr_tok].type == QUOTE)
 	{
-		if (redir_node->node_type.redir->type != HEREDOC \
-			&& tokens[*curr_tok].env_var > 0)
+		if (redir_node->node_type.redir->type != HEREDOC)
+		{
 			tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
+			handle_quotes(&tokens[*curr_tok].value);
+		}
 		if (redir_node->node_type.redir->type == HEREDOC)
 		{
-			if (del_quotes(tokens, curr_tok))
+			if (handle_quotes(&tokens[*curr_tok].value))
 				redir_node->node_type.redir->type = HEREDOC_Q;
 		}
 		redir_node->node_type.redir->left = tokens[*curr_tok].value;

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 17:36:39 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:36:55 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ typedef struct s_token
 {
 	t_tokentype			type;
 	char				*value;
-	int					env_var;
 }						t_token;
 
 typedef struct s_tokenizer
@@ -180,7 +179,7 @@ t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
 							t_astnode *right_node, t_data *data);
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
 							t_astnode *left_node, t_data *data);
-int						del_quotes(t_token *tokens, int *curr_tok);
+int						handle_quotes(char **str);
 int						quote_len(char *str, int i);
 
 // free ast
