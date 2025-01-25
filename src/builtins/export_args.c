@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_with_args.c                                 :+:      :+:    :+:   */
+/*   export_args.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/24 19:01:18 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:45:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,33 @@
 /**
  * @fn: export with args & values
  */
+
+//returns an allocated string, being a copy of the passed str with a \ added before each conflictive character (" and \")
+static void	add_escape_char(char **n_val, char *str)
+{
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"' || str[i] == '\\')
+			count++;
+		i++;
+	}
+	*n_val = gc_malloc((ft_strlen(str) + count + 1) * sizeof(char));
+	while (i >= 0)
+	{
+		(*n_val)[i + count] = str[i];
+		if (str[i] == '\"' || str[i] == '\\')
+		{
+			count--;
+			(*n_val)[i + count] = '\\';
+		}
+		i--;
+	}
+}
 
 //grammar checks the env var name(but not to apply to the env var value)
 static bool	valid_exp(char *arg)
@@ -56,7 +83,7 @@ static int	withsign(char ***env, char *arg, char *sign)
 		gc_free(n_key);
 		return (-1);
 	}
-	n_val = gc_strdup(sign + 1);
+	add_escape_char(&n_val, sign);
 	if (n_key != NULL && n_val != NULL)
 	{
 		if (update_env(env, n_key, n_val, true) != 0)

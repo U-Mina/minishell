@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 09:57:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 11:19:07 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,12 @@ char	*expand_env(char *str, t_data *data)
 		if (str[i] == '\"' )
 		{
 			d_quote_st = i;
-			if (quote_len >= 0)
+			if (quote_len(str, i) >= 0)
 				d_quote_end = i + quote_len(str, i);
 		}
 		if (str[i] == '\'' && i < d_quote_st && i > d_quote_end)
 		{
-			if (quote_len >= 0)
+			if (quote_len(str, i) >= 0)
 				i = i + quote_len(str, i);
 		}
 		if (str[i] == '$')
