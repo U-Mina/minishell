@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 17:19:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:36:34 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ int	unset_env(char ***env, char *arg)
 			res = del_var(env, arg);
 			if (res == -1)
 			{
-				printf("debugging del_var()");
-				return (print_err("debugging del_var()", NULL, NULL), -1);
+				return (perror("malloc"), -1);
 			}
 			break ;
 		}
