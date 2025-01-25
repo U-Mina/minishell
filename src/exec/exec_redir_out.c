@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_out.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 20:58:40 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/18 16:23:32 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 13:24:12 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	out_or_append(t_redir *redir, int fd, int *exit_status)
+// static int	out_or_append(t_redir *redir, int fd, int *exit_status)
+static int	out_or_append(t_redir *redir, int fd)
 {
 	if (fd != 1)
 		close(fd);
@@ -23,10 +24,10 @@ static int	out_or_append(t_redir *redir, int fd, int *exit_status)
 	if (fd == -1)
 	{
 		print_err(redir->left, NULL, strerror(errno));
-		*exit_status = 1;
+		//*exit_status = 1;
 		return (-1);
 	}
-	*exit_status = 0;
+	// *exit_status = 0;
 	return (fd);
 }
 
@@ -37,14 +38,15 @@ int	exec_out(t_redir *redir, t_data *data)
 	fd = 1;
 	if (redir)
 	{
-		fd = out_or_append(redir, fd, &data->exit_status);
+		fd = out_or_append(redir, fd);
 		if (fd < 0)
 		{
 			data->fd[1] = 1;
-			return (-1);
+			return (data->exit_status = 1, -1);
 		}
 	}
 	data->fd[1] = fd;
+	data->exit_status = 0;
 	return (0);
 }
 
