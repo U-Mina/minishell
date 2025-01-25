@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 10:39:59 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 16:01:12 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:23:57 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,25 @@ void	gc_free(void *free_ptr)
 {
 	t_gc_list	**gc_list;
 	t_gc_list	*current;
+	t_gc_list	*prev;
 
 	gc_list = get_gc_list();
 	current = *gc_list;
-	if (current->allocated == free_ptr)
+	prev = NULL;
+	while (current != NULL)
 	{
-		(*gc_list) = current->next;
-		free(current->allocated);
-	}
-	else
-	{
-		while (current->next->allocated != free_ptr)
-			current = current->next;
-		free(current->next->allocated);
-		current->next = current->next->next;
+		if (current->allocated == free_ptr)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				(*gc_list) = current->next;
+			free(current->allocated);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
 	}
 }
 
@@ -79,6 +84,7 @@ void	gc_clean(void)
 	}
 	free(current->allocated);
 	free(current);
+	*gc_list = NULL;
 }
 
 void	*gc_realloc(void *ptr, size_t old, size_t new)
