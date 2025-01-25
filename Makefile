@@ -36,9 +36,9 @@ SOURCES =	minishell.c\
 			env_utils3.c\
 			env.c\
 			exit.c\
-			export_utils.c\
-			export_utils2.c\
 			export.c\
+			export_only.c\
+			export_args.c\
 			hepler_utils.c\
 			pwd.c\
 			unset.c\
