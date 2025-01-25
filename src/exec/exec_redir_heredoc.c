@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_heredoc.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 15:03:52 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:59:36 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	exec_heredoc(char *de, int *exit_status, t_data *data, bool quote)
 	int		fd[2];
 	char	*line;
 
-	if (create_pipe(fd, exit_status) < 0)
+	if (create_pipe(fd) < 0)
 	{
 		print_err("heredoc", de, strerror(errno));
 		*exit_status = 1;

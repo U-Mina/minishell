@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/20 11:01:47 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:58:25 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@
  * - redirct and connect pipe
  * - close and clean
  */
-
-//to do fork_err() or just print_err()?
-
-static pid_t	fork_err(int *fd, int *exit_status)
+static pid_t	fork_err(int *fd)
 {
 	int	id;
 
@@ -28,10 +25,11 @@ static pid_t	fork_err(int *fd, int *exit_status)
 	if (id < 0)
 	{
 		print_err("fork", NULL, strerror(errno));
-		*exit_status = 1;
+		//*exit_status = 1;
 		close(fd[0]);
 		close(fd[1]);
-		exit(*exit_status);
+		return (-1);
+		//exit(*exit_status);
 	}
 	return (id);
 }
@@ -40,9 +38,10 @@ static int	left_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 {
 	pid_t	left;
 
-	left = fork_err(fd, &data->exit_status);
+	// left = fork_err(fd, &data->exit_status);
+	left = fork_err(fd);
 	if (left == -1)
-		return (-1);
+		return (data->exit_status = 1, -1);
 	if (left == 0)
 	{
 		close(sync_fd[0]);
@@ -66,9 +65,9 @@ static int	right_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 	char	buffer[5];
 	size_t	bytes_read;
 
-	right = fork_err(fd, &data->exit_status);
+	right = fork_err(fd);
 	if (right == -1)
-		return (-1);
+		return (data->exit_status = 1, -1);
 	if (right == 0)
 	{
 		close(sync_fd[1]);
@@ -88,21 +87,32 @@ static int	right_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 	return (right);
 }
 
-int	create_pipe(int *fd, int *exit_status)
+// int	create_pipe(int *fd, int *exit_status)
+int	create_pipe(int *fd)
 {
 	int	pip;
 
 	pip = pipe(fd);
 	if (pip == 0)
 	{
-		*exit_status = 0;
+		//*exit_status = 0;
 		return (0);
 	}
 	print_err("pipe", NULL, strerror(errno));
-	*exit_status = 1;
+	//*exit_status = 1;
 	return (-1);
 }
 
+	// if (create_pipe(fd, &data->exit_status) < 0)
+	// 	return ;
+	// if (create_pipe(sync_fd, &data->exit_status) < 0)
+	// 	return ;
+	// left = left_node(p_node->left, fd, sync_fd, data);
+	// if (left < 0)
+	// 	return ;
+	// right = right_node(p_node->right, fd, sync_fd, data);
+	// if (right < 0)
+	// 	return ;
 void	exec_pipe(t_pipe *p_node, t_data *data)
 {
 	int		fd[2];
@@ -110,16 +120,18 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	pid_t	left;
 	pid_t	right;
 
-	if (create_pipe(fd, &data->exit_status) < 0)
+	if (create_pipe(fd) == -1 || create_pipe(sync_fd) == -1)
+	{
+		data->exit_status = 1;
 		return ;
-	if (create_pipe(sync_fd, &data->exit_status) < 0)
-		return ;
+	}
 	left = left_node(p_node->left, fd, sync_fd, data);
-	if (left < 0)
-		return ;
 	right = right_node(p_node->right, fd, sync_fd, data);
-	if (right < 0)
+	if (left < 0 || right < 0)
+	{
+		data->exit_status = 1;
 		return ;
+	}
 	close(sync_fd[0]);
 	close(sync_fd[1]);
 	close(fd[0]);

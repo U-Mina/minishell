@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/23 15:36:15 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 13:15:15 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	dup_err(int fd1, int std_fd, int *exit_status)
+// static int	dup_err(int fd1, int std_fd, int *exit_status)
+static int	dup_err(int fd1, int std_fd)
 {
 	int	res;
 
@@ -20,10 +21,10 @@ static int	dup_err(int fd1, int std_fd, int *exit_status)
 	if (res == -1)
 	{
 		print_err("dup2", NULL, strerror(errno));
-		*exit_status = 1;
+		// *exit_status = 1;
 		return (-1);
 	}
-	*exit_status = 0;
+	// *exit_status = 0;
 	return (0);
 }
 
@@ -31,15 +32,15 @@ static int	update_fd(t_data *data)
 {
 	if (data->fd[0] != 0) //being overwrite by new_fd, change with stdin
 	{
-		if (dup_err(data->fd[0], STDIN_FILENO, &data->exit_status) == -1)//stdin_fileno
-			return (-1);
+		if (dup_err(data->fd[0], STDIN_FILENO) == -1)//stdin_fileno
+			return (data->exit_status = 1, -1);
 		close(data->fd[0]);
 		data->fd[0] = 0;
 	}
 	if (data->fd[1] != 1)
 	{
-		if (dup_err(data->fd[1], STDOUT_FILENO, &data->exit_status) == -1)//stdout_fileno
-			return (-1);
+		if (dup_err(data->fd[1], STDOUT_FILENO) == -1)//stdout_fileno
+			return (data->exit_status = 1, -1);
 		close(data->fd[1]);
 		data->fd[1] = 1;
 	}

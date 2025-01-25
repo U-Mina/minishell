@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 14:35:21 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/25 12:25:41 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ bool	check_err_go_dir(char *path, int *exit_status)
 // 	return (*exit_status = 1, false);
 // }
 
-char	*cur_path(int *exit_status)
+// char	*cur_path(int *exit_status)
+char	*cur_path()
 {
 	int		i;
 	char	*tmp;
@@ -52,7 +53,7 @@ char	*cur_path(int *exit_status)
 	if (tmp == NULL)
 	{
 		perror("gercwd: ");
-		*exit_status = 1;
+		// *exit_status = 1;
 		return (NULL);
 	}
 	res = gc_malloc(sizeof(char) * (ft_strlen(tmp) + 1));
@@ -62,10 +63,9 @@ char	*cur_path(int *exit_status)
 		res[i] = tmp[i];
 		i++;
 	}
-	//free(tmp);
 	free(tmp);
 	res[i] = '\0';
-	*exit_status = 0;
+	// *exit_status = 0;
 	return (res);
 }
 
@@ -91,24 +91,24 @@ int	ft_cd(char **args, char ***env, int *exit_status)
 	char	*cur;
 	bool	retval;
 
-	cur = cur_path(exit_status);
+	cur = cur_path();
 	if (cur == NULL)
-		return (-1);
+		return (*exit_status = 1, -1);
 	if (args_nbr(args) == 1) //only 'cd' cmd
 		retval = cd_home(*env, exit_status);
 	else
 		retval = check_err_go_dir(args[1], exit_status);
 	if (retval == true)
-		return (handle_pwd(cur, env, exit_status), 0);//change pwd and old after success, err checked needed later
+		return (handle_pwd(cur, env), 0);//change pwd and old after success, err checked needed later
 	return (-1);
 }
 
-void	handle_pwd(char *o_pwd, char ***env, int *exit_status)
+void	handle_pwd(char *o_pwd, char ***env)
 {
 	char	*cur;
 	char	*n_var;
 
-	cur = cur_path(exit_status);
+	cur = cur_path();
 	if (find_env_var(*env, "OLDPWD") < 0)//no OLDPWD exist, create one
 	{
 		n_var = create_newvar("OLDPWD", o_pwd);
