@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/24 19:07:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 11:53:41 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ static void	sort_env(char **env, char ***sorted, int var_nb)
 		(*sorted)[i] = smallest(env_cpy);
 		i++;
 	}
+	(*sorted)[i] = NULL;
 	gc_free(env_cpy); //do not double free, because otherwise we lost the allocated strings, now stored in the sorted double string.
 }
 
@@ -120,11 +121,8 @@ int	exp_only(char **env)
 	sort_env(env, &sorted_env, var_len);
 	while (sorted_env[i])
 	{
-		if (sorted_env[i])
-		{
-			sorted_env[i] = print_export(sorted_env[i]);
-			printf("declare -x %s\n", sorted_env[i]);
-		}
+		sorted_env[i] = print_export(sorted_env[i]);
+		printf("declare -x %s\n", sorted_env[i]);
 		i++;
 	}
 	free_double_pointer(sorted_env);
