@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/24 13:32:18 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 09:57:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int	quote_len(char *str, int i)
 	j = 1;
 	while (str[i + j] != str[i])
 		j++;
+	if (j >= (int)ft_strlen(str))
+	{
+		perror("Uncloased quotes are not handled in this minishell");
+		return (-1);
+	}
 	return (j);
 }
 

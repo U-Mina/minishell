@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/17 12:28:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:00:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ static void	create_token(t_tokenizer *tokenizer, char *input)
 		make_pipe_token(token);
 	else if (*input == '>' || *input == '<')
 		make_redir_token(token, input);
-	else if (*input == '\"' || *input == '\'')
-		make_quote_token(token, input);
 	else
 		make_word_token(token, input);
 	tokenizer->count++;

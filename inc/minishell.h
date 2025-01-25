@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/24 13:36:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:00:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef enum e_tokentype
 	WORD,
 	COMMAND,
 	ARGUMENT,
-	QUOTE,
 	REDIRECTION,
 	PIPE,
 	TOKEN_EOF
@@ -167,7 +166,6 @@ void					init_pipe_node(t_pipe *pipe_node);
 t_token					*tokenizer(char *input);
 void					make_eof_token(t_token *token);
 void					make_word_token(t_token *token, char *input);
-void					make_quote_token(t_token *token, char *input);
 void					make_redir_token(t_token *token, char *input);
 void					make_pipe_token(t_token *token);
 
@@ -223,28 +221,16 @@ char					**cpy_env(char **env);
 void					change_shlvl_oldpwd(char ***env, char *key1,
 							char *key2);
 int						find_env_var(char **env, const char *key);
-char					*create_newvar(const char *key, char *val);
-void					put_var(char ***env, char *n_var);
 int						update_env(char ***env, const char *key, char *val,
 							bool flg);
 void					mod_val(char **env, char *key, char *val);
-//int					del_var(char ***env, int pos);
 int						del_var(char ***env, char *key);
-void					del_val(char **env, char *key);
+char					*create_newvar(const char *key, char *val);
 char					*env_var_value(char **env, const char *key);
 
 // export hlper
-char					*smallest(char **tmp);
-int						nonull_varlen(char **env);
-char					**nonull_cpy(char **env, int len);
-char					**sort_env(char **env, char **sorted);
-//int						exp_only(char **env, int *exit_status);
 int						exp_only(char **env);
 int						exp_with_arg(char ***env, char *arg);
-int						withsign(char ***env, char *arg, char *sign);
-int						nosign(char ***env, char *arg);
-char	*print_export(char *key);
-bool					valid_exp(char *arg);
 
 // unset hpler
 bool					valid_unset(char *arg);

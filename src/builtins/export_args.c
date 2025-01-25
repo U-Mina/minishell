@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils2.c                                    :+:      :+:    :+:   */
+/*   export_with_args.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/24 13:20:33 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/24 19:01:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//grammar check
-//idea: change para from 'const char *arg' to 'char *arg'
-bool	valid_exp(char *arg)
+/**
+ * @fn: export with args & values
+ */
+
+//grammar checks the env var name(but not to apply to the env var value)
+static bool	valid_exp(char *arg)
 {
 	int	i;
 
@@ -38,57 +41,8 @@ bool	valid_exp(char *arg)
 	return (true);
 }
 
-/**
- * @fn: export with args & values
- */
-//wrap fn for case choose
-int	exp_with_arg(char ***env, char *arg)
-{
-	char	*sign;
-	int		res;
-
-	sign = ft_strchr(arg, '=');
-	if (sign != NULL)
-		res = withsign(env, arg, sign);
-	else
-		res = nosign(env, arg);
-	return (res);
-}
-
-// static char	*handle_quotes(char *str)
-// {
-// 	char	*res;
-// 	int		i;
-// 	int		j;
-// 	char	quote;
-
-// 	i = 0;
-// 	j = 0;
-// 	while (str[i] != '\0')
-// 	{
-// 		if (str[i] == '\'' || str[i] == '\"')
-
-// 			i = i + quote_len(str, i);
-// 		if (str[i] != '\'' && str[i] != '\"')
-// 			j++;
-// 		i++;
-// 	}
-// 	res = gc_malloc(j * sizeof(char));
-// 	while (i >= 0)
-// 	{
-// 		if (str[i] != '\'' && str[i] != '\"')
-// 		{
-// 			res[j] = str[i];
-// 			j--;
-// 		}
-// 		i--;
-// 	}
-// 	gc_free(str);
-// 	return (res);
-// }
-
 //export with '=' sign
-int	withsign(char ***env, char *arg, char *sign)
+static int	withsign(char ***env, char *arg, char *sign)
 {
 	size_t	len;
 	char	*n_key;
@@ -116,7 +70,7 @@ int	withsign(char ***env, char *arg, char *sign)
 }
 
 //export without '=' sign
-int	nosign(char ***env, char *arg)
+static int	nosign(char ***env, char *arg)
 {
 	char	*n_key;
 
@@ -129,31 +83,16 @@ int	nosign(char ***env, char *arg)
 	return (0);
 }
 
-char	*print_export(char *key)
+//wrap fn for case choose
+int	exp_with_arg(char ***env, char *arg)
 {
-	int i;
-	char	*retval;
+	char	*sign;
+	int		res;
 
-	i = 0;
-	retval = gc_malloc(sizeof(char *) * (ft_strlen(key) + 3));//"" + NULL --> 3
-	while (key[i])
-	{
-		retval[i] = key[i];
-		if (key[i] == '=')
-		{
-			retval[i + 1] = '"';
-			break ;
-		}
-		i++;
-	}
-	i = i + 1;
-	while (key[i])
-	{
-		retval[i + 1] = key[i];
-		i++;
-	}
-	retval[i + 1] = '"';
-	retval[i + 2] = '\0';
-	//free(key);
-	return (retval);
+	sign = ft_strchr(arg, '=');
+	if (sign != NULL)
+		res = withsign(env, arg, sign);
+	else
+		res = nosign(env, arg);
+	return (res);
 }
