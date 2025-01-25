@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/23 13:02:55 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/25 13:34:42 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	{
 		init_signal_exec();
 		if (execve(cmd->path, cmd->argv, data->env) < 0)
+		//if here is <0, what is the error type, do we need specific exit number??
 		{
 			data->exit_status = 1;
 			perror("execve");
@@ -143,9 +144,9 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	}
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->exit_status, 0);
+	if (WIFEXITED(data->exit_status))
+		data->exit_status = WEXITSTATUS(data->exit_status);
+	else if (WIFSIGNALED(data->exit_status))
+		data->exit_status = 128 + WTERMSIG(data->exit_status);
 	init_signal_inter(data->minishell->sa, data->minishell->old_sa);
-	// if (WIFEXITED(data->exit_status))
-	// 	data->exit_status = WEXITSTATUS(data->exit_status);
-	// else
-	// 	data->exit_status = 1;
 }
