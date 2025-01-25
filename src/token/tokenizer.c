@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 10:00:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 16:23:57 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ t_token	*tokenizer(char *input)
 	t_tokenizer	*tokenizer;
 
 	tokenizer = init_tokenizer();
+	// if (!tokenizer)
+	// 	return (handle_error(gc_list)); 
 	tokens = tokenizer->tokens;
 	current_token = 0;
 	while (*input != '\0')
