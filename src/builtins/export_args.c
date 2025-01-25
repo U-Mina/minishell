@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 10:45:27 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:00:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	withsign(char ***env, char *arg, char *sign)
 		gc_free(n_key);
 		return (-1);
 	}
-	add_escape_char(&n_val, sign);
+	add_escape_char(&n_val, sign + 1);
 	if (n_key != NULL && n_val != NULL)
 	{
 		if (update_env(env, n_key, n_val, true) != 0)
