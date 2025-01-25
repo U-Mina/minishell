@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 12:22:39 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/25 12:59:01 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,8 @@ void					exec_heredoc(char *de, int *exit_status, t_data *data, bool quote);
 int						exec_in(t_redir *redir, t_data *data);
 int						exec_out(t_redir *redir, t_data *data);
 void					exec_pipe(t_pipe *p_node, t_data *data);
-int						create_pipe(int *fd, int *exit_status);
+// int						create_pipe(int *fd, int *exit_status);
+int						create_pipe(int *fd);
 int						exec_builtins(t_cmd *cmd, t_data *data);
 // void					exec_inner_shell(t_data *data);
 int						get_path(char *cmd, t_cmd *c_node, t_data *data);
