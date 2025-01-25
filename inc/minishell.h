@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 10:00:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:22:39 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,10 +209,11 @@ int						ft_env(char **env, int *exit_status);
 void					ft_exit(t_data *data, char **args);
 
 // cd helper
-char					*cur_path(int *exit_status);
+// char					*cur_path(int *exit_status);
+char					*cur_path(void);
 bool					cd_home(char **env, int *exit_status);
 bool					check_err_go_dir(char *path, int *exit_status);
-void					handle_pwd(char *o_pwd, char ***env, int *exit_status);
+void					handle_pwd(char *o_pwd, char ***env);
 
 // env helper ft
 char					**create_env(void);
