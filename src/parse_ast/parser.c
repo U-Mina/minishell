@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 15:47:22 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 13:18:28 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,28 @@
 //check error handling
 
 //parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
-t_astnode	*parse(t_token *tokens, t_data *data)
+int	parse(t_token *tokens, t_data *data)
 {
-	t_astnode	*root;
-	int			current_token;
+	int	curr_tok;
 
-	current_token = 0;
-	root = NULL;
-	if (!tokens || tokens[current_token].type == TOKEN_EOF)
-		return (root);
-	if (tokens[current_token].type == WORD)
-		root = parse_cmd(tokens, &current_token, data);
-	while (tokens[current_token].type != TOKEN_EOF)
+	curr_tok = 0;
+	data->ast_root = NULL;
+	while (tokens && tokens[curr_tok].type != TOKEN_EOF)
 	{
-		if (tokens[current_token].type == PIPE)
-			root = parse_pipe(tokens, &current_token, root, data);
-		if (tokens[current_token].type == REDIRECTION)
-			root = parse_redir(tokens, &current_token, root, data);
+		if (tokens[curr_tok].type == WORD || \
+			tokens[curr_tok].type == REDIRECTION)
+			data->ast_root = parse_cmd(tokens, &curr_tok, data);
+		if (tokens[curr_tok].type == PIPE)
+			data->ast_root = parse_pipe(tokens, &curr_tok, \
+														data->ast_root, data);
 	}
-	return (root);
+	if (data->ast_root == NULL)
+	{
+		data->exit_status = 258;
+		perror("minishell: syntax error");
+		return (0);
+	}
+	return (1);
 }
 
 //creates a new node for the AST (Abstract Syntax Tree)
@@ -49,9 +52,6 @@ t_astnode	*create_astnode(t_token *token)
 	// if (!new_node)
 	// 	return(handle_error(gc_list));
 	new_node->token = token;
-	//fd[2] init
-	// new_node->fd[0] = STDIN_FILENO;
-	// new_node->fd[1] = STDOUT_FILENO;
 	if (new_node->token->type == COMMAND)
 	{
 		new_node->node_type.cmd = gc_malloc(sizeof(t_cmd));

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 12:32:02 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 13:33:05 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ int	main(int ac, char **av, char **envp)
 			add_history(input);
 			data.tokens = tokenizer(input);
 			//print_tokens(data.tokens); //check lexer
-			data.ast_root = parse(data.tokens, &data);
-			//print_ast(data.ast_root, 0); //check parser
-			exec_ast(data.ast_root, &data);
+			if (parse(data.tokens, &data))
+			{
+				//print_ast(data.ast_root, 0); //check parser
+				exec_ast(data.ast_root, &data);
+			}
 			reset_data(&data);
 		}
 		free(input);
@@ -70,13 +72,16 @@ void	print_ast(t_astnode* ast_node, int level)
 	if (ast_node->token->type == PIPE)
 	{
 		printf("%s (%i)\n", ast_node->token->value, ast_node->token->type);
-		print_ast(ast_node->node_type.pipe->left, level + 1);
-		print_ast(ast_node->node_type.pipe->right, level + 1);
+		if (ast_node->node_type.pipe->left)
+			print_ast(ast_node->node_type.pipe->left, level + 1);
+		if (ast_node->node_type.pipe->right)
+			print_ast(ast_node->node_type.pipe->right, level + 1);
 	}
 	else if (ast_node->token->type == REDIRECTION)
 	{
 		printf("%s (%i.%i): %s\n", ast_node->token->value, ast_node->token->type, ast_node->node_type.redir->type, ast_node->node_type.redir->left);
-		print_ast(ast_node->node_type.redir->right, level + 1);
+		if (ast_node->node_type.redir->right)
+			print_ast(ast_node->node_type.redir->right, level + 1);
 	}
 	else if (ast_node->token->type == COMMAND)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 12:59:01 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/26 14:00:14 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void					make_redir_token(t_token *token, char *input);
 void					make_pipe_token(t_token *token);
 
 // parser
-t_astnode				*parse(t_token *tokens, t_data *data);
+int						parse(t_token *tokens, t_data *data);
 t_astnode				*create_astnode(t_token *token);
 t_astnode				*parse_cmd(t_token *tokens, int *curr_tok, t_data *data);
 t_astnode				*parse_redir(t_token *tokens, int *curr_tok,

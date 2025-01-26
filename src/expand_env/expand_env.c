@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 17:00:05 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 14:00:51 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ static void	env_val(char *str, t_env_var *env_var, int i_start, t_data *data)
 
 	env_var->start = i_start;
 	i = i_start + 1;
+	env_val = NULL;
 	if (str[i] == '?')
 	{
-		env_var->val = gc_itoa(data->exit_status); // (as int or as char* ???)
+		env_var->val = gc_itoa(data->exit_status);
 		// if (!env_var->val)
 		// 	gc_malloc_error();
 		env_var->end = i + 1;
@@ -35,16 +36,16 @@ static void	env_val(char *str, t_env_var *env_var, int i_start, t_data *data)
 	{
 		while (ft_isalnum(str[i]) || str[i] == '_')
 			i++;
+		if (i == i_start + 1)
+			env_val = gc_strdup("$");
 		env_var->end = i;
 		env_var->name_len = env_var->end - env_var->start - 1;
-		env_val = env_var_value(data->env, gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
-		if (!env_val)// is this the expected behavior!?!
-			env_val = "\0";
+		if (!env_val)
+			env_val = env_var_value(data->env, gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
+		if (!env_val)
+			env_val = gc_strdup("");
 		env_var->val_len = ft_strlen(env_val);
-		env_var->val = gc_malloc(env_var->val_len + 1);
-		// if (!env_var->val)
-		// 	gc_malloc_error();
-		ft_strlcpy(env_var->val, env_val, env_var->val_len + 1);
+		env_var->val = env_val;
 	}
 }
 
@@ -58,43 +59,39 @@ static void	comb_lit_env(char *lit, char *str, t_env_var *env_var)
 	gc_free(env_var->val);
 }
 
+static char	*expanded_str(char *str, int *i, t_data *data)
+{
+	t_env_var	env_var;
+	char		*tmp;
+
+	env_val(str, &env_var, *i, data);
+	tmp = gc_malloc((ft_strlen(str) + env_var.val_len + 1) * sizeof(char));
+	// if (!tmp)
+	// 	gc_malloc_error();
+	comb_lit_env(tmp, str, &env_var);
+	gc_free(str);
+	(*i) = (*i) + env_var.val_len;
+	return (tmp);
+}
+
 char	*expand_env(char *str, t_data *data)
 {
-	int			i;
-	char		*tmp;
-	t_env_var	env_var;
-	int			d_quote_st;
-	int			d_quote_end;
+	int		i;
+	bool	d_quote_flag;
 
 	i = 0;
-	d_quote_st = ft_strlen(str);
-	d_quote_end = -1;
+	d_quote_flag = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] == '\"' && i < d_quote_st && i > d_quote_end)
-		{
-			d_quote_st = i;
-			if (quote_len(str, i) >= 0)
-				d_quote_end = i + quote_len(str, i);
-		}
-		if (str[i] == '\'' && i < d_quote_st && i > d_quote_end)
+		if (str[i] == '\"')
+			d_quote_flag = !d_quote_flag;
+		if (str[i] == '\'' && !d_quote_flag)
 		{
 			if (quote_len(str, i) >= 0)
 				i = i + quote_len(str, i);
 		}
 		if (str[i] == '$')
-		{
-			env_val(str, &env_var, i, data);
-			tmp = gc_malloc((ft_strlen(str) + env_var.val_len + 1) * sizeof(char));
-			// if (!tmp)
-			// 	gc_malloc_error();
-			if (i >= d_quote_st && i <= d_quote_end)
-				d_quote_end = d_quote_end + env_var.val_len;
-			comb_lit_env(tmp, str, &env_var);
-			gc_free(str); //gc will have to check that str is really in gc list, because for the content in redir heredoc, it is allocated with readline, and will not be in gc list
-			str = tmp;
-			i = i + env_var.val_len;
-		}
+			str = expanded_str(str, &i, data);
 		i++;
 	}
 	return (str);

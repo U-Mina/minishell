@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 12:26:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/25 16:17:20 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ int	quote_len(char *str, int i)
 	while (str[i + j] != str[i])
 		j++;
 	if (j >= (int)ft_strlen(str + i))
-	{
-		perror("Unclosed quotes are not handled in this minishell");
 		return (-1);
-	}
 	return (j);
 }
 
@@ -37,6 +34,7 @@ static int	del_quotes(char **str, int o)
 	int		j;
 
 	i = o;
+	rv = -1;
 	quote = (*str)[i];
 	j = 1;
 	while ((*str)[i + j] != '\0')
@@ -59,13 +57,19 @@ int	handle_quotes(char **str)
 	char	*res;
 	int		i;
 	int		o_len;
+	int		q_len;
 
 	o_len = ft_strlen(*str);
 	i = 0;
 	while ((*str)[i] != '\0')
 	{
 		if ((*str)[i] == '\'' || (*str)[i] == '\"')
-			i = i + del_quotes(str, i);
+		{
+			q_len = del_quotes(str, i);
+			if (q_len < 0)
+				return (-1);
+			i = i + q_len;
+		}
 		else
 			i++;
 	}
