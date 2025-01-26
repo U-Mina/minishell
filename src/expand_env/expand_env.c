@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 14:00:51 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 15:51:57 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*expanded_str(char *str, int *i, t_data *data)
 	// 	gc_malloc_error();
 	comb_lit_env(tmp, str, &env_var);
 	gc_free(str);
-	(*i) = (*i) + env_var.val_len;
+	(*i) = (*i) + env_var.val_len - 1;
 	return (tmp);
 }
 
