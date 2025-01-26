@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 16:17:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 16:13:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	del_quotes(char **str, int o)
 	{
 		if ((*str)[i + j] == quote && j == 1)
 		{
-			rv = i + j - o;
+			rv = rv + i + j - o;
 			j = 2;
 		}
 		(*str)[i] = (*str)[i + j];
