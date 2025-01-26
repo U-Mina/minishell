@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 13:15:15 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/26 11:46:02 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,24 @@ static int	exec_redir(t_redir *redir, t_data *data)
 
 t_astnode	*handle_redir_fd(t_astnode *ast_node, t_data *data)
 {
-	while(ast_node->token->type == REDIRECTION)
+	while (ast_node->token->type == REDIRECTION)
 	{
-		exec_redir(ast_node->node_type.redir, data);
+		if (exec_redir(ast_node->node_type.redir, data) < 0)
+			return NULL;
 		ast_node = ast_node->node_type.redir->right;
 	}
+
 	return(ast_node);
 }
-
+// t_astnode	*handle_redir_fd(t_astnode *ast_node, t_data *data)
+// {
+// 	while(ast_node->token->type == REDIRECTION)
+// 	{
+// 		exec_redir(ast_node->node_type.redir, data);
+// 		ast_node = ast_node->node_type.redir->right;
+// 	}
+// 	return(ast_node);
+// }
 
 // //todo: ft handle_redir(), this ft will do error_check for fd(<0?) and clean and direct to exec_redir
 // /**
