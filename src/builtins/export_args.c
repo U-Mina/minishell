@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 12:00:18 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 17:17:35 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static int	nosign(char ***env, char *arg)
 	n_key = arg;
 	if (find_env_var(*env, n_key) == -1)
 	{
-		if (update_env(env, n_key, NULL, false) != 0)
+		if (valid_exp (arg) && update_env(env, n_key, NULL, false) != 0)
 			return (perror("malloc fail"), -1);
 	}
 	return (0);
@@ -117,7 +117,7 @@ int	exp_with_arg(char ***env, char *arg)
 	int		res;
 
 	sign = ft_strchr(arg, '=');
-	if (sign != NULL)
+	if (sign != NULL && sign != arg)
 		res = withsign(env, arg, sign);
 	else
 		res = nosign(env, arg);
