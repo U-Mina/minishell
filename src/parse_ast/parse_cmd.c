@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 13:31:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/26 14:32:34 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,32 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	return (cmd_type);
 }
 
+static t_astnode	*update_redir(t_astnode *root, t_token *tok, int *curr_tok, \
+									t_data *data)
+{
+	t_astnode	*last_node;
+
+	if (root->token->type == COMMAND)
+		root = parse_redir(tok, curr_tok, root, data);
+	else
+	{
+		last_node = root;
+		while (last_node->node_type.redir->right->token->type != COMMAND)
+			last_node = last_node->node_type.redir->right;
+		last_node->node_type.redir->right = parse_redir(tok, curr_tok, \
+									last_node->node_type.redir->right, data);
+	}
+	return (root);
+}
+
 static t_astnode	*handle_arg_redir(t_astnode *cmd_node, t_token *tok, \
 												int *curr_tok, t_data *data)
 {
-	t_astnode	*redir_node;
+	t_astnode	*root;
 	int			arg_tok;
 
 	arg_tok = *curr_tok;
-	redir_node = cmd_node;
+	root = cmd_node;
 	while (tok[*curr_tok].type != TOKEN_EOF && tok[*curr_tok].type != PIPE)
 	{
 		if (tok[*curr_tok].type == WORD)
@@ -88,18 +106,12 @@ static t_astnode	*handle_arg_redir(t_astnode *cmd_node, t_token *tok, \
 			(cmd_node->node_type.cmd->arg_nb)++;
 			(*curr_tok)++;
 		}
-		else if (tok[*curr_tok].type == REDIRECTION && redir_node == cmd_node)
-			redir_node = parse_redir(tok, curr_tok, cmd_node, data);
-		else if (tok[*curr_tok].type == REDIRECTION && redir_node != cmd_node)
-		{
-			redir_node->node_type.redir->right = \
-									parse_redir(tok, curr_tok, cmd_node, data);
-			redir_node = redir_node->node_type.redir->right;
-		}
+		else if (tok[*curr_tok].type == REDIRECTION)
+			root = update_redir(root, tok, curr_tok, data);
 	}
 	if (!get_cmd_args(cmd_node, tok, arg_tok, data))
 		return (NULL);
-	return (redir_node);
+	return (root);
 }
 
 
