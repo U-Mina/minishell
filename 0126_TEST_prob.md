@@ -10,6 +10,18 @@
 	ms: cat: out1: No such file or directory
 	old_ms: work as bash
 
+	TEST 44:   /Users/ewu/42_minishell_tester/tester.sh: line 217: 53595 Done                    echo -n "$INPUT"
+	53596 Abort trap: 6           | $MINISHELL_PATH/$EXECUTABLE 2> tmp_err_minishell > tmp_out_minishell
+	 
+	echo '              $USER          '
+		STD_OUT: ❌  STD_ERR: ✅  EXIT_CODE: ❌ [ minishell(134)  bash(0) ]  
+	
+Prompt>exit
+exit
+minishell(55797,0x10dfc8dc0) malloc: *** error for object 0x7f007fbb6dc0: pointer being freed was not allocated
+minishell(55797,0x10dfc8dc0) malloc: *** set a breakpoint in malloc_error_break to debug
+zsh: abort      ./minishell
+
 **mstest m**
 	*O = our output*
 	*B = bash output*

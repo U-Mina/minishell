@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 06:55:32 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 12:36:34 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/27 11:07:26 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_unset(char **args, char ***env, int *exit_status)
 	i = 1;
 	if (args_nbr(args) == 1 || !env || !env[0])
 		return (1);
-	*exit_status = 0;
+	//*exit_status = 0;
 	//while (i < args_nbr(args))
 	while (args[i])
 	{
@@ -42,7 +42,10 @@ bool	valid_unset(char *arg)
 	int	i;
 
 	if (!arg || !*arg)
+	{
+		print_err("minishell: unset", "'", "not a valid identifier");
 		return (false);
+	}
 	if (!(ft_isalpha(arg[0]) == 1 || arg[0] == '_'))
 	{
 		print_err("minishell: unset", arg, "not a valid identifier");
