@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 21:13:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/27 19:49:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,11 @@ void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	gc_free(val);
 	pos2 = find_env_var(*env, key2);
 	if (pos2 >= 0)
+	{
 		gc_free((*env)[pos2]);
-	(*env)[pos2] = gc_strdup(key2);
+		(*env)[pos2] = gc_strdup(key2);
+	}
+	//what to do if OLDPWD is not there?? write also an env variable empty with this name or just not write???
 }
 
 //ini the struct of t_env, maybe move to *main.c/init.c*

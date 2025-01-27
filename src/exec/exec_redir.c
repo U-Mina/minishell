@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/27 10:12:08 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/27 20:06:01 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ static int	exec_redir(t_redir *redir, t_data *data)
 	if (update_fd(data) < 0)//proper error handling
 	{
 		data->exit_status = 1;
-		return -1;
+		return (-1);
 		//exec_ast(redir->right, data);
 		//return (0);this is type? should be ex_st =1, and return -1 on err?
 	}
-	return (-1);
+	return (0);
 }
 
 t_astnode	*handle_redir_fd(t_astnode *ast_node, t_data *data)
