@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:31:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 12:26:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/27 19:26:17 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ t_astnode	*parse_pipe(t_token *tokens, int *curr_tok, t_astnode *left_node,
 	t_astnode	*pipe_node;
 	t_pipe		*pipe;
 
-	if (!left_node)
-		return (NULL);
 	if (tokens[*curr_tok].type == PIPE)
 	{
 		pipe_node = create_astnode(&tokens[*curr_tok]);
