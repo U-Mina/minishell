@@ -22,6 +22,20 @@ minishell(55797,0x10dfc8dc0) malloc: *** error for object 0x7f007fbb6dc0: pointe
 minishell(55797,0x10dfc8dc0) malloc: *** set a breakpoint in malloc_error_break to debug
 zsh: abort      ./minishell
 
+*NOT sure how to deal with: cd "nonexist" 2>/dev/null
+		ex_st becomes 1 bc '2>/dev/null' is successfully handled
+		while bash shows 1 to indicate cd is not success
+
+
+
+
+
+
+
+
+
+
+
 **mstest m**
 	*O = our output*
 	*B = bash output*

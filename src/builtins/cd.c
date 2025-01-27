@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 12:25:41 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/27 11:27:50 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ bool	check_err_go_dir(char *path, int *exit_status)
 			print_err("minishell: cd", path, "Permission denied");
 		else
 			print_err("minishell: cd", path, "No such file or directory");
-		return (*exit_status = 1, false);
+		*exit_status = 1;
+		return (false);
 	}
 	*exit_status = 0;
 	return	(true);
