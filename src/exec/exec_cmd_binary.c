@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/28 16:03:47 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:19:26 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,9 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	}
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->exit_status, 0);
+	restore_signal(data->minishell->sa);
 	if (WIFEXITED(data->exit_status))
 		data->exit_status = WEXITSTATUS(data->exit_status);
 	else if (WIFSIGNALED(data->exit_status))
 		data->exit_status = 128 + WTERMSIG(data->exit_status);
-	restore_signal(data->minishell->sa);
 }
