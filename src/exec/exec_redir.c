@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/27 20:06:01 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:24:05 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ t_astnode	*handle_redir_fd(t_astnode *ast_node, t_data *data)
 {
 	while (ast_node->token->type == REDIRECTION)
 	{
-		if (exec_redir(ast_node->node_type.redir, data) < 0)
+		if (exec_redir(ast_node->node_type.redir, data) < 0 || \
+			!ast_node->node_type.redir->right)
 			return (NULL);
 		ast_node = ast_node->node_type.redir->right;
 	}
