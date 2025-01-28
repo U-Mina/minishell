@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 19:39:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:49:06 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ void	ft_exit(t_data *data, char **args)
 		if (is_digit(args[1]) == 0)
 		{
 			data->exit_status = ft_atoi(args[1]);
-			term_minishell(data->minishell, ft_atoi(args[1]));
+			term_minishell(&(data->minishell), ft_atoi(args[1]));
 		}
 		else if (is_digit(args[1]) == -1)
 		{
 			print_err("minishell", args[1], "numeric argument required");
 			data->exit_status = 255;
-			term_minishell(data->minishell, 255);
+			term_minishell(&(data->minishell), 255);
 		}
 	}
 	data->exit_status = 0;
-	term_minishell(data->minishell, 0);
+	term_minishell(&(data->minishell), 0);
 }

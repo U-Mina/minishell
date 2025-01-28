@@ -6,14 +6,14 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 17:58:50 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:57:41 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //disables the printing of Ctrl as ^ (ECHOCTL flag) and sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
-void	init_minishell(t_minishell	*minishell, int ac, char **av)
+static void	init_minishell(t_minishell	*minishell, int ac, char **av)
 {
 	(void)ac;
 	(void)av;
@@ -30,16 +30,16 @@ void	init_minishell(t_minishell	*minishell, int ac, char **av)
 //so this works also for checking and referrencing
 
 /** init and pass env to t_cmd */
-void	init_data(char **envp, t_data *data, t_minishell *minishell)
+void	init(char **envp, t_data *data, int ac, char **av)
 {
+	init_minishell(&data->minishell, ac, av);
 	data->exit_status = 0;
 	data->o_fd[0] = dup(STDIN_FILENO);
 	data->o_fd[1] = dup(STDOUT_FILENO);
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
 	data->heredoc_fd = 1;
-	data->minishell = minishell;
-	//^^ being set in parse_cmd alreadt
+	//^^ being set in parse_cmd already
 	if (!envp[0])
 	{
 		data->env = create_env();
@@ -74,23 +74,11 @@ void	reset_data(t_data *data)
 		gc_free(data->tokens);
 }
 
-//check: try bad input
-//debug: not sure what para to pass
-void	init_cmd_node(t_cmd *cmd_node)
+void	check_signal(t_data *data)
 {
-	cmd_node->arg_nb = 0;
-	cmd_node->argv = NULL;
-	cmd_node->path = NULL;
-}
-
-void	init_redir_node(t_redir *redir_node)
-{
-	redir_node->left = NULL;
-	redir_node->right = NULL;
-}
-
-void	init_pipe_node(t_pipe *pipe_node)
-{
-	pipe_node->left = NULL;
-	pipe_node->right = NULL;
+	if (g_signal == SIGINT)
+	{
+		data->exit_status = 1;
+		g_signal = 0;
+	}
 }

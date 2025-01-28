@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 19:15:45 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:47:35 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	right_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 			exit(1);
 		}
 		close(sync_fd[0]);
-		restore_signal(data->minishell->sa);
+		restore_signal(data->minishell.sa);
 		// ast_node = handle_redir_fd(ast_node, data);//dont know if in the right part is also needed??
 		if (g_signal != SIGINT)
 		{
@@ -155,7 +155,7 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	waitpid(right, &data->exit_status, 0);
 	if (WIFEXITED(data->exit_status))
 		data->exit_status = WEXITSTATUS(data->exit_status);
-	restore_signal(data->minishell->sa);
+	restore_signal(data->minishell.sa);
 }
 
 //too many lines, split into several fts

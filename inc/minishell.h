@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 16:54:03 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:56:42 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ typedef struct s_data
 	int					fd[2];
 	t_token				*tokens;
 	t_astnode			*ast_root;
-	t_minishell			*minishell;
+	t_minishell			minishell;
 }						t_data;
 
 // gc_list
@@ -156,14 +156,10 @@ typedef struct s_gc_list
 void					init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 
 // main and init
-void					init_minishell(t_minishell *minishell, int ac,
-							char **av);
+void					init(char **envp, t_data *data, int ac, char **av);
 void					term_minishell(t_minishell *minishell, int rv);
-void					init_data(char **envp, t_data *data, t_minishell *minishell);
 void					reset_data(t_data *data);
-void					init_cmd_node(t_cmd *cmd_node);
-void					init_redir_node(t_redir *redir_node);
-void					init_pipe_node(t_pipe *pipe_node);
+void					check_signal(t_data *data);
 
 // lexer-tokenizer
 t_token					*tokenizer(char *input);
@@ -180,6 +176,9 @@ t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
 							t_astnode *right_node, t_data *data);
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
 							t_astnode *left_node, t_data *data);
+void					init_cmd_node(t_cmd *cmd_node);
+void					init_redir_node(t_redir *redir_node);
+void					init_pipe_node(t_pipe *pipe_node);
 int						handle_quotes(char **str);
 int						quote_len(char *str, int i);
 
