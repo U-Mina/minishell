@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 10:15:11 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/28 17:58:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 //disables the printing of Ctrl as ^ (ECHOCTL flag) and sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
 void	init_minishell(t_minishell	*minishell, int ac, char **av)
 {
-	struct termios	term;
-
 	(void)ac;
 	(void)av;
 	init_signal_inter(minishell->sa, minishell->old_sa);
 	tcgetattr(STDIN_FILENO, &(minishell->old_term));
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	term.c_cc[VEOF] = 4;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	tcgetattr(STDIN_FILENO, &(minishell->term));
+	minishell->term.c_lflag &= ~ECHOCTL;
+	minishell->term.c_cc[VEOF] = 4;
+	tcsetattr(STDIN_FILENO, TCSANOW, &(minishell->term));
 }
 
 //this works for initialize the data in struct, such as **env, exit_status, and all other

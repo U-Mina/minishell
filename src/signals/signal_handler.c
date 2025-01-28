@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:35:31 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/12 16:33:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:24:57 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,23 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		write(1, "\n", 1);
+		if (g_signal != SIGINT)
+			write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_signal = SIGINT;
+	}
+}
+
+//handles SIGINT action in heredoc mode
+void	heredoc_signal_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		g_signal = SIGINT;
+		write(STDERR_FILENO, "\n", 1);
+		close(STDIN_FILENO);
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_heredoc.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 12:59:36 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/28 19:06:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,54 @@
 // 	return (-1);
 // }
 
-static char	*read_here(char *de, int *exit_status, t_data *data, bool quote)
+static void	init_heredoc(struct sigaction *h_sa, t_data *data)
 {
-	char	*content;
-	char	*retval;
-
-	data->fd[0] =  dup(STDIN_FILENO);
-	data->fd[1] =  dup(STDOUT_FILENO);
+	data->fd[0] = dup(STDIN_FILENO);
+	data->fd[1] = dup(STDOUT_FILENO);
 	dup2(data->o_fd[0], STDIN_FILENO);
 	dup2(data->o_fd[1], STDOUT_FILENO);
+	sigemptyset(&(h_sa[0].sa_mask));
+	h_sa[0].sa_handler = &heredoc_signal_handler;
+	h_sa[0].sa_flags = 0;
+	sigemptyset(&(h_sa[1].sa_mask));
+	h_sa[1].sa_handler = SIG_IGN;
+	h_sa[1].sa_flags = 0;
+	sigaction(SIGINT, &h_sa[0], NULL);
+	sigaction(SIGQUIT, &h_sa[1], NULL);
+}
+
+static void	term_heredoc(t_data *data)
+{
+	dup2(data->fd[0], STDIN_FILENO);
+	dup2(data->fd[1], STDOUT_FILENO);
+	sigaction(SIGINT, &data->minishell->sa[0], NULL);
+	sigaction(SIGQUIT, &data->minishell->sa[1], NULL);
+}
+
+static char	*read_here(char *de, int *exit_status, t_data *data, bool quote)
+{
+	char				*content;
+	char				*retval;
+	struct sigaction	h_sa[2];
+
+	init_heredoc(h_sa, data);
 	content = readline("> ");
 	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1) || *content < 0) //check properly the behavior when Ctrl-D is pressed (*content < 0) if we should set error different, exit status???
 	{
-		if (errno != 0)
+		if (errno != 0 && g_signal != SIGINT)
 			return (print_err("readline", NULL, strerror(errno)), *exit_status = 1, NULL);
 		free(content);
 		content = NULL;
 		*exit_status = 0;
-		dup2(data->fd[0], STDIN_FILENO);
-		dup2(data->fd[1], STDOUT_FILENO);
+		term_heredoc(data);
+		rl_on_new_line();
 		return (NULL);
 	}
 	retval = gc_strjoin(content, "\n");
 	if (!quote)
 		retval = expand_env(retval, data);
 	free(content);
-	dup2(data->fd[0], STDIN_FILENO);
-	dup2(data->fd[1], STDOUT_FILENO);
+	term_heredoc(data);
 	return (retval);
 }
 
@@ -101,4 +122,9 @@ void	exec_heredoc(char *de, int *exit_status, t_data *data, bool quote)
 	close(fd[1]);
 	data->heredoc_fd = fd[0];
 	data->fd[0] = fd[0];
+	if (g_signal == SIGINT)
+	{
+		data->heredoc_fd = -1;
+		data->exit_status = 1;
+	}
 }

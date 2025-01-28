@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_binary.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 13:34:42 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/28 16:03:47 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,5 @@ void	child_proc(t_cmd *cmd, t_data *data)
 		data->exit_status = WEXITSTATUS(data->exit_status);
 	else if (WIFSIGNALED(data->exit_status))
 		data->exit_status = 128 + WTERMSIG(data->exit_status);
-	init_signal_inter(data->minishell->sa, data->minishell->old_sa);
+	restore_signal(data->minishell->sa);
 }

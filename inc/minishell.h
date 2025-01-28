@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/26 14:00:14 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:54:03 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # include <termios.h>
 # include <unistd.h>
 
+volatile sig_atomic_t g_signal;
+
 struct	s_data;
 
 // original_state and signal handling
@@ -37,6 +39,7 @@ typedef struct s_minishell
 {
 	struct sigaction	sa[2];
 	struct sigaction	old_sa[2];
+	struct termios		term;
 	struct termios		old_term;
 }						t_minishell;
 
@@ -274,6 +277,7 @@ char					*gc_itoa(int n);
 void					init_signal_inter(struct sigaction *sa,
 							struct sigaction *old_sa);
 void					signal_handler(int signum);
+void					heredoc_signal_handler(int signum);
 void					restore_signal(struct sigaction *old_sa);
 void					init_signal_exec(void);
 

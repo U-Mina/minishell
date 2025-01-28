@@ -6,11 +6,13 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 13:33:05 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:49:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+volatile sig_atomic_t g_signal = 0;
 
 //include all allocated elements in gc_list (using gc_malloc and handle mallocated in other functions ex. ft_split)
 //todo: char **envp need to be passed as para in main to get the env from sys 
@@ -24,12 +26,17 @@ int	main(int ac, char **av, char **envp)
 	init_data(envp, &data, &minishell);
 	while (1)
 	{
-		input = readline("Prompt>");
+		input = readline("Minishell>");
 		if(!input)
 			break ;
 		if (*input != '\0' && *gc_strtrim(input, " \t\n\v\f\r") != '\0')
 		{
 			add_history(input);
+			if (g_signal == SIGINT)
+			{
+				data.exit_status = 1;
+				g_signal = 0;
+			}
 			data.tokens = tokenizer(input);
 			//print_tokens(data.tokens); //check lexer
 			if (parse(data.tokens, &data))
