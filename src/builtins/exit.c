@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 14:44:58 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/28 19:39:34 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ static int	is_digit(char *s)
 {
 	while (*s)
 	{
-		if (!(*s >= '0' && *s <= '9'))
+		if (!((*s >= '0' && *s <= '9') || *s == '+' || *s == '-'))
 			return (-1);
 		s++;
 	}
 	return (0);
 }
 
-void ft_exit(t_data *data, char **args)
+void	ft_exit(t_data *data, char **args)
 {
 	printf("exit\n");
 	if (args_nbr(args) > 2)
@@ -55,32 +55,3 @@ void ft_exit(t_data *data, char **args)
 	data->exit_status = 0;
 	term_minishell(data->minishell, 0);
 }
-		
-// void ft_exit(char **args, int *exit_status)
-// {
-// 	printf("exit\n");
-// 	if (args_nbr(args) > 1)
-// 	{
-// 		if (is_digit(args[1]) == -1)
-// 		{
-// 			print_err("minishell", args[1], "numeric argument required" );
-// 			*exit_status = 255;
-// 			exit(*exit_status);
-// 		}
-// 		else
-// 		{
-// 			if (args_nbr(args) == 2)
-// 			{
-// 				*exit_status = ft_atoi(args[1]);
-// 				exit(*exit_status);
-// 			}
-// 			else
-// 			{
-// 				print_err("minishell", "exit", "too many arguments" );
-// 				*exit_status = 1;
-// 			}
-// 		}
-// 	}
-// 	else
-// 		exit(0);
-// }
