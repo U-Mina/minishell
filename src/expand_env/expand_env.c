@@ -6,47 +6,62 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 15:51:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:42:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//expands the environmental variable found at the i_start position of a string (str) to its value
+//PART OF ENV_VAL (see later)
+static int	env_val_name(char *str, t_env_var *env_var, int i, t_data *data)
+{
+	while (ft_isalnum(str[i]) || str[i] == '_')
+		i++;
+	if (i == env_var->start + 1)
+	{
+		env_var->val = gc_strdup("$");
+		if (!env_var->val)
+			return (set_malloc_error(data), 0);
+	}
+	env_var->end = i;
+	env_var->name_len = env_var->end - env_var->start - 1;
+	if (!env_var->val)
+	{
+		env_var->val = gc_substr(str, env_var->start + 1, env_var->name_len);
+		if (!env_var->val)
+			return (set_malloc_error(data), 0);
+		env_var->val = env_var_value(data->env, env_var->val);
+	}
+	if (!env_var->val)
+		env_var->val = gc_strdup("");
+	if (!env_var->val)
+		return (set_malloc_error(data), 0);
+	env_var->val_len = ft_strlen(env_var->val);
+	return (1);
+}
+
+//Together with env_val_name, expands the environmental variable found at the i_start position of a string (str) to its value
 //fills a t_env_var structure with the info about the start, end and len of the variable in the str string
 //returns a pointer to the allocated string representing the value
-static void	env_val(char *str, t_env_var *env_var, int i_start, t_data *data)
+static int	env_val(char *str, t_env_var *env_var, int i_start, t_data *data)
 {
 	int		i;
-	char	*env_val;
 
 	env_var->start = i_start;
 	i = i_start + 1;
-	env_val = NULL;
+	env_var->val = NULL;
 	if (str[i] == '?')
 	{
 		env_var->val = gc_itoa(data->exit_status);
-		// if (!env_var->val)
-		// 	gc_malloc_error();
+		if (!env_var->val)
+			return (set_malloc_error(data), 0);
 		env_var->end = i + 1;
 		env_var->name_len = env_var->end - env_var->start - 1;
 		env_var->val_len = ft_strlen(env_var->val);
+		return (1);
 	}
 	else
-	{
-		while (ft_isalnum(str[i]) || str[i] == '_')
-			i++;
-		if (i == i_start + 1)
-			env_val = gc_strdup("$");
-		env_var->end = i;
-		env_var->name_len = env_var->end - env_var->start - 1;
-		if (!env_val)
-			env_val = env_var_value(data->env, gc_substr(str, i_start + 1, env_var->name_len));//"leak" the gc_substr
-		if (!env_val)
-			env_val = gc_strdup("");
-		env_var->val_len = ft_strlen(env_val);
-		env_var->val = env_val;
-	}
+		return (env_val_name(str, env_var, i, data));
 }
 
 //combines literal text from quotes with expanded env var value
@@ -64,10 +79,11 @@ static char	*expanded_str(char *str, int *i, t_data *data)
 	t_env_var	env_var;
 	char		*tmp;
 
-	env_val(str, &env_var, *i, data);
+	if (!env_val(str, &env_var, *i, data))
+		return (set_malloc_error(data), NULL);
 	tmp = gc_malloc((ft_strlen(str) + env_var.val_len + 1) * sizeof(char));
-	// if (!tmp)
-	// 	gc_malloc_error();
+	if (!tmp)
+		return (set_malloc_error(data), NULL);
 	comb_lit_env(tmp, str, &env_var);
 	gc_free(str);
 	(*i) = (*i) + env_var.val_len - 1;
@@ -91,7 +107,11 @@ char	*expand_env(char *str, t_data *data)
 				i = i + quote_len(str, i);
 		}
 		if (str[i] == '$')
+		{
 			str = expanded_str(str, &i, data);
+			if (!str)
+				return (set_malloc_error(data), NULL);
+		}
 		i++;
 	}
 	return (str);
