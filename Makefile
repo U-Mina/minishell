@@ -18,7 +18,7 @@ SOURCES =	minishell.c\
 			parse_cmd.c\
 			parse_pipe.c\
 			parse_redir.c\
-			init_node.c\
+			create_node.c\
 			quote_utils.c\
 			free_ast.c\
 			expand_env.c\
@@ -44,9 +44,10 @@ SOURCES =	minishell.c\
 			hepler_utils.c\
 			pwd.c\
 			unset.c\
-			gc_itoa.c\
-			gc_list_utils.c\
 			gc_malloc_free.c\
+			gc_error.c\
+			gc_list_utils.c\
+			gc_itoa.c\
 			gc_split.c\
 			gc_strdup.c\
 			gc_strjoin.c\

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 13:16:14 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:29:00 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,14 @@ static int	handle_redir_extras(t_token *tokens, int *curr_tok, t_redir *redir,
 	if (redir->type != HEREDOC)
 	{
 		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
-		if (handle_quotes(&tokens[*curr_tok].value) < 0)
+		if (!tokens[*curr_tok].value)
+			return (set_malloc_error(data), 0);
+		if (handle_quotes(&tokens[*curr_tok].value, data) < 0)
 			return (0);
 	}
 	if (redir->type == HEREDOC)
 	{
-		h_q = handle_quotes(&tokens[*curr_tok].value);
+		h_q = handle_quotes(&tokens[*curr_tok].value, data);
 		if (h_q == 1)
 			redir->type = HEREDOC_Q;
 		else if (h_q < 0)
@@ -62,11 +64,11 @@ t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 	redir_node = NULL;
 	if (tokens[*curr_tok].type == REDIRECTION)
 	{
-		redir_node = create_astnode(&tokens[*curr_tok]);
+		redir_node = create_redir_node(&tokens[*curr_tok]);
+		if (!redir_node)
+			return (set_malloc_error(data), NULL);
 		redir = redir_node->node_type.redir;
 		redir->type = get_redir_type(tokens[*curr_tok].value);
-		// if (!redir_node)
-		// 	return (handle_error(gc_list));
 		if (tokens[++(*curr_tok)].type == WORD)
 		{
 			if (!handle_redir_extras(tokens, curr_tok, redir, data))

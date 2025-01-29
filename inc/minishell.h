@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 10:43:29 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:17:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
-# include <fcntl.h> // for read()
+# include <fcntl.h>
 # include <stdio.h>
 # include <limits.h>
 # include <stdio.h>
-# include <readline/history.h> //readline()
+# include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
@@ -43,15 +43,7 @@ typedef struct s_minishell
 	struct termios		old_term;
 }						t_minishell;
 
-typedef struct s_env_var
-{
-	char				*val;
-	int					start;
-	int					end;
-	int					name_len;
-	int					val_len;
-}						t_env_var;
-
+//tokens
 typedef enum e_tokentype
 {
 	WORD,
@@ -74,8 +66,7 @@ typedef enum e_redirtype
 typedef enum e_cmdtype
 {
 	COMMAND_BUILTIN,
-	COMMAND_BINARY,
-	COMMAND_MINI
+	COMMAND_BINARY
 }						t_cmdtype;
 
 typedef struct s_token
@@ -92,16 +83,13 @@ typedef struct s_tokenizer
 	int					count;
 }						t_tokenizer;
 
+//AST nodes
 struct	s_astnode;
 
-// heredoc_fd is specially for heredoc<<
-// heredoc need a tmp fd to hold the content,
-// and then call dup2(heredoc_fd, STDIN_FILENO(0))
 typedef struct s_redir
 {
 	t_redirtype			type;
-	int					heredoc_fd;
-	char				*left; // the filename
+	char				*left;
 	struct s_astnode	*right;
 }						t_redir;
 
@@ -133,6 +121,7 @@ typedef struct s_astnode
 	t_nodetype			node_type;
 }						t_astnode;
 
+//data struct
 typedef struct s_data
 {
 	int					exit_status;
@@ -143,7 +132,18 @@ typedef struct s_data
 	t_token				*tokens;
 	t_astnode			*ast_root;
 	t_minishell			minishell;
+	bool				malloc_err;
 }						t_data;
+
+//env var
+typedef struct s_env_var
+{
+	char				*val;
+	int					start;
+	int					end;
+	int					name_len;
+	int					val_len;
+}						t_env_var;
 
 // gc_list
 typedef struct s_gc_list
@@ -151,9 +151,6 @@ typedef struct s_gc_list
 	void				*allocated;
 	struct s_gc_list	*next;
 }						t_gc_list;
-
-// will add into parse_cmd later
-void					init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 
 // main and init
 void					init(char **envp, t_data *data, int ac, char **av);
@@ -170,20 +167,16 @@ int						make_pipe_token(t_token *token);
 
 // parser
 int						parse(t_token *tokens, t_data *data);
-t_astnode				*create_astnode(t_token *token);
 t_astnode				*parse_cmd(t_token *tokens, int *curr_tok, t_data *data);
 t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
 							t_astnode *right_node, t_data *data);
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
 							t_astnode *left_node, t_data *data);
-void					init_cmd_node(t_cmd *cmd_node);
-void					init_redir_node(t_redir *redir_node);
-void					init_pipe_node(t_pipe *pipe_node);
-int						handle_quotes(char **str);
+t_astnode				*create_cmd_node(t_token *token);
+t_astnode				*create_redir_node(t_token *token);
+t_astnode				*create_pipe_node(t_token *token);
+int						handle_quotes(char **str, t_data *data);
 int						quote_len(char *str, int i);
-
-// free ast
-void					free_double_pointer(char **str);
 void					free_ast(t_astnode *ast_node);
 
 // exec
@@ -256,8 +249,10 @@ void					*gc_malloc(size_t size);
 void					*gc_realloc(void *ptr, size_t old, size_t new);
 t_gc_list				**get_gc_list(void);
 void					gc_malloc_error(void);
+void					set_malloc_error(t_data *data);
 void					add_gc_list(void *new_alloc);
 void					gc_free(void *free_ptr);
+void					free_double_pointer(char **str);
 void					gc_clean(void);
 char					**gc_split(char const *s, char c);
 char					*gc_strdup(const char *s1);

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 16:13:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:10:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	quote_len(char *str, int i)
 	return (j);
 }
 
-//removes the quotes of a given string at a position o and its pair, returning the index of the first char after the last removed quote
+//removes the quotes of a given string at a position "o" and its pair, returning the index of the first char after the last removed quote
 static int	del_quotes(char **str, int o)
 {
 	int		rv;
@@ -52,14 +52,11 @@ static int	del_quotes(char **str, int o)
 }
 
 //handle the quotes of a string, deleting pairs of quotes
-int	handle_quotes(char **str)
+static int	get_new_length(char **str)
 {
-	char	*res;
 	int		i;
-	int		o_len;
 	int		q_len;
 
-	o_len = ft_strlen(*str);
 	i = 0;
 	while ((*str)[i] != '\0')
 	{
@@ -68,16 +65,32 @@ int	handle_quotes(char **str)
 			q_len = del_quotes(str, i);
 			if (q_len < 0)
 				return (-1);
-			i = i + q_len;
+			i = i + q_len - 1;
 		}
-		else
-			i++;
+		i++;
 	}
-	if (o_len == i)
+	return (i);
+}
+
+//handle the quotes of a string, deleting pairs of quotes
+int	handle_quotes(char **str, t_data *data)
+{
+	char	*res;
+	int		n_len;
+	int		o_len;
+
+	o_len = ft_strlen(*str);
+	n_len = get_new_length(str);
+	if (n_len < 0)
+		return (-1);
+	if (o_len == n_len)
 		return (0);
-	res = gc_malloc((i + 1) * sizeof(char));
-	ft_strlcpy(res, *str, i + 1);
+	res = gc_malloc((n_len + 1) * sizeof(char));
+	if (!res)
+		return (set_malloc_error(data), -1);
+	ft_strlcpy(res, *str, n_len + 1);
 	gc_free((*str));
 	*str = res;
 	return (1);
 }
+

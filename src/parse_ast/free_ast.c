@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:25:37 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 13:04:13 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/29 12:05:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//in libft or in helpers
-//frees all the string elements in a double pointer, and the double pointer itself
-void	free_double_pointer(char **str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return ;
-	while (str[i])
-	{
-		gc_free(str[i]);
-		i++;
-	}
-	gc_free(str);
-}
 
 static void	free_cmd_node(t_astnode *ast_node)
 {

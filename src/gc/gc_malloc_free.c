@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 10:39:59 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 10:42:02 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:04:59 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,6 @@ void	*gc_malloc(size_t size)
 	}
 	add_gc_list(allocated);
 	return (allocated);
-}
-
-//handle allocation failure using gc_malloc, forcing exit and cleaning everything before
-//if malloc fails, exit whole program
-void	gc_malloc_error(void)
-{
-	t_gc_list	**gc_list;
-
-	gc_list = get_gc_list();
-	if (gc_list)
-	{
-		gc_clean();
-		perror ("minishell: heap allocation fail\n");
-		// exit(EXIT_FAILURE);
-	}
 }
 
 //frees one allocated element from the gc_list and from heap
@@ -67,6 +52,22 @@ void	gc_free(void *free_ptr)
 		prev = current;
 		current = current->next;
 	}
+}
+
+//frees all the string elements in a double pointer, and the double pointer itself
+void	free_double_pointer(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return ;
+	while (str[i])
+	{
+		gc_free(str[i]);
+		i++;
+	}
+	gc_free(str);
 }
 
 //frees all the allocated elements in the gc_list and heap

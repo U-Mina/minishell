@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 10:13:02 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:10:56 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	init(char **envp, t_data *data, int ac, char **av)
 	data->fd[0] = STDIN_FILENO;
 	data->fd[1] = STDOUT_FILENO;
 	data->heredoc_fd = 1;
+	data->malloc_err = false;
 	set_env(envp, data);
 	data->tokens = NULL;
 	data->ast_root = NULL;

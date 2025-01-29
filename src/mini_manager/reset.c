@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:04:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 10:14:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:11:22 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	reset_data(t_data *data)
 		free_ast(data->ast_root);
 	if (data->tokens)
 		gc_free(data->tokens);
+	data->malloc_err = false;
 }
 
 //updates the exit status depending on the status of the global variable g_signal (if SIGINT has been received) and restores to 0

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 10:40:51 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:08:49 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	tokenizer(char *input, t_data *data)
 
 	tokenizer = init_tokenizer();
 	if (!tokenizer)
-		return (0);
+		return (set_malloc_error(data), 0);
 	current_token = 0;
 	while (*input != '\0')
 	{
@@ -98,7 +98,7 @@ int	tokenizer(char *input, t_data *data)
 		current_token++;
 	}
 	if (!create_token(tokenizer, input))
-		return (0);
+		return (set_malloc_error(data), 0);
 	data->tokens = tokenizer->tokens;
 	return (1);
 }

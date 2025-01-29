@@ -6,42 +6,11 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 10:53:20 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:03:28 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
-//updates the number of arguments of a cmd_node
-int	get_cmd_args(t_astnode *cmd_node, t_token *tokens, int arg_tok,
-							t_data *data)
-{
-	char		**argv;
-	int			i;
-
-	argv = (char **)gc_malloc((cmd_node->node_type.cmd->arg_nb + 2) * sizeof(char *));
-	// if (!argv)
-	// 	return (handle_error(gc_list));
-	argv[0] = cmd_node->token->value;
-	i = 1;
-	while (tokens[arg_tok].type != TOKEN_EOF && tokens[arg_tok].type != PIPE)
-	{
-		if (tokens[arg_tok].type == ARGUMENT)
-		{
-		//??? should handle the exception that should keep the quotes: when passing shell commands as arguments to another shell interpreter (such as: sh -c "echo hello")!?!?!?!??!?
-			tokens[arg_tok].value = expand_env(tokens[arg_tok].value, data);
-			if (handle_quotes(&(tokens[arg_tok].value)) < 0)
-				return (0);
-			argv[i] = tokens[arg_tok].value;
-			i++;
-		}
-		arg_tok++;
-	}
-	argv[i] = NULL;
-	cmd_node->node_type.cmd->argv = argv;
-	return (1);
-}
 
 //disambiguates the tokentype, being a command (binary or builtin)
 static t_cmdtype	get_cmd_type(char *cmd)
@@ -72,6 +41,39 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	return (cmd_type);
 }
 
+//returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
+//updates the number of arguments of a cmd_node
+int	get_cmd_args(t_astnode *cmd_node, t_token *tokens, int arg_tok,
+							t_data *data)
+{
+	char		**argv;
+	int			i;
+
+	argv = (char **)gc_malloc((cmd_node->node_type.cmd->arg_nb + 2) * \
+														sizeof(char *));
+	if (!argv)
+		return (set_malloc_error(data), 0);
+	argv[0] = cmd_node->token->value;
+	i = 1;
+	while (tokens[arg_tok].type != TOKEN_EOF && tokens[arg_tok].type != PIPE)
+	{
+		if (tokens[arg_tok].type == ARGUMENT)
+		{
+			tokens[arg_tok].value = expand_env(tokens[arg_tok].value, data);
+			if (!tokens[arg_tok].value)
+				return (set_malloc_error(data), 0);
+			if (handle_quotes(&(tokens[arg_tok].value), data) < 0)
+				return (0);
+			argv[i++] = tokens[arg_tok].value;
+		}
+		arg_tok++;
+	}
+	argv[i] = NULL;
+	cmd_node->node_type.cmd->argv = argv;
+	return (1);
+}
+
+//manages a redir node parsing it and setting it to the correct position in the AST with respect to a cmd and other possible redirs of the same cmd
 static t_astnode	*update_redir(t_astnode *root, t_token *tok, int *curr_tok, \
 									t_data *data)
 {
@@ -90,6 +92,7 @@ static t_astnode	*update_redir(t_astnode *root, t_token *tok, int *curr_tok, \
 	return (root);
 }
 
+//manages the redirection and words found after a cmd, creating the AST with redirect and args properly added
 static t_astnode	*handle_arg_redir(t_astnode *cmd_node, t_token *tok, \
 												int *curr_tok, t_data *data)
 {
@@ -114,7 +117,6 @@ static t_astnode	*handle_arg_redir(t_astnode *cmd_node, t_token *tok, \
 	return (root);
 }
 
-
 //creates AST nodes for commands
 t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 {
@@ -124,12 +126,14 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 	if (tokens[*curr_tok].type == WORD)
 	{
 		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
-		if (handle_quotes(&tokens[*curr_tok].value) < 0)
+		if (!tokens[*curr_tok].value)
+			return (set_malloc_error(data), NULL);
+		if (handle_quotes(&tokens[*curr_tok].value, data) < 0)
 			return (NULL);
 		tokens[*curr_tok].type = COMMAND;
-		cmd_node = create_astnode(&tokens[*curr_tok]);
-		// if (!cmd_node)
-		// 	return (handle_error(gc_list));
+		cmd_node = create_cmd_node(&tokens[*curr_tok]);
+		if (!cmd_node)
+			return (set_malloc_error(data), NULL);
 		cmd_node->node_type.cmd->type = get_cmd_type(tokens[*curr_tok].value);
 		(*curr_tok)++;
 	}
@@ -139,5 +143,3 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 		return (NULL);
 	return (handle_arg_redir(cmd_node, tokens, curr_tok, data));
 }
-//check: do we need to init the lefe var in t_cmd:
-//idea: such as: arg_nv = 0, **env = data->env?? in the init() part??
