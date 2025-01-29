@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 10:55:17 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:55:39 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ int	main(int ac, char **av, char **envp)
 }
 
 // //CHANGE THIS CHUNK FOR AST CHECKING
- 			// else if (parse(data.tokens, &data))
-			// {
-			// 	//print_tokens(data.tokens); //check lexer
-			// 	//print_ast(data.ast_root, 0); //check parser
-			// 	exec_ast(data.ast_root, &data);
-			// }
- 			// reset_data(&data);
-
+// else if (parse(data.tokens, &data))
+// {
+// 	//print_tokens(data.tokens); //check lexer
+// 	//print_ast(data.ast_root, 0); //check parser
+// 	exec_ast(data.ast_root, &data);
+// }
+// reset_data(&data);
 
 // // //COMPROVATIONS
 // // //check lexer
@@ -58,7 +57,8 @@ int	main(int ac, char **av, char **envp)
 // 	i = 0;
 // 	while (tokens[i].type != TOKEN_EOF)
 // 	{
-// 		printf("i: %i\ntype: %i\nvalue: %s\n\n", i, tokens[i].type, tokens[i].value);
+// 		printf("i: %i\ntype: %i\nvalue: %s\n\n", i, tokens[i].type, \
+// 				tokens[i].value);
 // 		i++;
 // 	}
 // }
@@ -70,7 +70,7 @@ int	main(int ac, char **av, char **envp)
 // 	int	j;
 
 // 	i = 0;
-// 	while(i++ < level)
+// 	while (i++ < level)
 // 		printf("	");
 // 	if (ast_node->token->type == PIPE)
 // 	{
@@ -82,18 +82,22 @@ int	main(int ac, char **av, char **envp)
 // 	}
 // 	else if (ast_node->token->type == REDIRECTION)
 // 	{
-// 		printf("%s (%i.%i): %s\n", ast_node->token->value, ast_node->token->type, ast_node->node_type.redir->type, ast_node->node_type.redir->left);
+// 		printf("%s (%i.%i): %s\n", ast_node->token->value, \
+// 		ast_node->token->type, ast_node->node_type.redir->type, \
+// 		ast_node->node_type.redir->left);
 // 		if (ast_node->node_type.redir->right)
 // 			print_ast(ast_node->node_type.redir->right, level + 1);
 // 	}
 // 	else if (ast_node->token->type == COMMAND)
 // 	{
-// 		printf("%s (%i.%i):\n", ast_node->token->value, ast_node->token->type, ast_node->node_type.cmd->type);
+// 		printf("%s (%i.%i):\n", ast_node->token->value, \
+// 		ast_node->token->type, \
+// 		ast_node->node_type.cmd->type);
 // 		j = 1;
 // 		while (j <= ast_node->node_type.cmd->arg_nb)
 // 		{
 // 			i = 0;
-// 			while(i < level + 1)
+// 			while (i < level + 1)
 // 			{
 // 				printf("	");
 // 				i++;

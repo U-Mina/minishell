@@ -6,13 +6,15 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 12:08:49 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:47:40 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//initiates the tokenizer structure, that will hold the array of tokens and some parameters regarding its capacity
+//initiates the tokenizer structure, that will hold
+//the array of tokens and 
+//some parameters regarding its capacity
 static t_tokenizer	*init_tokenizer(void)
 {
 	t_tokenizer	*tokenizer;
@@ -29,7 +31,8 @@ static t_tokenizer	*init_tokenizer(void)
 	return (tokenizer);
 }
 
-//reallocates space for more tokens in the tokenizer, using the factor established in "tokenizer->grow"
+//reallocates space for more tokens in the tokenizer,
+//according to the factor "tokenizer->grow"
 static int	grow_tokenizer(t_tokenizer *tokenizer)
 {
 	int		new_capacity;
@@ -47,7 +50,8 @@ static int	grow_tokenizer(t_tokenizer *tokenizer)
 	return (1);
 }
 
-//creates and allocates a token in the tokenizer and assigns the type, the value, and the len according to the input.
+//creates and allocates a token in the tokenizer and
+//assigns the type, the value, and the len according to the input.
 static int	create_token(t_tokenizer *tokenizer, char *input)
 {
 	t_token	*token;
@@ -73,7 +77,10 @@ static int	create_token(t_tokenizer *tokenizer, char *input)
 	return (1);
 }
 
-//lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself
+//lexer or tokenizer (lexic analysis)
+//Creates and returns an allocated array of token structures, 
+//store the type of the token (to be further disambiguated according to context)
+//and the value itself
 int	tokenizer(char *input, t_data *data)
 {
 	int			current_token;

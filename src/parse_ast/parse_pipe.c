@@ -6,13 +6,15 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:31:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 11:18:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:42:50 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//parses the pipe, assigning the previous left part to the left node and the right part to the next command
+//parses the pipe, 
+//assigning the previous left part to the left node and
+//the right part to the next command
 t_astnode	*parse_pipe(t_token *tokens, int *curr_tok, t_astnode *left_node,
 						t_data *data)
 {

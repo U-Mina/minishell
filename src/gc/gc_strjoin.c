@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:30:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 15:14:33 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:49:02 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,3 @@ char	*gc_strjoin(char const *s1, char const *s2)
 	ft_strlcat(str, s2, s1_len + s2_len + 1);
 	return (str);
 }
-

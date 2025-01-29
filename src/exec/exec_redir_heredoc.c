@@ -6,35 +6,26 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 19:47:58 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:32:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//todo: in heredoc, $home etc case need to be handlesd!!!
-
-// static int	heredoc(t_redir *redir, int fd, int *exit_status)
-// {
-// 	if (fd != 0)
-// 		close(fd);
-// 	fd = redir->heredoc_fd;
-// 	if (fd != -1)
-// 	{
-// 		*exit_status = 0;
-// 		return (fd);
-// 	}
-// 	print_err("heredoc", redir->left, strerror(errno));
-// 	*exit_status = 1;
-// 	return (-1);
-// }
-
-static void	init_heredoc(struct sigaction *h_sa, t_data *data)
+static int	init_heredoc(struct sigaction *h_sa, t_data *data)
 {
 	data->fd[0] = dup(STDIN_FILENO);
 	data->fd[1] = dup(STDOUT_FILENO);
-	dup2(data->o_fd[0], STDIN_FILENO);
-	dup2(data->o_fd[1], STDOUT_FILENO);
+	if (dup_err(data->o_fd[0], STDIN_FILENO) == -1)
+	{
+		data->exit_status = 1;
+		return (0);
+	}
+	if (dup_err(data->o_fd[1], STDOUT_FILENO) == -1)
+	{
+		data->exit_status = 1;
+		return (0);
+	}
 	sigemptyset(&(h_sa[0].sa_mask));
 	h_sa[0].sa_handler = &heredoc_signal_handler;
 	h_sa[0].sa_flags = 0;
@@ -43,33 +34,39 @@ static void	init_heredoc(struct sigaction *h_sa, t_data *data)
 	h_sa[1].sa_flags = 0;
 	sigaction(SIGINT, &h_sa[0], NULL);
 	sigaction(SIGQUIT, &h_sa[1], NULL);
+	return (1);
 }
 
 static void	term_heredoc(t_data *data)
 {
-	dup2(data->fd[0], STDIN_FILENO);
-	dup2(data->fd[1], STDOUT_FILENO);
 	sigaction(SIGINT, &data->minishell.sa[0], NULL);
 	sigaction(SIGQUIT, &data->minishell.sa[1], NULL);
+	if (dup_err(data->fd[0], STDIN_FILENO) == -1)
+		data->exit_status = 1;
+	if (dup_err(data->fd[1], STDOUT_FILENO) == -1)
+		data->exit_status = 1;
 }
 
-static char	*read_here(char *de, int *exit_status, t_data *data, bool quote)
+static char	*read_here(char *de, int *exit_status, t_data *data,
+						bool quote)
 {
 	char				*content;
 	char				*retval;
 	struct sigaction	h_sa[2];
 
-	init_heredoc(h_sa, data);
+	if (!init_heredoc(h_sa, data))
+		return (term_heredoc(data), NULL);
 	content = readline("> ");
-	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1) || *content < 0) //check properly the behavior when Ctrl-D is pressed (*content < 0) if we should set error different, exit status???
+	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1))
 	{
 		if (errno != 0 && g_signal != SIGINT)
-			return (print_err("readline", NULL, strerror(errno)), *exit_status = 1, NULL);
+		{
+			print_err("readline", NULL, strerror(errno));
+			return (*exit_status = 1, NULL);
+		}
 		free(content);
-		content = NULL;
 		*exit_status = 0;
 		term_heredoc(data);
-		rl_on_new_line();
 		return (NULL);
 	}
 	retval = gc_strjoin(content, "\n");
@@ -99,15 +96,12 @@ void	exec_heredoc(char *de, int *exit_status, t_data *data, bool quote)
 	int		fd[2];
 	char	*line;
 
-	if (create_pipe(fd) < 0)
-	{
-		print_err("heredoc", de, strerror(errno));
-		*exit_status = 1;
-	}
+	if (create_pipe(fd, data) < 0)
+		return (print_err("heredoc", de, strerror(errno)));
 	while (1)
 	{
 		line = read_here(de, exit_status, data, quote);
-		if (line == NULL)//finished reading(EOF) or meet delim
+		if (!line)
 			break ;
 		if (write_pipe(fd, line, exit_status) < 0)
 		{
@@ -122,9 +116,4 @@ void	exec_heredoc(char *de, int *exit_status, t_data *data, bool quote)
 	close(fd[1]);
 	data->heredoc_fd = fd[0];
 	data->fd[0] = fd[0];
-	if (g_signal == SIGINT)
-	{
-		data->heredoc_fd = -1;
-		data->exit_status = 1;
-	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_builtin.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 12:34:54 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/21 09:55:59 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/29 14:47:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,5 @@ int	exec_builtins(t_cmd *cmd, t_data *data)
 		return (ft_env(data->env, &data->exit_status), 0);
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (ft_exit(data, args), 0);
-	return (-2);//set -2 for error check
+	return (data->exit_status = 1, -1);
 }
-//args = get_command_args(cmd_node) -->already done in parsing
-//exit_status is inited in struct, so pass the value
-
-//todo: 
-// exec_cmd();
-// builtin_case_match();
-// binary_path_find();
-// exec_child();
-/**
- * case sensitive: unset, export, cd, exit
- * not-sensitive: pwd/PWD, env/ENV, echo/ECHO
- */
-//check: is clean function need to be called after each direct
-//todo: to connect and pass *exit_status;
-
-// int exec_command(t_astnode *astnode, int *exit_status)
-// {
-// 	t_tokentype *type;
-
-// 	if (type == COMMAND_BINARY)
-// 		return (exec_binary());
-// 	else if (type == COMMAND_BUILTIN)
-// 		return (exec_builtins(astnode));
-// }

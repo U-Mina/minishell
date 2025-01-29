@@ -6,13 +6,15 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 10:39:59 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 12:04:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:49:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//allocates in heap using malloc, returns a pointer to the allocated memory and adds this pointer to a gc_list (garbage collector list) to keep track and clean all allocated items when needed
+//allocates in heap using malloc,
+//returns a pointer to the allocated memory 
+//adds this pointer to a gc_list
 void	*gc_malloc(size_t size)
 {
 	void	*allocated;
@@ -54,7 +56,7 @@ void	gc_free(void *free_ptr)
 	}
 }
 
-//frees all the string elements in a double pointer, and the double pointer itself
+//frees all the elements in a double pointer, and the double pointer itself
 void	free_double_pointer(char **str)
 {
 	int	i;
@@ -91,7 +93,7 @@ void	gc_clean(void)
 	*gc_list = NULL;
 }
 
-//reallocates enough space for a size of "new" into a ptr that had "old" size space
+//reallocates enough space for "new" into a ptr that had "old" size space
 void	*gc_realloc(void *ptr, size_t old, size_t new)
 {
 	void	*new_ptr;

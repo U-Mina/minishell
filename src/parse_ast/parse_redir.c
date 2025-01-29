@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 11:29:00 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:48:55 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ static int	handle_redir_extras(t_token *tokens, int *curr_tok, t_redir *redir,
 	return (1);
 }
 
-//parses redirection when present, creating a redirection node, being the left node the filename or the delimiter and the left node the command node or redirections to be further executed
+//parses redirection when present, creating a redirection node, 
+//assigns the left node the filename or the delimiter and
+//the right node the command node or redirections to be further executed
 t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 						t_data *data)
 {
@@ -84,4 +86,3 @@ t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 	}
 	return (redir_node);
 }
-

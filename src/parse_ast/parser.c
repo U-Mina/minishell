@@ -6,13 +6,16 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 11:18:08 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:44:45 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//parser (syntactic analysis): builds an Abstract Syntax Tree (AST) using recursive descent parsing, and returns a pointer to AST root. The AST has the tokens as nodes, already correctly classified, and hierarchized.
+//parser (syntactic analysis): builds and allocate an Abstract Syntax Tree (AST)
+//with tokens as nodes, already correctly classified, and hierarchized
+//using recursive descent parsing, 
+//stores a pointer to AST root in data structure
 int	parse(t_token *tokens, t_data *data)
 {
 	int	curr_tok;

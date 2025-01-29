@@ -6,13 +6,14 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 11:10:56 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:40:19 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//disables the printing of Ctrl as ^ (ECHOCTL flag) and sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
+//disables the printing of Ctrl as ^ (ECHOCTL flag) and
+//sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
 static void	init_minishell(t_minishell	*minishell, int ac, char **av)
 {
 	(void)ac;

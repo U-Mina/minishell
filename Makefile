@@ -7,7 +7,7 @@ SRC_DIR = src
 OBJ_DIR = obj
 
 VPATH =	$(SRC_DIR):$(SRC_DIR)/mini_manager:$(SRC_DIR)/token:$(SRC_DIR)/parse_ast:$(SRC_DIR)/exec:\
-		$(SRC_DIR)/builtins:$(SRC_DIR)/signals:$(SRC_DIR)/gc:$(SRC_DIR)/error:$(SRC_DIR)/utils:$(SRC_DIR)/expand_env
+		$(SRC_DIR)/builtins:$(SRC_DIR)/signals:$(SRC_DIR)/gc:$(SRC_DIR)/utils:$(SRC_DIR)/expand_env
 
 SOURCES =	minishell.c\
 			tokenizer.c\
@@ -24,13 +24,15 @@ SOURCES =	minishell.c\
 			expand_env.c\
 			executor.c\
 			exec_cmd.c\
-			exec_cmd_binary.c\
+			exec_cmd_binary_path.c\
+			exec_cmd_binary_child.c\
 			exec_cmd_builtin.c\
-			exec_pipe.c\
 			exec_redir.c\
 			exec_redir_heredoc.c\
 			exec_redir_in.c\
 			exec_redir_out.c\
+			exec_pipe.c\
+			exec_utils.c\
 			cd.c\
 			echo.c\
 			env_utils.c\
@@ -56,9 +58,7 @@ SOURCES =	minishell.c\
 			init.c\
 			reset.c\
 			term.c\
-			signal_handler.c\
-			error_exit.c\
-			handle_error.c
+			signal_handler.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)/%.o)
 

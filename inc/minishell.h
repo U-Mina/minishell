@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 12:17:27 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:54:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@
 # include <termios.h>
 # include <unistd.h>
 
-volatile sig_atomic_t g_signal;
+volatile sig_atomic_t	g_signal;
 
-struct	s_data;
+struct					s_data;
 
 // original_state and signal handling
 typedef struct s_minishell
@@ -84,7 +84,7 @@ typedef struct s_tokenizer
 }						t_tokenizer;
 
 //AST nodes
-struct	s_astnode;
+struct					s_astnode;
 
 typedef struct s_redir
 {
@@ -167,7 +167,8 @@ int						make_pipe_token(t_token *token);
 
 // parser
 int						parse(t_token *tokens, t_data *data);
-t_astnode				*parse_cmd(t_token *tokens, int *curr_tok, t_data *data);
+t_astnode				*parse_cmd(t_token *tokens, int *curr_tok,
+							t_data *data);
 t_astnode				*parse_redir(t_token *tokens, int *curr_tok,
 							t_astnode *right_node, t_data *data);
 t_astnode				*parse_pipe(t_token *tokens, int *curr_tok,
@@ -182,17 +183,18 @@ void					free_ast(t_astnode *ast_node);
 // exec
 void					exec_ast(t_astnode *ast_node, t_data *data);
 void					exec_cmd(t_astnode *cmd_node, t_data *data);
+int						exec_builtins(t_cmd *cmd, t_data *data);
+int						get_path(char *cmd, t_cmd *c_node, t_data *data);
+void					child_proc(t_cmd *cmd, t_data *data);
 t_astnode				*handle_redir_fd(t_astnode *ast_node, t_data *data);
-void					exec_heredoc(char *de, int *exit_status, t_data *data, bool quote);
+void					exec_heredoc(char *de, int *exit_status, t_data *data,
+							bool quote);
 int						exec_in(t_redir *redir, t_data *data);
 int						exec_out(t_redir *redir, t_data *data);
 void					exec_pipe(t_pipe *p_node, t_data *data);
-// int						create_pipe(int *fd, int *exit_status);
-int						create_pipe(int *fd);
-int						exec_builtins(t_cmd *cmd, t_data *data);
-// void					exec_inner_shell(t_data *data);
-int						get_path(char *cmd, t_cmd *c_node, t_data *data);
-void					child_proc(t_cmd *cmd, t_data *data);
+int						dup_err(int fd1, int std_fd);
+int						create_pipe(int *fd, t_data *data);
+pid_t					fork_err(int *fd);
 
 // builtin ft
 void					ft_echo(char **args, int *exit_status);
@@ -201,11 +203,9 @@ void					ft_pwd(int *exit_status);
 int						ft_export(char ***env, char **args, int *exit_status);
 int						ft_unset(char **args, char ***env, int *exit_status);
 int						ft_env(char **env, int *exit_status);
-// char ***env, int *exit_status
 void					ft_exit(t_data *data, char **args);
 
 // cd helper
-// char					*cur_path(int *exit_status);
 char					*cur_path(void);
 bool					cd_home(char **env, int *exit_status);
 bool					check_err_go_dir(char *path, int *exit_status);
@@ -225,23 +225,16 @@ int						del_var(char ***env, char *key);
 char					*create_newvar(const char *key, char *val);
 char					*env_var_value(char **env, const char *key);
 
-// export hlper
+// export helper
 int						exp_only(char **env);
 int						exp_with_arg(char ***env, char *arg);
 
-// unset hpler
+// unset helper
 bool					valid_unset(char *arg);
 int						unset_env(char ***env, char *arg);
 
-// error, free, clean, exit
-// void		ft_exit_status(int exit_code);
+// helper_utils
 void					print_err(char *s1, char *s2, char *s3);
-void					free_env(char **env);
-
-// general hlper n' wrapper
-//char					*safe_join(char *s1, char *s2);//gc_malloc is used inside, so mem in gc_list
-// void					*safe_malloc(size_t size);
-// void					*ft_realloc(void *ptr, size_t old, size_t new);
 int						args_nbr(char **arr);
 
 // gc
@@ -262,11 +255,6 @@ char					*gc_substr(char const *s, unsigned int start,
 char					*gc_strtrim(char const *s1, char const *set);
 char					*gc_itoa(int n);
 
-// temporary prototype
-// char *ft_strchr(char *s, char c);
-// int ft_strncmp(char *s1, char *s2);
-// char *ft_strdup(char *s);
-
 // signal_handler
 void					init_signal_inter(struct sigaction *sa,
 							struct sigaction *old_sa);
@@ -282,9 +270,8 @@ char					*expand_env(char *str, t_data *data);
 int						ft_isspace(char c);
 int						ft_issep(char c);
 
-// TO BE DELETED AT THE END
-// comprovations
-void					print_tokens(t_token *tokens);
-void					print_ast(t_astnode *ast_node, int level);
+// // comprovations
+// void					print_tokens(t_token *tokens);
+// void					print_ast(t_astnode *ast_node, int level);
 
 #endif

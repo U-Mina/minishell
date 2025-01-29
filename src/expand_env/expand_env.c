@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:01:57 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 12:42:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:38:27 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ static int	env_val_name(char *str, t_env_var *env_var, int i, t_data *data)
 	return (1);
 }
 
-//Together with env_val_name, expands the environmental variable found at the i_start position of a string (str) to its value
-//fills a t_env_var structure with the info about the start, end and len of the variable in the str string
+//Expands the env var found at i_start of str to its value
+//fills a t_env_var structure with the info about env var and pos in str
 //returns a pointer to the allocated string representing the value
 static int	env_val(char *str, t_env_var *env_var, int i_start, t_data *data)
 {
@@ -97,6 +97,8 @@ char	*expand_env(char *str, t_data *data)
 
 	i = 0;
 	d_quote_flag = 0;
+	if (!str)
+		return (NULL);
 	while (str[i] != '\0')
 	{
 		if (str[i] == '\"')

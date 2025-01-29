@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 12:10:33 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:48:47 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	quote_len(char *str, int i)
 	return (j);
 }
 
-//removes the quotes of a given string at a position "o" and its pair, returning the index of the first char after the last removed quote
+//removes the quotes of a given string at a position "o" and its pair
+//returning the index of the first char after the last removed quote
 static int	del_quotes(char **str, int o)
 {
 	int		rv;
@@ -93,4 +94,3 @@ int	handle_quotes(char **str, t_data *data)
 	*str = res;
 	return (1);
 }
-

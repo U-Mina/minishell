@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 10:53:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:45:41 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	make_eof_token(t_token *token)
 	return (1);
 }
 
-//extracts a word (delimited by spaces or separator characters) from the input and fills the token variable value according to this
+//extracts a word (delimited by spaces or separator characters) from the input
+//and fills the token variable value according to this
 int	make_word_token(t_token *token, char *input)
 {
 	char		*word;
@@ -46,7 +47,8 @@ int	make_word_token(t_token *token, char *input)
 	return (1);
 }
 
-//extracts a redirection operator from the input and fills the token variable value according to this
+//extracts a redirection operator from the input and 
+//fills the token variable value according to this
 int	make_redir_token(t_token *token, char *input)
 {
 	char	*redir;
@@ -66,7 +68,8 @@ int	make_redir_token(t_token *token, char *input)
 	return (1);
 }
 
-//extracts a pipe operator from the input and fills the token variable value according to this
+//extracts a pipe operator from the input and
+//fills the token variable value according to this
 int	make_pipe_token(t_token *token)
 {
 	char	*pipe;

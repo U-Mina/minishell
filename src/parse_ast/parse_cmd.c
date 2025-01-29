@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 12:03:28 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:42:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static t_cmdtype	get_cmd_type(char *cmd)
 	return (cmd_type);
 }
 
-//returns an array of strings, the first one of which is the command/program name and each of the following ones are the flags/parameters for the command
+//returns an array of strings, the first one of which is the cmd name and
+// each of the following ones are the flags/parameters for the command
 //updates the number of arguments of a cmd_node
 int	get_cmd_args(t_astnode *cmd_node, t_token *tokens, int arg_tok,
 							t_data *data)
@@ -73,7 +74,8 @@ int	get_cmd_args(t_astnode *cmd_node, t_token *tokens, int arg_tok,
 	return (1);
 }
 
-//manages a redir node parsing it and setting it to the correct position in the AST with respect to a cmd and other possible redirs of the same cmd
+//manages a redir node parsing it and
+//setting it to the correct position in AST with respect to a cmd/other redirs
 static t_astnode	*update_redir(t_astnode *root, t_token *tok, int *curr_tok, \
 									t_data *data)
 {
@@ -92,7 +94,8 @@ static t_astnode	*update_redir(t_astnode *root, t_token *tok, int *curr_tok, \
 	return (root);
 }
 
-//manages the redirection and words found after a cmd, creating the AST with redirect and args properly added
+//manages the redirs and words found after a cmd, 
+//creating the AST with redirect and args properly added
 static t_astnode	*handle_arg_redir(t_astnode *cmd_node, t_token *tok, \
 												int *curr_tok, t_data *data)
 {

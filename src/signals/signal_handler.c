@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:35:31 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/28 18:24:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:44:11 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,6 @@ void	heredoc_signal_handler(int signum)
 		close(STDIN_FILENO);
 	}
 }
-
-//call it in the child process, before execve??? 
-//Be sure that signal is enough, and in the other case sigaction is needed (at least to store previous state, but for what else it is interesting?? mask??? need to do it???)
-//Be sure that SIG_DFL will work in any system
 
 //handles SIGINT and SIGQUIT in shell execution mode
 void	init_signal_exec(void)

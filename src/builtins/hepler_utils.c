@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hepler_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:40:19 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 11:31:32 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/29 12:59:43 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,56 +37,18 @@ int	args_nbr(char **arr)
 	return (i);
 }
 
-// wrapper ft
-// char	*safe_join(char *s1, char *s2)
-// {
-// 	size_t	l1;
-// 	size_t	l2;
-// 	char	*res;
-
-// 	// if (!s1 || !s2)
-// 	// 	return (NULL);
-// 	l1 = ft_strlen(s1);
-// 	l2 = ft_strlen(s2);
-// 	res = gc_malloc(sizeof(char) * (l1 + l2 + 1));
-// 	ft_memcpy((char *)res, s1, l1);
-// 	ft_memcpy((char *)(res + l1), s2, l2);
-// 	res[l1 + l2] = '\0';
-// 	if (res == NULL)
-// 		return (NULL); 
-// 	return (res);
-// }
-
-// void	*safe_malloc(size_t size)
-// {
-// 	void	*retval;
-
-// 	retval = malloc(size);
-// 	if (!retval)
-// 	{
-// 		perror("malloc: ");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	return (retval);
-// }
-
-// void	*ft_realloc(void *ptr, size_t old, size_t new)
-// {
-// 	void	*new_ptr;
-// 	size_t	cpy;
-
-// 	if (new == 0)
-// 	{
-// 		free(ptr);
-// 		return (NULL);
-// 	}
-// 	if (ptr == NULL)
-// 		return (safe_malloc(new));
-// 	new_ptr = safe_malloc(new);
-// 	cpy = new;
-// 	if (old < new)
-// 		cpy = old;
-// 	ft_memcpy(new_ptr, ptr, cpy);
-// 	free(ptr);
-// 	return (new_ptr);
-// }
+void	print_err(char *s1, char *s2, char *s3)
+{
+	ft_putstr_fd(s1, 2);
+	ft_putstr_fd(": ", 2);
+	if (s2)
+	{
+		ft_putstr_fd(s2, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	if (s3)
+	{
+		ft_putstr_fd(s3, 2);
+		ft_putstr_fd("\n", 2);
+	}
+}
