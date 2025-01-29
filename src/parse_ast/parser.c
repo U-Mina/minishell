@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 13:18:28 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:52:19 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	parse(t_token *tokens, t_data *data)
 		if (tokens[curr_tok].type == PIPE)
 			data->ast_root = parse_pipe(tokens, &curr_tok, \
 														data->ast_root, data);
+		if (!data->ast_root)
+			break ;
 	}
 	if (data->ast_root == NULL)
 	{

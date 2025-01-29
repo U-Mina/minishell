@@ -6,13 +6,14 @@ READLINE_FLAGS = -lreadline
 SRC_DIR = src
 OBJ_DIR = obj
 
-VPATH =	$(SRC_DIR):$(SRC_DIR)/init:$(SRC_DIR)/token:$(SRC_DIR)/parse_ast:$(SRC_DIR)/exec:\
-		$(SRC_DIR)/builtins:$(SRC_DIR)/signals:$(SRC_DIR)/gc:$(SRC_DIR)/term:$(SRC_DIR)/utils:$(SRC_DIR)/expand_env
+VPATH =	$(SRC_DIR):$(SRC_DIR)/mini_manager:$(SRC_DIR)/token:$(SRC_DIR)/parse_ast:$(SRC_DIR)/exec:\
+		$(SRC_DIR)/builtins:$(SRC_DIR)/signals:$(SRC_DIR)/gc:$(SRC_DIR)/error:$(SRC_DIR)/utils:$(SRC_DIR)/expand_env
 
 SOURCES =	minishell.c\
-			init.c\
 			tokenizer.c\
 			token_make.c\
+			ft_isspace.c\
+			ft_issep.c\
 			parser.c\
 			parse_cmd.c\
 			parse_pipe.c\
@@ -51,12 +52,12 @@ SOURCES =	minishell.c\
 			gc_strjoin.c\
 			gc_strtrim.c\
 			gc_substr.c\
+			init.c\
+			reset.c\
+			term.c\
 			signal_handler.c\
 			error_exit.c\
-			handle_error.c\
-			term.c\
-			ft_isspace.c\
-			ft_issep.c
+			handle_error.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)/%.o)
 

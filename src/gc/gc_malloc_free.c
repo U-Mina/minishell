@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 10:39:59 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 14:23:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:42:02 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	*gc_malloc(size_t size)
 
 	allocated = malloc(size);
 	if (!allocated)
+	{
 		gc_malloc_error();
+		return (NULL);
+	}
 	add_gc_list(allocated);
 	return (allocated);
 }
@@ -34,8 +37,8 @@ void	gc_malloc_error(void)
 	if (gc_list)
 	{
 		gc_clean();
-		perror ("Heap allocation fail\n");
-		exit(EXIT_FAILURE);
+		perror ("minishell: heap allocation fail\n");
+		// exit(EXIT_FAILURE);
 	}
 }
 
@@ -87,6 +90,7 @@ void	gc_clean(void)
 	*gc_list = NULL;
 }
 
+//reallocates enough space for a size of "new" into a ptr that had "old" size space
 void	*gc_realloc(void *ptr, size_t old, size_t new)
 {
 	void	*new_ptr;

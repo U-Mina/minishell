@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/28 19:56:54 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:55:17 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ int	main(int ac, char **av, char **envp)
 		if (*input != '\0' && *gc_strtrim(input, " \t\n\v\f\r") != '\0')
 		{
 			add_history(input);
-			check_signal(&data);
-			data.tokens = tokenizer(input);
-			if (parse(data.tokens, &data))
+			reset_signal(&data);
+			if (!tokenizer(input, &data))
+				data.exit_status = 1;
+			else if (parse(data.tokens, &data))
 				exec_ast(data.ast_root, &data);
 			reset_data(&data);
 		}
@@ -39,17 +40,17 @@ int	main(int ac, char **av, char **envp)
 }
 
 // //CHANGE THIS CHUNK FOR AST CHECKING
-// 			//print_tokens(data.tokens); //check lexer
-// 			if (parse(data.tokens, &data))
-// 			{
-// 				//print_ast(data.ast_root, 0); //check parser
-// 				exec_ast(data.ast_root, &data);
-// 			}
-// 			reset_data(&data);
+ 			// else if (parse(data.tokens, &data))
+			// {
+			// 	//print_tokens(data.tokens); //check lexer
+			// 	//print_ast(data.ast_root, 0); //check parser
+			// 	exec_ast(data.ast_root, &data);
+			// }
+ 			// reset_data(&data);
 
 
-// //COMPROVATIONS
-// //check lexer
+// // //COMPROVATIONS
+// // //check lexer
 // void	print_tokens(t_token *tokens)
 // {
 // 	int	i;

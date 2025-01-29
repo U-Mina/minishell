@@ -6,28 +6,30 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 16:23:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:40:51 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//initiates the tokenizer structure, that will hold the array of tokens and some parameters regarding its capacity
 static t_tokenizer	*init_tokenizer(void)
 {
 	t_tokenizer	*tokenizer;
 
 	tokenizer = gc_malloc(sizeof(t_tokenizer));
-	// if (!tokenizer)
-	// 	return (handle_error(gc_list));
+	if (!tokenizer)
+		return (NULL);
 	tokenizer->capacity = 20;
 	tokenizer->grow = 20;
 	tokenizer->count = 0;
 	tokenizer->tokens = gc_malloc(tokenizer->capacity * sizeof(t_token));
-	// if (!tokenizer->tokens)
-	// 	return (handle_error(gc_list));
+	if (!tokenizer->tokens)
+		return (NULL);
 	return (tokenizer);
 }
 
+//reallocates space for more tokens in the tokenizer, using the factor established in "tokenizer->grow"
 static int	grow_tokenizer(t_tokenizer *tokenizer)
 {
 	int		new_capacity;
@@ -35,12 +37,10 @@ static int	grow_tokenizer(t_tokenizer *tokenizer)
 
 	new_capacity = tokenizer->capacity + tokenizer->grow;
 	new_tokens = gc_malloc(new_capacity * sizeof(t_token));
-	// if (!new_tokens)
-	// {
-	// 	handle_error(gc_list);
-	// 	return (1);
-	// }
-	ft_memcpy(new_tokens, tokenizer->tokens, tokenizer->capacity * sizeof(t_token));
+	if (!new_tokens)
+		return (0);
+	ft_memcpy(new_tokens, tokenizer->tokens, tokenizer->capacity \
+													* sizeof(t_token));
 	gc_free(tokenizer->tokens);
 	tokenizer->tokens = new_tokens;
 	tokenizer->capacity = new_capacity;
@@ -48,36 +48,40 @@ static int	grow_tokenizer(t_tokenizer *tokenizer)
 }
 
 //creates and allocates a token in the tokenizer and assigns the type, the value, and the len according to the input.
-static void	create_token(t_tokenizer *tokenizer, char *input)
+static int	create_token(t_tokenizer *tokenizer, char *input)
 {
 	t_token	*token;
+	int		success;
 
 	token = &(tokenizer->tokens[tokenizer->count]);
 	if (tokenizer->count == tokenizer->capacity)
-		grow_tokenizer(tokenizer);
-	//error check, if !grow_tokenizer(tokenizer)???
+	{
+		if (!grow_tokenizer(tokenizer))
+			return (0);
+	}
 	if (*input == '\0')
-		make_eof_token(token);
+		success = make_eof_token(token);
 	else if (*input == '|')
-		make_pipe_token(token);
+		success = make_pipe_token(token);
 	else if (*input == '>' || *input == '<')
-		make_redir_token(token, input);
+		success = make_redir_token(token, input);
 	else
-		make_word_token(token, input);
+		success = make_word_token(token, input);
+	if (!success)
+		return (0);
 	tokenizer->count++;
+	return (1);
 }
 
 //lexer or tokenizer (lexic analysis). Creates and returns an allocated array of token structures, that store the type of the token (to be further disambiguated according to the token context) and the value itself
-t_token	*tokenizer(char *input)
+int	tokenizer(char *input, t_data *data)
 {
 	int			current_token;
-	t_token		*tokens;
 	t_tokenizer	*tokenizer;
 
 	tokenizer = init_tokenizer();
-	// if (!tokenizer)
-	// 	return (handle_error(gc_list)); 
-	tokens = tokenizer->tokens;
+	if (!tokenizer)
+		return (0);
 	current_token = 0;
 	while (*input != '\0')
 	{
@@ -86,10 +90,15 @@ t_token	*tokenizer(char *input)
 		if (*input == '\0')
 			break ;
 		else
-			create_token(tokenizer, input);
-		input = input + ft_strlen(tokens[current_token].value);
+		{
+			if (!create_token(tokenizer, input))
+				return (0);
+		}
+		input = input + ft_strlen(tokenizer->tokens[current_token].value);
 		current_token++;
 	}
-	create_token(tokenizer, input);
-	return (tokens); // or if data is passed for exit status, have here data->tokens = tokens; and make the function void and in the main, the data->tokens will be passed to the parsing part
+	if (!create_token(tokenizer, input))
+		return (0);
+	data->tokens = tokenizer->tokens;
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/26 14:32:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:53:20 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 	}
 	else if (tokens[*curr_tok].type == REDIRECTION)
 		return (parse_redir(tokens, curr_tok, data->ast_root, data));
+	else
+		return (NULL);
 	return (handle_arg_redir(cmd_node, tokens, curr_tok, data));
 }
 //check: do we need to init the lefe var in t_cmd:

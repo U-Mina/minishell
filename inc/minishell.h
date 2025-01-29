@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 19:56:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:43:29 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,16 +157,16 @@ void					init_cmd_env(char **envp, t_cmd *cmd, int *exit_status);
 
 // main and init
 void					init(char **envp, t_data *data, int ac, char **av);
-void					term_minishell(t_minishell *minishell, int rv);
 void					reset_data(t_data *data);
-void					check_signal(t_data *data);
+void					reset_signal(t_data *data);
+void					term_minishell(t_minishell *minishell, int rv);
 
 // lexer-tokenizer
-t_token					*tokenizer(char *input);
-void					make_eof_token(t_token *token);
-void					make_word_token(t_token *token, char *input);
-void					make_redir_token(t_token *token, char *input);
-void					make_pipe_token(t_token *token);
+int						tokenizer(char *input, t_data *data);
+int						make_eof_token(t_token *token);
+int						make_word_token(t_token *token, char *input);
+int						make_redir_token(t_token *token, char *input);
+int						make_pipe_token(t_token *token);
 
 // parser
 int						parse(t_token *tokens, t_data *data);

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:18:06 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/25 14:31:10 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:13:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ void	term_minishell(t_minishell	*minishell, int exit_status)
 	restore_signal(minishell->old_sa);
 	tcsetattr(STDIN_FILENO, TCSANOW, &(minishell->old_term));
 	gc_clean();
-	exit (rv); //return value???
+	exit (rv);
 }
