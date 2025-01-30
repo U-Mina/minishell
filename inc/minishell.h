@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 15:54:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 09:58:36 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,10 +233,6 @@ int						exp_with_arg(char ***env, char *arg);
 bool					valid_unset(char *arg);
 int						unset_env(char ***env, char *arg);
 
-// helper_utils
-void					print_err(char *s1, char *s2, char *s3);
-int						args_nbr(char **arr);
-
 // gc
 void					*gc_malloc(size_t size);
 void					*gc_realloc(void *ptr, size_t old, size_t new);
@@ -269,6 +265,8 @@ char					*expand_env(char *str, t_data *data);
 // utils
 int						ft_isspace(char c);
 int						ft_issep(char c);
+void					print_err(char *s1, char *s2, char *s3);
+int						args_nbr(char **arr);
 
 // // comprovations
 // void					print_tokens(t_token *tokens);

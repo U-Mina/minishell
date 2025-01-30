@@ -3,32 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 09:37:57 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:21:01 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * modify ENV wrt:
- * @export: ft_add_env_var (export var=val, '=' needed)
- * @cd: update PWD, OLDPWD
- * @unset: ft_del_env_var
- */
+// modify ENV wrt: @export, @cd, @unset
 
-/**
- * EXPORT: search var
- * -> if exit->replace/mod (free)
- * -> if not->add to array (alloc mem)
- */
-
-/**
- * check does a var exist or not
- //idea: to find a var (with/without val)
- */
+//check does a var exist or not, to find a var (with/without val)
 int	find_env_var(char **env, const char *key)
 {
 	int	i;
@@ -38,15 +24,15 @@ int	find_env_var(char **env, const char *key)
 	len = ft_strlen(key);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '='
+			|| env[i][len] == '\0'))
 			return (i);
 		i++;
 	}
 	return (-1);
 }
 
-//this version is in-place shifting, try another way to create a new **env_arr and free old one
-//int	del_var(char ***env, char *key)
+// in-place shifting to delete variable from env array
 int	del_var(char ***env, char *key)
 {
 	int	i;
@@ -56,12 +42,12 @@ int	del_var(char ***env, char *key)
 	pos = find_env_var(*env, key);
 	len = varlen(*env);
 	if (pos < 0)
-		return (-2); // no such var
+		return (-2);
 	gc_free((*env)[pos]);
 	i = pos;
 	while (i < len - 1)
 	{
-		(*env)[i] = (*env)[i + 1]; //overwrite envar[i]
+		(*env)[i] = (*env)[i + 1];
 		i++;
 	}
 	(*env)[len - 1] = NULL;
@@ -70,8 +56,8 @@ int	del_var(char ***env, char *key)
 }
 
 /**
- * cpenv is an array, so everytime new var is added, 
- * new mem_space is needed to put new_var into **cpenv array
+ * cpenv is an array, everytime new var is added,
+ * new mem is needed to put new_var into **cpenv array
  */
 static void	put_var(char ***env, char *n_var)
 {
@@ -80,8 +66,8 @@ static void	put_var(char ***env, char *n_var)
 
 	i = varlen(*env);
 	n_env = gc_malloc((sizeof(char *) * (i + 2)));
-	// if (!n_env)
-	// 	return ;
+	if (!n_env)
+		return ;
 	i = 0;
 	while ((*env)[i])
 	{
@@ -94,13 +80,14 @@ static void	put_var(char ***env, char *n_var)
 	*env = n_env;
 }
 
-//returns an allocated string representing the new env var=val (if any) to include at the env list
+// ret an allocated string representing new env var=val
+//(if any) to include at the env list
+// if val==NULL, only key is returned, namely export without '='
 char	*create_newvar(const char *key, char *val)
 {
 	char	*tmp;
 	char	*n_var;
 
-	//export cmd without '='/value
 	if (val == NULL)
 		n_var = gc_strdup(key);
 	else
@@ -112,29 +99,29 @@ char	*create_newvar(const char *key, char *val)
 	return (n_var);
 }
 
-//after any change in env (add/del of var/val), updtae **env array
-// flg == true, change to n_val
-//the pass para *val is the value to be assign to var
+// after any change in env (add/del of var/val), updtae **env array
+// flg == true, change to n_val, false, only add new var without value
+// the pass para *val is the value to be assign to var
 int	update_env(char ***env, const char *key, char *val, bool flg)
 {
 	int		pos;
-	char	*n_var;
+	char	*n_var_with_value;
 
 	pos = find_env_var(*env, key);
-	n_var = create_newvar(key, val);
-	if (n_var == NULL)
+	n_var_with_value = create_newvar(key, val);
+	if (n_var_with_value == NULL)
 		return (-1);
-	if (pos >= 0)//key does exist
+	if (pos >= 0)
 	{
 		if (flg == true)
 		{
 			gc_free((*env)[pos]);
-			(*env)[pos] = n_var;
+			(*env)[pos] = n_var_with_value;
 		}
 		else
-			gc_free(n_var);
+			gc_free(n_var_with_value);
 		return (0);
 	}
-	put_var(env, n_var);
+	put_var(env, n_var_with_value);
 	return (0);
 }

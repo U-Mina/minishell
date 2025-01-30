@@ -3,24 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   export_args.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 19:25:25 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:46:03 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @fn: export with args & values
+ * returns an allocated str, being a copy of the passed str with a \ added
+ * before each conflictive character (" and \")
  */
-
-//returns an allocated string, being a copy of the passed str with a \ added before each conflictive character (" and \")
 static void	add_escape_char(char **n_val, char *str)
 {
-	int		i;
-	int		count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -43,13 +42,16 @@ static void	add_escape_char(char **n_val, char *str)
 	}
 }
 
-//grammar checks the env var name(but not to apply to the env var value)
-static bool	valid_exp(char *arg)
+// grammar checks the env var name(but not to apply to the env var value)
+static bool	valid_export(char *arg)
 {
 	int	i;
 
 	if (!arg || !*arg)
+	{
+		print_err("minishell: export", "'", "not a valid identifier");
 		return (false);
+	}
 	if (!(ft_isalpha(arg[0]) == 1 || arg[0] == '_'))
 	{
 		print_err("minishell: export", arg, "not a valid identifier");
@@ -68,7 +70,7 @@ static bool	valid_exp(char *arg)
 	return (true);
 }
 
-//export with '=' sign
+// export with '=' sign
 static int	withsign(char ***env, char *arg, char *sign)
 {
 	size_t	len;
@@ -78,7 +80,7 @@ static int	withsign(char ***env, char *arg, char *sign)
 	len = sign - arg;
 	n_key = gc_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(n_key, arg, len + 1);
-	if (valid_exp(n_key) == false)
+	if (valid_export(n_key) == false)
 	{
 		gc_free(n_key);
 		return (-1);
@@ -96,7 +98,7 @@ static int	withsign(char ***env, char *arg, char *sign)
 	return (0);
 }
 
-//export without '=' sign
+// export without '=' sign
 static int	nosign(char ***env, char *arg)
 {
 	char	*n_key;
@@ -104,7 +106,7 @@ static int	nosign(char ***env, char *arg)
 	n_key = arg;
 	if (find_env_var(*env, n_key) == -1)
 	{
-		if (!valid_exp (arg))
+		if (!valid_export(arg))
 			return (-1);
 		if (update_env(env, n_key, NULL, false) != 0)
 			return (perror("malloc fail"), -1);
@@ -112,7 +114,7 @@ static int	nosign(char ***env, char *arg)
 	return (0);
 }
 
-//wrap fn for case choose
+// wrap fn for case choose
 int	exp_with_arg(char ***env, char *arg)
 {
 	char	*sign;

@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   ft_print_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/30 08:53:06 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 13:02:03 by ewu              ###   ########.fr       */
+/*   Created: 2025/01/30 09:56:35 by ewu               #+#    #+#             */
+/*   Updated: 2025/01/30 09:57:28 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @cases: export=; export=val; export=""
- */
-int	ft_export(char ***env, char **args, int *exit_status)
+//mimic bash error message format
+void	print_err(char *s1, char *s2, char *s3)
 {
-	int	i;
-
-	if (args_nbr(args) == 1)
+	ft_putstr_fd(s1, 2);
+	ft_putstr_fd(": ", 2);
+	if (s2)
 	{
-		if (exp_only(*env) == -1)
-			return (*exit_status = 1, -1);
+		ft_putstr_fd(s2, 2);
+		ft_putstr_fd(": ", 2);
 	}
-	else
+	if (s3)
 	{
-		i = 1;
-		while (args[i])
-		{
-			if (exp_with_arg(env, args[i]) == -1)
-				return (*exit_status = 1, -1);
-			i++;
-		}
+		ft_putstr_fd(s3, 2);
+		ft_putstr_fd("\n", 2);
 	}
-	return (0);
 }

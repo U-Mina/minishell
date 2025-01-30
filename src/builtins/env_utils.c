@@ -3,24 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/27 19:49:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:08:58 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @count_env_len: mem allocate
  * @copy_env: 'env' cmd
  * @sort_env: export cmd
  */
 
-//if no env var is passed, create a var list for it
-//HOME, PWD, OLDPWD, SHLVL, _=, NULL
-//check: ?? to add executable path
+//if no env var is passed, create: HOME, PWD, OLDPWD, SHLVL, _=, NULL
 char	**create_env(void)
 {
 	char	**env;
@@ -37,17 +34,17 @@ char	**create_env(void)
 		hm_usr = "/";
 	env[0] = gc_strjoin("HOME=", hm_usr);
 	env[1] = gc_strjoin("PWD=", _cwd);
-	env[2] = gc_strdup("OLDPWD"); //empty at the begining
+	env[2] = gc_strdup("OLDPWD");
 	env[3] = gc_strjoin("SHLVL=", "1");
 	exec_path = gc_strjoin("_=", _cwd);
 	env[4] = gc_strjoin(exec_path, "/./minishell");
 	env[5] = NULL;
-	//use free() or gc_free(), wait for checking
+	gc_free(exec_path);
 	free(_cwd);
 	return (env);
 }
 
-// count num of var in env, and allocate mem accordingly for cpy_env
+// count nbr of var in env, and alloc mem accordingly for cpy_env
 int	varlen(char **env)
 {
 	int	i;
@@ -58,8 +55,8 @@ int	varlen(char **env)
 	return (i);
 }
 
-//todo: to change all safe-malloc() to gc_malloc()??
-// hard cp **envp vars to **cpenv
+// hard copy of **envp
+// if any malloc error, free all the previous malloced mem
 char	**cpy_env(char **env)
 {
 	int		i;
@@ -72,7 +69,7 @@ char	**cpy_env(char **env)
 	while (i < len)
 	{
 		cpenv[i] = gc_strdup(env[i]);
-		if (!cpenv[i]) //safe check
+		if (!cpenv[i])
 		{
 			while (i-- > 0)
 				gc_free(cpenv[i]);
@@ -84,7 +81,9 @@ char	**cpy_env(char **env)
 	return (cpenv);
 }
 
-//key1->"SHLVL", key2->"OLDPWD": shlvl + 1, modify OLDPWD
+/**
+ * @key1: SHLVL, @key2: OLDPWD; shlvl + 1, modify OLDPWD
+ * If shlvl/oldpwd doesn't exist in the env,it adds them with values*/
 void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 {
 	char	*val;
@@ -92,31 +91,21 @@ void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	int		pos2;
 
 	pos1 = find_env_var(*env, key1);
-	// if (pos1 < 0) ??
-	//check: the error check necesary or not? just created above
-	val = gc_itoa(ft_atoi(env_var_value(*env, key1)) + 1);
-	gc_free((*env)[pos1]);
-	(*env)[pos1] = gc_strjoin("SHLVL=", val);
-	//check: is var_create() funtion necessary?
-	gc_free(val);
+	if (pos1 >= 0)
+	{
+		val = gc_itoa(ft_atoi(env_var_value(*env, key1)) + 1);
+		gc_free((*env)[pos1]);
+		(*env)[pos1] = gc_strjoin("SHLVL=", val);
+		gc_free(val);
+	}
+	else
+		update_env(env, key1, "1", true);
 	pos2 = find_env_var(*env, key2);
 	if (pos2 >= 0)
 	{
 		gc_free((*env)[pos2]);
 		(*env)[pos2] = gc_strdup(key2);
 	}
-	//what to do if OLDPWD is not there?? write also an env variable empty with this name or just not write???
+	else
+		update_env(env, key2, "", true);
 }
-
-//ini the struct of t_env, maybe move to *main.c/init.c*
-//env = copy of original result of 'env' cmd, and then modify
-// t_env *init_cpenv(char **env)
-// {
-// 	t_env *cpenv;
-// 	char **tmp;
-// 	size_t i;
-
-// 	i = varlen(env);
-// 	cpenv->var_nb = i;
-// 	cpenv->envar = cpy_env(env);
-// 	return (cpenv);

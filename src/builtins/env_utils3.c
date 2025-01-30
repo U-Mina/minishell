@@ -3,20 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/21 21:01:09 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:31:31 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * get the value of env var
- */
-
-//rename as *var_value()
+// get the value of a env var
 char	*env_var_value(char **env, const char *key)
 {
 	int	i;
@@ -35,6 +31,7 @@ char	*env_var_value(char **env, const char *key)
 	return (NULL);
 }
 
+// delete value of a env var (checking '=' sign)
 void	del_val(char **env, char *key)
 {
 	int	i;
@@ -44,17 +41,20 @@ void	del_val(char **env, char *key)
 	len = ft_strlen(key);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '='
+			|| env[i][len] == '\0'))
 		{
 			gc_free(env[i]);
 			env[i] = gc_strdup(key);
-			//check: null check for env[i] or not?
+			if (env[i] == NULL)
+				return ;
 			break ;
 		}
 		i++;
 	}
 }
 
+//change the value of an env var
 void	mod_val(char **env, char *key, char *val)
 {
 	int		i;
@@ -65,7 +65,8 @@ void	mod_val(char **env, char *key, char *val)
 	len = ft_strlen(key);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '='
+			|| env[i][len] == '\0'))
 		{
 			gc_free(env[i]);
 			tmp = gc_strjoin(key, "=");

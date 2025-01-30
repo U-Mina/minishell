@@ -3,27 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   export_only.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/25 11:53:41 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:01:04 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @fn: export cmd without argument, only print alphabetically
- */
-
-//fomrats the env var list to print
+// fomrats the env var list to print, add "" + NULL (len+3)
 static char	*print_export(char *key)
 {
 	int		i;
 	char	*tmp;
 
 	i = 0;
-	tmp = gc_malloc(sizeof(char *) * (ft_strlen(key) + 3));//"" + NULL --> 3
+	tmp = gc_malloc(sizeof(char *) * (ft_strlen(key) + 3));
 	while (key[i])
 	{
 		tmp[i] = key[i];
@@ -46,7 +42,7 @@ static char	*print_export(char *key)
 	return (tmp);
 }
 
-//find the smallest string (in terms of alphabetic num/letter value) in the env list and returns it
+// find the smallest str (alphabetic num/letter value) in env list
 static char	*smallest(char **env_cpy)
 {
 	int		i;
@@ -72,13 +68,13 @@ static char	*smallest(char **env_cpy)
 	return (smallest);
 }
 
-//creates and allocates an array of allocated strings containing a copy of env list in data
+// creates and allocate arr of allocated strs containing a copy of **env
 static char	**copy_env(char **env, int len)
 {
 	int		i;
 	char	**env_cpy;
 
-	env_cpy = gc_malloc((len + 1) * sizeof(char*));
+	env_cpy = gc_malloc((len + 1) * sizeof(char *));
 	i = 0;
 	while (i < len && env[i] && env[i][0])
 	{
@@ -89,7 +85,10 @@ static char	**copy_env(char **env, int len)
 	return (env_cpy);
 }
 
-//sorts the env var list using a helper copy of env, in which smallest elements are consequently deleted
+/**
+ * create cp of **env, iterate through it, find the smallest str
+ * put smallest to **sorted, remove smallest from cp, repeat until all sorted
+ */
 static void	sort_env(char **env, char ***sorted, int var_nb)
 {
 	int		i;
@@ -103,10 +102,13 @@ static void	sort_env(char **env, char ***sorted, int var_nb)
 		i++;
 	}
 	(*sorted)[i] = NULL;
-	gc_free(env_cpy); //do not double free, because otherwise we lost the allocated strings, now stored in the sorted double string.
+	gc_free(env_cpy);
 }
 
-//sorts the list of env var, formats it to print and prints it
+/**
+ * @export: export cmd without argument, only print alphabetically
+ * sorts the list of env var, formats it, then print
+ */
 int	exp_only(char **env)
 {
 	int		i;
@@ -116,8 +118,8 @@ int	exp_only(char **env)
 	i = 0;
 	var_len = varlen(env);
 	sorted_env = gc_malloc(sizeof(char *) * (var_len + 1));
-	// if (!sorted_env)
-	// 	return (perror("malloc"), *exit_status = 1, -1);
+	if (!sorted_env)
+		return (perror("malloc"), -1);
 	sort_env(env, &sorted_env, var_len);
 	while (sorted_env[i])
 	{

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:16:51 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 16:09:23 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:33:58 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//idea: **env == **cpenv, with shlvl+1 and OLDPWD changed
+//**env == **cpenv, with shlvl+1 and OLDPWD changed
+//if '=' not found, dont print and go net var
 int	ft_env(char **env, int *exit_status)
 {
 	int	i;
@@ -22,8 +23,7 @@ int	ft_env(char **env, int *exit_status)
 		return (-1);
 	while (env[i])
 	{
-		if (ft_strchr(env[i], '=') != NULL) 
-		//ret ptr to '=' otherwise 'NULL'
+		if (ft_strchr(env[i], '=') != NULL)
 			printf("%s\n", env[i]);
 		i++;
 	}

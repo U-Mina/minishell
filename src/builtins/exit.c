@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 16:19:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/28 19:49:06 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:36:34 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * end cur shell, clean everything
- * no arg, nbr args, word args
- */
-
-//to coustomize ft_isdigit() to pass string instead int as para
+//coustomized ft_isdigit() to pass str instead int as para
 static int	is_digit(char *s)
 {
 	while (*s)
@@ -29,6 +24,10 @@ static int	is_digit(char *s)
 	return (0);
 }
 
+/**
+ * exit cur_shl, and clean everything
+ * @cases: no arg, nbr args, word args, multiple args
+ */
 void	ft_exit(t_data *data, char **args)
 {
 	printf("exit\n");

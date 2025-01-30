@@ -14,6 +14,8 @@ SOURCES =	minishell.c\
 			token_make.c\
 			ft_isspace.c\
 			ft_issep.c\
+			ft_arg_nbr.c\
+			ft_print_error.c\
 			parser.c\
 			parse_cmd.c\
 			parse_pipe.c\
@@ -43,7 +45,6 @@ SOURCES =	minishell.c\
 			export.c\
 			export_only.c\
 			export_args.c\
-			hepler_utils.c\
 			pwd.c\
 			unset.c\
 			gc_malloc_free.c\

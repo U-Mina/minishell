@@ -6,16 +6,17 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/27 11:27:50 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 10:38:24 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * update PWD n' OLDPWD
- * @case: no arg/ abs/relativ path / cd 'wrong input(more than one arg etc)'
+ * cases: no arg/abosolute/relativ path/cd 'wrong input(more than one arg etc)'
  */
+
+// actul exec part of changing directory
 bool	check_err_go_dir(char *path, int *exit_status)
 {
 	if (access(path, F_OK) != 0)
@@ -35,16 +36,11 @@ bool	check_err_go_dir(char *path, int *exit_status)
 		return (false);
 	}
 	*exit_status = 0;
-	return	(true);
+	return (true);
 }
-// if (access(path, X_OK) != 0)
-// {
-// 	print_err("minishell: cd", path, "Permission denied");
-// 	return (*exit_status = 1, false);
-// }
 
-// char	*cur_path(int *exit_status)
-char	*cur_path()
+// get current path
+char	*cur_path(void)
 {
 	int		i;
 	char	*tmp;
@@ -54,7 +50,6 @@ char	*cur_path()
 	if (tmp == NULL)
 	{
 		perror("gercwd: ");
-		// *exit_status = 1;
 		return (NULL);
 	}
 	res = gc_malloc(sizeof(char) * (ft_strlen(tmp) + 1));
@@ -66,10 +61,10 @@ char	*cur_path()
 	}
 	free(tmp);
 	res[i] = '\0';
-	// *exit_status = 0;
 	return (res);
 }
 
+// change to home directory (call check_err_go_dir() to exec)
 bool	cd_home(char **env, int *exit_status)
 {
 	char	*hm;
@@ -81,162 +76,53 @@ bool	cd_home(char **env, int *exit_status)
 		*exit_status = 1;
 		return (false);
 	}
-	//*exit_status = 0;
 	return (check_err_go_dir(hm, exit_status));
 }
-// return (hm);
 
+// args[0] = "cd", args[1] = path
+// if no path, go to home directory, else go to path
 int	ft_cd(char **args, char ***env, int *exit_status)
 {
-	//int		i;
 	char	*cur;
 	bool	retval;
 
 	cur = cur_path();
 	if (cur == NULL)
 		return (*exit_status = 1, -1);
-	if (args_nbr(args) == 1) //only 'cd' cmd
+	if (args_nbr(args) == 1)
 		retval = cd_home(*env, exit_status);
 	else
 		retval = check_err_go_dir(args[1], exit_status);
 	if (retval == true)
-		return (handle_pwd(cur, env), 0);//change pwd and old after success, err checked needed later
+		return (handle_pwd(cur, env), 0);
+	*exit_status = 1;
 	return (-1);
 }
 
+// update PWD and OLDPWD after successful cd
+// if OLDPWD doesn't exist, create one, else update PWD and OLDPWD
 void	handle_pwd(char *o_pwd, char ***env)
 {
-	char	*cur;
-	char	*n_var;
+	char	*new_cur;
+	char	*new_var;
 
-	cur = cur_path();
-	if (find_env_var(*env, "OLDPWD") < 0)//no OLDPWD exist, create one
+	new_cur = cur_path();
+	if (new_cur == NULL)
 	{
-		n_var = create_newvar("OLDPWD", o_pwd);
-		// put_var(env, n_var);
-		//check: error check needed??
-		update_env(env, "OLDPWD", n_var, true);
+		perror("getcwd: ");
+		return ;
 	}
-	else//OLDPWD exist, change it to o_pwd
+	if (find_env_var(*env, "OLDPWD") < 0)
+	{
+		new_var = create_newvar("OLDPWD", o_pwd);
+		if (new_var == NULL)
+		{
+			perror("create_newvar: ");
+			return ;
+		}
+		update_env(env, "OLDPWD", new_var, true);
+	}
+	else
 		update_env(env, "OLDPWD", o_pwd, true);
-	update_env(env, "PWD", cur, true);
+	update_env(env, "PWD", new_cur, true);
 }
-
-//in this way avoid possible seg-fault problem
-// void	cur_path(char cur[PATH_MAX], int *exit_status)
-// {
-// 	if (getcwd(cur, sizeof(cur)) == NULL)
-// 	{
-// 		perror("gercwd: ");
-// 		*exit_status = 1;
-// 		return (NULL);
-// 	}
-// 	*exit_status = 0;
-// }
-
-	// tmp = args[1];
-	// if (chdir(tmp) == -1)
-	// {
-	// 	print_err("minishell: cd", tmp, "No such file or directory");
-	// 	*exit_status = 1;
-	// }
-	// else
-	// {
-	// 	free(tmp);
-	// 	return (ch_pwd_oldpwd((*env), 1, exit_status), 0);
-	// }
-	// free(tmp);
-	// return (1);
-
-// char	*cur_path(int *exit_status)
-// {
-// 	int		i;
-// 	char	*tmp;
-// 	char	*res;
-// 	tmp = getcwd(NULL, 0);
-// 	if (tmp == NULL)
-// 	{
-// 		perror("gercwd: ");
-// 		*exit_status = 1;
-// 		return (NULL);
-// 	}
-// 	res = gc_malloc(sizeof(char) * (ft_strlen(tmp) + 1));
-// 	i = 0;
-// 	while (tmp[i])
-// 	{
-// 		res[i] = tmp[i]; //not sure if this will give seg fault...??
-// 		i++;	
-// 	}
-// 	free(tmp);
-// 	res[i] = '\0';
-// 	*exit_status = 0;
-// 	return (res);
-// }
-
-// void	ch_pwd_oldpwd(t_data *data, int flag)
-// {
-// 	int		i;
-// 	char	*tmp;
-// 	char	*n_path;
-
-// 	i = 0;
-// 	tmp = cur_path(data->exit_status);
-// 	while (i < varlen(data->env))
-// 	{
-// 		if (flag == 0 && data->env[i] && (ft_strncmp(data->env[i], "OLDPWD", 7) == 0))
-// 		{
-// 			n_path = safe_join("OLDPWD=", tmp);
-// 			free(data->env[i]);
-// 			data->env[i] = n_path;
-// 		}
-// 		if (flag == 1 && data->env[i] && (ft_strncmp(data->env[i], "PWD", 4) == 0))
-// 		{
-// 			n_path = safe_join("PWD=", tmp);
-// 			free(data->env[i]);
-// 			data->env[i] = n_path;
-// 		}
-// 		i++;
-// 	}
-// 	free(tmp);
-// }
-// char	*cd_home(char **env, int *exit_status)
-// {
-// 	char	*hm;
-
-// 	hm = env_var_value(env, "HOME");
-// 	if (hm == NULL)
-// 	{
-// 		print_err("minishell", "cd", "HOME not set");
-// 		*exit_status = 1;
-// 		return (NULL);
-// 	}
-// 	*exit_status = 0;
-// 	return (hm);
-// }
-
-// void	ch_pwd_oldpwd(char **env, int flag, int *exit_status)
-// {
-// 	int		i;
-// 	char	*tmp;
-// 	char	*n_path;
-
-// 	i = 0;
-// 	tmp = cur_path(exit_status);
-// 	while (i < varlen(env))
-// 	{
-// 		if (flag == 0 && env[i] && (ft_strncmp(env[i], "OLDPWD", 6) == 0))
-// 		{
-// 			n_path = safe_join("OLDPWD=", tmp);
-// 			free(env[i]);
-// 			env[i] = n_path;
-// 		}
-// 		if (flag == 1 && env[i] && (ft_strncmp(env[i], "PWD", 3) == 0))
-// 		{
-// 			n_path = safe_join("PWD=", tmp);
-// 			free(env[i]);
-// 			env[i] = n_path;
-// 		}
-// 		i++;
-// 	}
-// 	free(tmp);
-// }

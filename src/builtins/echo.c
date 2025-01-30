@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:23:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/19 16:06:40 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 10:50:56 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//if starts with '-', if *arg=='n', ++, then check any non 'n' left (!*arg?)
 static bool	check_flag(char *arg)
 {
 	if (!*arg)
@@ -27,6 +28,7 @@ static bool	check_flag(char *arg)
 	return (true);
 }
 
+//skip -n part, print the rest, if multiple args, print space between them
 void	ft_echo(char **args, int *exit_status)
 {
 	bool	flag;
