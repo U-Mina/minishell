@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:35:31 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 12:44:11 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:55:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (g_signal != SIGINT)
+		if (g_signal != SIGINT_H && g_signal != SIGEOF)
 			write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_signal = SIGINT;
+		if (g_signal != SIGINT_H && g_signal != SIGEOF)
+			g_signal = SIGINT_I;
 	}
 }
 
@@ -44,17 +45,22 @@ void	heredoc_signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		g_signal = SIGINT;
+		g_signal = SIGINT_H;
 		write(STDERR_FILENO, "\n", 1);
 		close(STDIN_FILENO);
 	}
 }
 
 //handles SIGINT and SIGQUIT in shell execution mode
-void	init_signal_exec(void)
+void	init_exec_mode(void)
 {
+	struct termios		exec_term;
+
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	tcgetattr(STDIN_FILENO, &exec_term);
+	exec_term.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &exec_term);
 }
 
 //restores the signals actions to those in the original state

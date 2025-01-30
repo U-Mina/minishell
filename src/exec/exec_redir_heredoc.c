@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 15:32:27 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:36:25 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,11 @@ static char	*read_here(char *de, int *exit_status, t_data *data,
 	if (!init_heredoc(h_sa, data))
 		return (term_heredoc(data), NULL);
 	content = readline("> ");
+	if (!content && g_signal != SIGINT_H)
+		g_signal = SIGEOF;
 	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1))
 	{
-		if (errno != 0 && g_signal != SIGINT)
+		if (errno != 0 && g_signal != SIGINT_H)
 		{
 			print_err("readline", NULL, strerror(errno));
 			return (*exit_status = 1, NULL);

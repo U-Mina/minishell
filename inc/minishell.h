@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 15:54:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:29:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@
 # include <string.h>
 # include <termios.h>
 # include <unistd.h>
+
+# define SIGINT_I 2
+# define SIGINT_H 3
+# define SIGEOF 4
 
 volatile sig_atomic_t	g_signal;
 
@@ -261,7 +265,7 @@ void					init_signal_inter(struct sigaction *sa,
 void					signal_handler(int signum);
 void					heredoc_signal_handler(int signum);
 void					restore_signal(struct sigaction *old_sa);
-void					init_signal_exec(void);
+void					init_exec_mode(void);
 
 // expand_env
 char					*expand_env(char *str, t_data *data);
