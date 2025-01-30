@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 15:32:27 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:02:52 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,24 @@ static char	*read_here(char *de, int *exit_status, t_data *data,
 	if (!init_heredoc(h_sa, data))
 		return (term_heredoc(data), NULL);
 	content = readline("> ");
+	if (!content && g_signal != SIGINT_H)
+		g_signal = SIGEOF;
 	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1))
 	{
-		if (errno != 0 && g_signal != SIGINT)
+		if (errno != 0 && g_signal != SIGINT_H)
 		{
 			print_err("readline", NULL, strerror(errno));
 			return (*exit_status = 1, NULL);
 		}
 		free(content);
 		*exit_status = 0;
-		term_heredoc(data);
-		return (NULL);
+		return (term_heredoc(data), NULL);
 	}
 	retval = gc_strjoin(content, "\n");
 	if (!quote)
 		retval = expand_env(retval, data);
 	free(content);
-	term_heredoc(data);
-	return (retval);
+	return (term_heredoc(data), retval);
 }
 
 static int	write_pipe(int *fd, char *retval, int *exit_status)

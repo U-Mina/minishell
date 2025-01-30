@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:04:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:40:45 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:50:09 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 //to reset data structure between readline calls 
 void	reset_data(t_data *data)
 {
+	data->child_status = 0;
 	data->heredoc_fd = -1;
 	dup2(data->o_fd[0], STDIN_FILENO);
 	data->fd[0] = STDIN_FILENO;
@@ -30,9 +31,7 @@ void	reset_data(t_data *data)
 //updates the exit status depending on g_signal and restores g_signal to 0
 void	reset_signal(t_data *data)
 {
-	if (g_signal == SIGINT)
-	{
+	if (g_signal == SIGINT_I || g_signal == SIGINT_H)
 		data->exit_status = 1;
-		g_signal = 0;
-	}
+	g_signal = 0;
 }

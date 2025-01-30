@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 13:19:51 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:56:59 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	left_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		ast_node = handle_redir_fd(ast_node, data);
-		if (g_signal == SIGINT)
+		if (g_signal == SIGINT_H)
 		{
 			write(sync_fd[1], "sigint", 6);
 			close(sync_fd[1]);
@@ -51,7 +51,7 @@ static int	wait_left_redir(int sync_fd)
 
 	bytes_read = read(sync_fd, buffer, 7);
 	if (bytes_read == 6 && ft_strncmp(buffer, "sigint", 6) == 0)
-		g_signal = SIGINT;
+		g_signal = SIGINT_H;
 	else if (bytes_read != 4 || ft_strncmp(buffer, "done", 4) != 0)
 	{
 		perror("Pipe synchronization failed");
@@ -77,7 +77,7 @@ static int	right_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 			exit (1);
 		close(sync_fd[0]);
 		restore_signal(data->minishell.sa);
-		if (g_signal != SIGINT)
+		if (g_signal == 0)
 		{
 			exec_ast(ast_node, data);
 			exit(data->exit_status);
@@ -106,8 +106,6 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(left, NULL, 0);
-	waitpid(right, &data->exit_status, 0);
-	if (WIFEXITED(data->exit_status))
-		data->exit_status = WEXITSTATUS(data->exit_status);
+	waitpid(right, &data->child_status, 0);
 	restore_signal(data->minishell.sa);
 }
