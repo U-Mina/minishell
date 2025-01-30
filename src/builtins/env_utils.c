@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:07 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:08:58 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 14:06:09 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char	**create_env(void)
 	char	*exec_path;
 
 	env = gc_malloc(sizeof(char *) * 6);
+	if (!env)
+		return (perror("malloc "), NULL);
 	_cwd = getcwd(NULL, 0);
 	if (_cwd == NULL)
 		return (NULL);
@@ -66,6 +68,8 @@ char	**cpy_env(char **env)
 	i = 0;
 	len = varlen(env);
 	cpenv = gc_malloc(sizeof(char *) * (len + 1));
+	if (!cpenv)
+		return (perror("malloc "), NULL);
 	while (i < len)
 	{
 		cpenv[i] = gc_strdup(env[i]);
@@ -94,6 +98,8 @@ void	change_shlvl_oldpwd(char ***env, char *key1, char *key2)
 	if (pos1 >= 0)
 	{
 		val = gc_itoa(ft_atoi(env_var_value(*env, key1)) + 1);
+		if (val == NULL)
+			return ;
 		gc_free((*env)[pos1]);
 		(*env)[pos1] = gc_strjoin("SHLVL=", val);
 		gc_free(val);

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:45:08 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:31:31 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 14:13:48 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,11 @@ void	mod_val(char **env, char *key, char *val)
 		{
 			gc_free(env[i]);
 			tmp = gc_strjoin(key, "=");
+			if (tmp == NULL)
+				return ;
 			env[i] = gc_strjoin(tmp, val);
+			if (env[i] == NULL)
+				return ;
 			gc_free(tmp);
 			return ;
 		}

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 17:12:30 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:46:03 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 14:19:20 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static void	add_escape_char(char **n_val, char *str)
 		i++;
 	}
 	*n_val = gc_malloc((ft_strlen(str) + count + 1) * sizeof(char));
+	if (!*n_val)
+		return ;
 	while (i >= 0)
 	{
 		(*n_val)[i + count] = str[i];
@@ -79,6 +81,8 @@ static int	withsign(char ***env, char *arg, char *sign)
 
 	len = sign - arg;
 	n_key = gc_malloc(sizeof(char) * (len + 1));
+	if (!n_key)
+		return (perror("malloc fail"), -1);
 	ft_strlcpy(n_key, arg, len + 1);
 	if (valid_export(n_key) == false)
 	{

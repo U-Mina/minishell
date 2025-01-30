@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:35:39 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 10:38:24 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 13:48:28 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ char	*cur_path(void)
 		return (NULL);
 	}
 	res = gc_malloc(sizeof(char) * (ft_strlen(tmp) + 1));
+	if (!res)
+	{
+		perror("malloc ");
+		return (NULL);
+	}
 	i = 0;
 	while (tmp[i])
 	{
