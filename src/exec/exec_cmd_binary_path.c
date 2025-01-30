@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:05:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 14:52:35 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:33:10 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,7 @@ static int	copy_path(char *cmd, t_cmd *c_node, t_data *data)
 {
 	struct stat	path_stat;
 
-	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0 && \
-		stat(cmd, &path_stat) == 0)
+	if (check_permission(cmd, data) && stat(cmd, &path_stat) == 0)
 	{
 		if (S_ISREG(path_stat.st_mode))
 		{
@@ -111,9 +110,7 @@ static int	copy_path(char *cmd, t_cmd *c_node, t_data *data)
 			return (data->exit_status = 126, 0);
 		}
 	}
-	else
-		print_err("minishell", cmd, "No such file or directory");
-	return (data->exit_status = 1, 0);
+	return (0);
 }
 
 //Checks if a path is given or searches the binary in the PATH env.

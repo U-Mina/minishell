@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:17:08 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 16:21:32 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:28:40 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,22 @@ void	update_parent(t_data *data)
 		if (WTERMSIG(data->child_status) == SIGINT)
 			write(STDERR_FILENO, "\n", 1);
 	}
+}
+
+//checks if a file exist and it has the permissions to be accessed
+int	check_permission(char *cmd, t_data *data)
+{
+	if (access(cmd, F_OK) != 0)
+	{
+		print_err("minishell", cmd, "No such file or directory");
+		data->exit_status = 127;
+		return (0);
+	}
+	else if (access(cmd, X_OK) != 0)
+	{
+		print_err("minishell", cmd, "Permission denied");
+		data->exit_status = 126;
+		return (0);
+	}
+	return (1);
 }

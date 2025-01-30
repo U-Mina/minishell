@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 20:58:40 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 13:22:58 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:37:47 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	out_or_append(t_redir *redir, int fd)
 		fd = open(redir->left, (O_CREAT | O_WRONLY | O_APPEND), 00644);
 	if (fd == -1)
 	{
-		print_err(redir->left, NULL, strerror(errno));
+		print_err("minishell", redir->left, strerror(errno));
 		return (-1);
 	}
 	return (fd);

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 16:24:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:25:47 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ int						dup_err(int fd1, int std_fd);
 int						create_pipe(int *fd, t_data *data);
 pid_t					fork_err(int *fd);
 void					update_parent(t_data *data);
+int						check_permission(char *cmd, t_data *data);
 
 // builtin ft
 void					ft_echo(char **args, int *exit_status);

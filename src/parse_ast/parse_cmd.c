@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:42:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:07:42 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
 		if (!tokens[*curr_tok].value)
 			return (set_malloc_error(data), NULL);
+		if (tokens[*curr_tok].value[0] == '\0' && \
+								tokens[(*curr_tok) + 1].type != TOKEN_EOF)
+			return ((*curr_tok)++, parse_cmd(tokens, curr_tok, data));
 		if (handle_quotes(&tokens[*curr_tok].value, data) < 0)
 			return (NULL);
 		tokens[*curr_tok].type = COMMAND;
