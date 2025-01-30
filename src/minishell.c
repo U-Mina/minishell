@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 15:22:01 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:12:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	main(int ac, char **av, char **envp)
 			if (!tokenizer(input, &data))
 				data.exit_status = 1;
 			else if (parse(data.tokens, &data))
-				exec_ast(data.ast_root, &data);
-			get_child_status(&data);
+				executor(&data);
 			reset_data(&data);
 		}
 		free(input);

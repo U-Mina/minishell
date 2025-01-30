@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:17:08 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 12:56:48 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:21:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,8 @@ pid_t	fork_err(int *fd)
 //gets exit status from a terminated child process
 //child_status must have been set by waitpid() in execve or after pipe
 //child_status is reset to 0 in reset_data() after processing
-void	get_child_status(t_data *data)
+void	update_parent(t_data *data)
 {
-	if (data->child_status == 0)
-		return ;
 	if (WIFEXITED(data->child_status))
 		data->exit_status = WEXITSTATUS(data->child_status);
 	else if (WIFSIGNALED(data->child_status))
@@ -69,7 +67,5 @@ void	get_child_status(t_data *data)
 		data->exit_status = 128 + WTERMSIG(data->child_status);
 		if (WTERMSIG(data->child_status) == SIGINT)
 			write(STDERR_FILENO, "\n", 1);
-		else if (WTERMSIG(data->child_status) == SIGQUIT)
-			write(STDERR_FILENO, "Quit: 3\n", 8);
 	}
 }

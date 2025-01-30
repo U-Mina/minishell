@@ -59,7 +59,8 @@ SOURCES =	minishell.c\
 			init.c\
 			reset.c\
 			term.c\
-			signal_handler.c
+			signal_handler.c\
+			signal_child.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)/%.o)
 

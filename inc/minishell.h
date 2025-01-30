@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 15:26:24 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:24:24 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../libft/libft.h"
 # include <sys/types.h>
 # include <sys/wait.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -187,6 +187,7 @@ int						quote_len(char *str, int i);
 void					free_ast(t_astnode *ast_node);
 
 // exec
+void					executor(t_data *data);
 void					exec_ast(t_astnode *ast_node, t_data *data);
 void					exec_cmd(t_astnode *cmd_node, t_data *data);
 int						exec_builtins(t_cmd *cmd, t_data *data);
@@ -201,7 +202,7 @@ void					exec_pipe(t_pipe *p_node, t_data *data);
 int						dup_err(int fd1, int std_fd);
 int						create_pipe(int *fd, t_data *data);
 pid_t					fork_err(int *fd);
-void					get_child_status(t_data *data);
+void					update_parent(t_data *data);
 
 // builtin ft
 void					ft_echo(char **args, int *exit_status);
@@ -265,6 +266,7 @@ void					signal_handler(int signum);
 void					heredoc_signal_handler(int signum);
 void					restore_signal(struct sigaction *old_sa);
 void					init_exec_mode(void);
+void					handle_child_sigquit(t_data *data);
 
 // expand_env
 char					*expand_env(char *str, t_data *data);

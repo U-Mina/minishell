@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:56:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:13:15 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	close(fd[1]);
 	waitpid(left, NULL, 0);
 	waitpid(right, &data->child_status, 0);
+	update_parent(data);
 	restore_signal(data->minishell.sa);
 }

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:35:31 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 11:55:38 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:20:34 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,6 @@ void	heredoc_signal_handler(int signum)
 		write(STDERR_FILENO, "\n", 1);
 		close(STDIN_FILENO);
 	}
-}
-
-//handles SIGINT and SIGQUIT in shell execution mode
-void	init_exec_mode(void)
-{
-	struct termios		exec_term;
-
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	tcgetattr(STDIN_FILENO, &exec_term);
-	exec_term.c_lflag |= ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &exec_term);
 }
 
 //restores the signals actions to those in the original state

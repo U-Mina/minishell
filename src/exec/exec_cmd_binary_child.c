@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:31:50 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 12:57:02 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:05:37 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ void	child_proc(t_cmd *cmd, t_data *data)
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &data->child_status, 0);
 	restore_signal(data->minishell.sa);
+	update_parent(data);
 	tcsetattr(STDIN_FILENO, TCSANOW, &(data->minishell.term));
 }
