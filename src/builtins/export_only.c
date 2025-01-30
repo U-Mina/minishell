@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 19:09:41 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 13:01:04 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 14:32:05 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static char	*print_export(char *key)
 
 	i = 0;
 	tmp = gc_malloc(sizeof(char *) * (ft_strlen(key) + 3));
+	if (!tmp)
+		return (perror("malloc"), NULL);
 	while (key[i])
 	{
 		tmp[i] = key[i];
@@ -36,10 +38,7 @@ static char	*print_export(char *key)
 		tmp[i + 1] = key[i];
 		i++;
 	}
-	tmp[i + 1] = '"';
-	tmp[i + 2] = '\0';
-	gc_free(key);
-	return (tmp);
+	return (tmp[i + 1] = '"', tmp[i + 2] = '\0', gc_free(key), tmp);
 }
 
 // find the smallest str (alphabetic num/letter value) in env list
@@ -75,10 +74,18 @@ static char	**copy_env(char **env, int len)
 	char	**env_cpy;
 
 	env_cpy = gc_malloc((len + 1) * sizeof(char *));
+	if (!env_cpy)
+		return (perror("malloc"), NULL);
 	i = 0;
 	while (i < len && env[i] && env[i][0])
 	{
 		env_cpy[i] = gc_strdup(env[i]);
+		if (!env_cpy[i])
+		{
+			while (i-- > 0)
+				gc_free(env_cpy[i]);
+			return (gc_free(env_cpy), NULL);
+		}
 		i++;
 	}
 	env_cpy[i] = NULL;

@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:17:26 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:21:01 by ewu              ###   ########.fr       */
+/*   Updated: 2025/01/30 14:11:18 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	del_var(char ***env, char *key)
 	}
 	(*env)[len - 1] = NULL;
 	*env = gc_realloc(*env, sizeof(char *) * (len + 1), sizeof(char *) * len);
+	if (!*env)
+		return (perror("realloc "), -1);
 	return (0);
 }
 
@@ -89,17 +91,24 @@ char	*create_newvar(const char *key, char *val)
 	char	*n_var;
 
 	if (val == NULL)
+	{
 		n_var = gc_strdup(key);
+		if (n_var == NULL)
+			return (NULL);
+	}
 	else
 	{
 		tmp = gc_strjoin(key, "=");
+		if (tmp == NULL)
+			return (NULL);
 		n_var = gc_strjoin(tmp, val);
+		if (n_var == NULL)
+			return (NULL);
 		gc_free(tmp);
 	}
 	return (n_var);
 }
 
-// after any change in env (add/del of var/val), updtae **env array
 // flg == true, change to n_val, false, only add new var without value
 // the pass para *val is the value to be assign to var
 int	update_env(char ***env, const char *key, char *val, bool flg)
