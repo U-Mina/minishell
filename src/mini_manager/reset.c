@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:04:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 11:33:21 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:50:09 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 //to reset data structure between readline calls 
 void	reset_data(t_data *data)
 {
+	data->child_status = 0;
 	data->heredoc_fd = -1;
 	dup2(data->o_fd[0], STDIN_FILENO);
 	data->fd[0] = STDIN_FILENO;

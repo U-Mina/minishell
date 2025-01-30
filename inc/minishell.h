@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 11:29:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:48:39 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ typedef struct s_astnode
 typedef struct s_data
 {
 	int					exit_status;
+	int					child_status;
 	char				**env;
 	int					heredoc_fd;
 	int					o_fd[2];
@@ -199,6 +200,7 @@ void					exec_pipe(t_pipe *p_node, t_data *data);
 int						dup_err(int fd1, int std_fd);
 int						create_pipe(int *fd, t_data *data);
 pid_t					fork_err(int *fd);
+void					get_child_status(t_data *data);
 
 // builtin ft
 void					ft_echo(char **args, int *exit_status);

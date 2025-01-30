@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 11:35:00 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:56:59 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	right_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 			exit (1);
 		close(sync_fd[0]);
 		restore_signal(data->minishell.sa);
-		if (g_signal != 0)
+		if (g_signal == 0)
 		{
 			exec_ast(ast_node, data);
 			exit(data->exit_status);
@@ -106,8 +106,6 @@ void	exec_pipe(t_pipe *p_node, t_data *data)
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(left, NULL, 0);
-	waitpid(right, &data->exit_status, 0);
-	if (WIFEXITED(data->exit_status))
-		data->exit_status = WEXITSTATUS(data->exit_status);
+	waitpid(right, &data->child_status, 0);
 	restore_signal(data->minishell.sa);
 }

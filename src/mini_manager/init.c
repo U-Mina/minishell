@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/29 15:40:19 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:49:44 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	init(char **envp, t_data *data, int ac, char **av)
 {
 	init_minishell(&data->minishell, ac, av);
 	data->exit_status = 0;
+	data->child_status = 0;
 	data->o_fd[0] = dup(STDIN_FILENO);
 	data->o_fd[1] = dup(STDOUT_FILENO);
 	data->fd[0] = STDIN_FILENO;
