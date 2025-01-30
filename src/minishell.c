@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 16:12:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:26:13 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ int	main(int ac, char **av, char **envp)
 // {
 // 	//print_tokens(data.tokens); //check lexer
 // 	//print_ast(data.ast_root, 0); //check parser
-// 	exec_ast(data.ast_root, &data);
+// 	executor(&data);
 // }
 // reset_data(&data);
 
-// // //COMPROVATIONS
-// // //check lexer
+// //COMPROVATIONS
+// //check lexer
 // void	print_tokens(t_token *tokens)
 // {
 // 	int	i;
