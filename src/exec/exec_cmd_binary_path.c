@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:05:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:36:59 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:52:35 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,29 +90,38 @@ static char	*search_in_path(char *cmd, t_data *data)
 //If it is not an execultable path, it fails, and prints error.
 static int	copy_path(char *cmd, t_cmd *c_node, t_data *data)
 {
-	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+	struct stat	path_stat;
+
+	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0 && \
+		stat(cmd, &path_stat) == 0)
 	{
-		c_node->path = gc_strdup(cmd);
-		if (!c_node->path)
-			return (set_malloc_error(data), 0);
-		cmd = get_binary_name(cmd, data);
-		if (!cmd)
-			return (set_malloc_error(data), 0);
-		c_node->argv[0] = cmd;
-		return (1);
+		if (S_ISREG(path_stat.st_mode))
+		{
+			c_node->path = gc_strdup(cmd);
+			if (!c_node->path)
+				return (set_malloc_error(data), 0);
+			cmd = get_binary_name(cmd, data);
+			if (!cmd)
+				return (set_malloc_error(data), 0);
+			return (c_node->argv[0] = cmd, 1);
+		}
+		else if (S_ISDIR(path_stat.st_mode))
+		{
+			print_err("minishell", cmd, "is a directory");
+			return (data->exit_status = 126, 0);
+		}
 	}
 	else
-	{
 		print_err("minishell", cmd, "No such file or directory");
-		data->exit_status = 1;
-		return (0);
-	}
+	return (data->exit_status = 1, 0);
 }
 
 //Checks if a path is given or searches the binary in the PATH env.
 //Returns allocated string of the path in which to find the binary.
 int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 {
+	if (!cmd || *cmd == '\0')
+		return (0);
 	if (ft_strrchr(cmd, '/'))
 		return (copy_path(cmd, c_node, data));
 	else

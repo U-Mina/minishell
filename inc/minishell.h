@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/01/30 09:58:36 by ewu              ###   ########.fr       */
-=======
-/*   Updated: 2025/01/30 12:48:39 by ipuig-pa         ###   ########.fr       */
->>>>>>> bf0452ab14d02878f3c727f732978e80f2130eff
+/*   Updated: 2025/01/30 15:11:37 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +16,7 @@
 # include "../libft/libft.h"
 # include <sys/types.h>
 # include <sys/wait.h>
+#include <sys/stat.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -165,6 +162,7 @@ typedef struct s_gc_list
 void					init(char **envp, t_data *data, int ac, char **av);
 void					reset_data(t_data *data);
 void					reset_signal(t_data *data);
+void					exit_eof(t_minishell *minishell);
 void					term_minishell(t_minishell *minishell, int rv);
 
 // lexer-tokenizer
