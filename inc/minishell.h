@@ -6,11 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/01/30 09:58:36 by ewu              ###   ########.fr       */
-=======
-/*   Updated: 2025/01/30 12:48:39 by ipuig-pa         ###   ########.fr       */
->>>>>>> bf0452ab14d02878f3c727f732978e80f2130eff
+/*   Updated: 2025/01/30 14:41:29 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +20,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <limits.h>
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>

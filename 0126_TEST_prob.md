@@ -1,3 +1,16 @@
+*0130*
+	- cd.c: cur-path: if (res=gc_malloc() fail), perror, NULL
+	- env_utils.c: create_env(): if !env=gc_malloc, perror, NULL; line 71-72; line 101-102
+	- env_u2.c line 53-56, 95-98, 102-106
+	- env_u3.c line 73-77
+	- export_args.c line 33-34 (?), 84-85
+	- export-on.c: line 23-24, 77-78
+		** line 83-88, if any env[i] failed, clean this **env_cpy and free
+
+
+
+
+
 **0127 TEST**
 	|ls |ls
 	|ls 
