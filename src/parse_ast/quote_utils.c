@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 16:45:54 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:02:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	handle_quotes(char **str, t_data *data)
 
 	o_len = ft_strlen(*str);
 	n_len = get_new_length(str);
-	if (n_len <= 0)
+	if (n_len < 0)
 		return (-1);
 	if (o_len == n_len)
 		return (0);
