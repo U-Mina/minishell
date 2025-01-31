@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 15:30:11 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:32:18 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	handle_redir_extras(t_token *tokens, int *curr_tok, t_redir *redir,
 {
 	int	h_q;
 
-	if (tokens[*curr_tok].value == NULL)
+	if (tokens[*curr_tok].type != WORD)
 		return (0);
 	if (redir->type != HEREDOC)
 	{
