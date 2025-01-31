@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 16:31:06 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:27:04 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	make_eof_token(t_token *token)
 {
 	token->type = TOKEN_EOF;
 	token->value = NULL;
+	token->quote = false;
 	return (1);
 }
 
@@ -44,6 +45,7 @@ int	make_word_token(t_token *token, char *input)
 		return (0);
 	ft_strlcpy(word, input, word_len + 1);
 	token->value = word;
+	token->quote = false;
 	return (1);
 }
 
@@ -65,6 +67,7 @@ int	make_redir_token(t_token *token, char *input)
 		return (0);
 	ft_strlcpy(redir, input, redir_len + 1);
 	token->value = redir;
+	token->quote = false;
 	return (1);
 }
 
@@ -80,5 +83,6 @@ int	make_pipe_token(t_token *token)
 	ft_strlcpy(pipe, "|", 2);
 	token->type = PIPE;
 	token->value = pipe;
+	token->quote = false;
 	return (1);
 }

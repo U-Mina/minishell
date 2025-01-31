@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 15:32:18 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:39:25 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ static int	handle_redir_extras(t_token *tokens, int *curr_tok, t_redir *redir,
 		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
 		if (!tokens[*curr_tok].value)
 			return (set_malloc_error(data), 0);
-		if (handle_quotes(&tokens[*curr_tok].value, data) < 0)
+		if (handle_quotes(&(tokens[*curr_tok]), data) < 0)
 			return (0);
 	}
 	if (redir->type == HEREDOC)
 	{
-		h_q = handle_quotes(&tokens[*curr_tok].value, data);
+		h_q = handle_quotes(&(tokens[*curr_tok]), data);
 		if (h_q == 1)
 			redir->type = HEREDOC_Q;
 		else if (h_q < 0)

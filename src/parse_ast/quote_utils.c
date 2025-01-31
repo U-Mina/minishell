@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 17:02:16 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:31:46 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,14 @@ static int	get_new_length(char **str)
 }
 
 //handle the quotes of a string, deleting pairs of quotes
-int	handle_quotes(char **str, t_data *data)
+int	handle_quotes(t_token *token, t_data *data)
 {
+	char	**str;
 	char	*res;
 	int		n_len;
 	int		o_len;
 
+	str = &(token->value);
 	o_len = ft_strlen(*str);
 	n_len = get_new_length(str);
 	if (n_len < 0)
@@ -96,5 +98,6 @@ int	handle_quotes(char **str, t_data *data)
 	ft_strlcpy(res, *str, n_len + 1);
 	gc_free((*str));
 	*str = res;
+	token->quote = true;
 	return (1);
 }

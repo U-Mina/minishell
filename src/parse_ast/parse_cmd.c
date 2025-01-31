@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 11:38:22 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:31:15 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	get_cmd_args(t_astnode *cmd_node, t_token *tokens, int arg_tok,
 			tokens[arg_tok].value = expand_env(tokens[arg_tok].value, data);
 			if (!tokens[arg_tok].value)
 				return (set_malloc_error(data), 0);
-			if (handle_quotes(&(tokens[arg_tok].value), data) < 0)
+			if (handle_quotes(&(tokens[arg_tok]), data) < 0)
 				return (0);
 			argv[i++] = tokens[arg_tok].value;
 		}
@@ -134,7 +134,7 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 		if (tokens[*curr_tok].value[0] == '\0' && \
 								tokens[(*curr_tok) + 1].type != TOKEN_EOF)
 			return ((*curr_tok)++, parse_cmd(tokens, curr_tok, data));
-		if (handle_quotes(&tokens[*curr_tok].value, data) < 0)
+		if (handle_quotes(&(tokens[*curr_tok]), data) < 0)
 			return (NULL);
 		tokens[*curr_tok].type = COMMAND;
 		cmd_node = create_cmd_node(&tokens[*curr_tok]);

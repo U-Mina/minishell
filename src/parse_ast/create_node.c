@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_node.c                                        :+:      :+:    :+:   */
+/*   create_node.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:54:34 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 11:06:43 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:33:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ t_astnode	*create_cmd_node(t_token *token)
 		new_node->node_type.cmd->arg_nb = 0;
 		new_node->node_type.cmd->argv = NULL;
 		new_node->node_type.cmd->path = NULL;
+		new_node->node_type.cmd->quote = false;
+		if (token->quote == true)
+			new_node->node_type.cmd->quote = true;
 	}
 	else
 		return (NULL);
