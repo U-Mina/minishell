@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:05:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 18:33:10 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 11:19:39 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,14 @@ static int	copy_path(char *cmd, t_cmd *c_node, t_data *data)
 //Returns allocated string of the path in which to find the binary.
 int	get_path(char *cmd, t_cmd *c_node, t_data *data)
 {
-	if (!cmd || *cmd == '\0')
+	if (!cmd)
 		return (0);
+	if (*cmd == '\0')
+	{
+		print_err("minishell", cmd, "command not found");
+		data->exit_status = 127;
+		return (0);
+	}
 	if (ft_strrchr(cmd, '/'))
 		return (copy_path(cmd, c_node, data));
 	else
