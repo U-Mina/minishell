@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:32:03 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:48:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:30:11 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ static int	handle_redir_extras(t_token *tokens, int *curr_tok, t_redir *redir,
 {
 	int	h_q;
 
+	if (tokens[*curr_tok].value == NULL)
+		return (0);
 	if (redir->type != HEREDOC)
 	{
 		tokens[*curr_tok].value = expand_env(tokens[*curr_tok].value, data);
@@ -71,11 +73,9 @@ t_astnode	*parse_redir(t_token *tokens, int *curr_tok, t_astnode *right_node,
 			return (set_malloc_error(data), NULL);
 		redir = redir_node->node_type.redir;
 		redir->type = get_redir_type(tokens[*curr_tok].value);
-		if (tokens[++(*curr_tok)].type == WORD)
-		{
-			if (!handle_redir_extras(tokens, curr_tok, redir, data))
-				return (NULL);
-		}
+		(*curr_tok)++;
+		if (!handle_redir_extras(tokens, curr_tok, redir, data))
+			return (NULL);
 		if (right_node == NULL || right_node->token->type != COMMAND)
 		{
 			if (tokens[*curr_tok].type == WORD)
