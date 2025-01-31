@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:30:10 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 18:07:42 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 11:38:22 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ t_astnode	*parse_cmd(t_token *tokens, int *curr_tok, t_data *data)
 		(*curr_tok)++;
 	}
 	else if (tokens[*curr_tok].type == REDIRECTION)
-		return (parse_redir(tokens, curr_tok, data->ast_root, data));
+		return (parse_redir(tokens, curr_tok, NULL, data));
 	else
 		return (NULL);
 	return (handle_arg_redir(cmd_node, tokens, curr_tok, data));
