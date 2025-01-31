@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:49:53 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:44:45 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 11:25:32 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	parse(t_token *tokens, t_data *data)
 		if (tokens[curr_tok].type == WORD || \
 			tokens[curr_tok].type == REDIRECTION)
 			data->ast_root = parse_cmd(tokens, &curr_tok, data);
-		if (tokens[curr_tok].type == PIPE)
+		if (tokens[curr_tok].type == PIPE && data->ast_root)
 			data->ast_root = parse_pipe(tokens, &curr_tok, \
 														data->ast_root, data);
 		if (!data->ast_root)
