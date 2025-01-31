@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:48:47 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:14:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,28 @@ static int	del_quotes(char **str, int o)
 	int		rv;
 	char	quote;
 	int		i;
-	int		j;
 
 	i = o;
-	rv = -1;
-	quote = (*str)[i];
-	j = 1;
-	while ((*str)[i + j] != '\0')
+	rv = 0;
+	quote = (*str)[o];
+	while ((*str)[i + 1] != '\0')
 	{
-		if ((*str)[i + j] == quote && j == 1)
+		if ((*str)[i + 1] == quote)
 		{
-			rv = rv + i + j - o;
-			j = 2;
+			rv = i - o;
+			break ;
 		}
-		(*str)[i] = (*str)[i + j];
+		(*str)[i] = (*str)[i + 1];
 		i++;
 	}
-	(*str)[i] = '\0';
-	return (rv);
+	if ((*str)[i] == '\0' && rv == 0)
+		return (-1);
+	while ((*str)[i + 2] != '\0')
+	{
+		(*str)[i] = (*str)[i + 2];
+		i++;
+	}
+	return ((*str)[i] = '\0', rv);
 }
 
 //handle the quotes of a string, deleting pairs of quotes

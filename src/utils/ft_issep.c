@@ -6,13 +6,13 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 12:00:07 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 11:00:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:35:16 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//checks if the passed character is a separator (&, ;, & not interpreted)
+//checks if the passed character is a separator (&, ;, &, (,) not interpreted)
 int	ft_issep(char c)
 {
 	unsigned char	u_c;
