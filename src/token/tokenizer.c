@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:26:27 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:47:40 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 10:39:12 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static int	grow_tokenizer(t_tokenizer *tokenizer)
 	new_tokens = gc_malloc(new_capacity * sizeof(t_token));
 	if (!new_tokens)
 		return (0);
-	ft_memcpy(new_tokens, tokenizer->tokens, tokenizer->capacity \
-													* sizeof(t_token));
+	ft_memcpy(new_tokens, tokenizer->tokens, \
+					tokenizer->capacity * sizeof(t_token));
 	gc_free(tokenizer->tokens);
 	tokenizer->tokens = new_tokens;
 	tokenizer->capacity = new_capacity;
@@ -57,12 +57,12 @@ static int	create_token(t_tokenizer *tokenizer, char *input)
 	t_token	*token;
 	int		success;
 
-	token = &(tokenizer->tokens[tokenizer->count]);
 	if (tokenizer->count == tokenizer->capacity)
 	{
 		if (!grow_tokenizer(tokenizer))
 			return (0);
 	}
+	token = &(tokenizer->tokens[tokenizer->count]);
 	if (*input == '\0')
 		success = make_eof_token(token);
 	else if (*input == '|')
@@ -99,7 +99,7 @@ int	tokenizer(char *input, t_data *data)
 		else
 		{
 			if (!create_token(tokenizer, input))
-				return (0);
+				return (set_malloc_error(data), 0);
 		}
 		input = input + ft_strlen(tokenizer->tokens[current_token].value);
 		current_token++;
