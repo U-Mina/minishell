@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:31:24 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/29 15:45:41 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:31:06 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	make_word_token(t_token *token, char *input)
 	{
 		if (input[word_len] == '\"' || input[word_len] == '\'')
 		{
-			if (quote_len(input, word_len) >= 0)
+			if (quote_len(input, word_len) > 1)
 				word_len = word_len + quote_len(input, word_len);
 		}
 		word_len++;

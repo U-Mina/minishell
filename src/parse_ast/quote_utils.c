@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 15:14:16 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:30:29 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	quote_len(char *str, int i)
 	int	j;
 
 	j = 1;
-	while (str[i + j] != str[i])
+	while (str[i + j] != str[i] && str[i + j] != '\0')
 		j++;
 	if (j >= (int)ft_strlen(str + i))
 		return (-1);
@@ -86,7 +86,7 @@ int	handle_quotes(char **str, t_data *data)
 
 	o_len = ft_strlen(*str);
 	n_len = get_new_length(str);
-	if (n_len < 0)
+	if (o_len <= 1 || n_len <= 0)
 		return (-1);
 	if (o_len == n_len)
 		return (0);

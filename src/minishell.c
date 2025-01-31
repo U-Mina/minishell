@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 17:26:13 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:29:01 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ int	main(int ac, char **av, char **envp)
 }
 
 // //CHANGE THIS CHUNK FOR AST CHECKING
-// else if (parse(data.tokens, &data))
-// {
-// 	//print_tokens(data.tokens); //check lexer
-// 	//print_ast(data.ast_root, 0); //check parser
-// 	executor(&data);
-// }
-// reset_data(&data);
+// 			else if (parse(data.tokens, &data))
+// 			{
+// 				print_tokens(data.tokens); //check lexer
+// 				print_ast(data.ast_root, 0); //check parser
+// 				executor(&data);
+// 			}
+// 			reset_data(&data);
 
 // //COMPROVATIONS
 // //check lexer
