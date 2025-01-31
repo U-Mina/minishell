@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:35:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 17:31:46 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:46:23 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ int	handle_quotes(t_token *token, t_data *data)
 	str = &(token->value);
 	o_len = ft_strlen(*str);
 	n_len = get_new_length(str);
-	if (n_len < 0)
-		return (-1);
 	if (o_len == n_len)
 		return (0);
+	if (n_len < 0 || o_len <= 1)
+		return (-1);
 	res = gc_malloc((n_len + 1) * sizeof(char));
 	if (!res)
 		return (set_malloc_error(data), -1);
