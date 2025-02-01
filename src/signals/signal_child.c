@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals_child.c                                    :+:      :+:    :+:   */
+/*   signal_child.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:18:44 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 16:20:15 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 09:54:31 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	init_exec_mode(void)
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	ft_memset(&exec_term, 0, sizeof(struct termios));
 	tcgetattr(STDIN_FILENO, &exec_term);
 	exec_term.c_lflag |= ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &exec_term);
