@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/02/01 11:49:23 by ewu              ###   ########.fr       */
+/*   Updated: 2025/02/01 11:50:25 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ void					reset_data(t_data *data);
 void					reset_signal(t_data *data);
 void					exit_eof(t_minishell *minishell);
 void					term_minishell(t_minishell *minishell, int rv);
+void					print_header(void);
 
 // lexer-tokenizer
 int						tokenizer(char *input, t_data *data);
