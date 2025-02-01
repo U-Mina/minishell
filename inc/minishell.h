@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/31 17:35:00 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 10:08:16 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@
 # define SIGINT_H 3
 # define SIGEOF 4
 
-volatile sig_atomic_t	g_signal;
+extern volatile sig_atomic_t	g_signal;
 
-struct					s_data;
+struct							s_data;
 
 // original_state and signal handling
 typedef struct s_minishell
@@ -89,7 +89,7 @@ typedef struct s_tokenizer
 }						t_tokenizer;
 
 //AST nodes
-struct					s_astnode;
+struct						s_astnode;
 
 typedef struct s_redir
 {
