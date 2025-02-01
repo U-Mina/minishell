@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/02/01 10:09:17 by ewu              ###   ########.fr       */
+/*   Updated: 2025/02/01 11:07:13 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	main(int ac, char **av, char **envp)
 	init(envp, &data, ac, av);
 	while (1)
 	{
-		input = readline("Minishell>");
+		print_header();
+		input = readline(PROMPT);
 		if (!input)
 			return (exit_eof(&(data.minishell)), 0);
 		if (*input != '\0' && *gc_strtrim(input, " \t\n\v\f\r") != '\0')

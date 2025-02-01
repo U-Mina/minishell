@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 13:01:04 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:49:44 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 11:44:30 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//disables the printing of Ctrl as ^ (ECHOCTL flag) and
-//sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
-static void	init_minishell(t_minishell	*minishell, int ac, char **av)
+// disables the printing of Ctrl as ^ (ECHOCTL flag) and
+// sets the Ctrl-D (4 is ASCII) to the value of EOF (for signal handling)
+static void	init_minishell(t_minishell *minishell, int ac, char **av)
 {
 	(void)ac;
 	(void)av;
@@ -26,7 +26,7 @@ static void	init_minishell(t_minishell	*minishell, int ac, char **av)
 	tcsetattr(STDIN_FILENO, TCSANOW, &(minishell->term));
 }
 
-//creates a new env if needed
+// creates a new env if needed
 static void	set_env(char **envp, t_data *data)
 {
 	if (!envp[0])
@@ -35,7 +35,7 @@ static void	set_env(char **envp, t_data *data)
 		if (data->env == NULL)
 		{
 			data->exit_status = 1;
-			exit (1);
+			exit(1);
 		}
 	}
 	else
@@ -44,13 +44,13 @@ static void	set_env(char **envp, t_data *data)
 		if (data->env == NULL)
 		{
 			data->exit_status = 1;
-			exit (1);
+			exit(1);
 		}
 		change_shlvl_oldpwd(&data->env, "SHLVL", "OLDPWD");
 	}
 }
 
-//initializes the data struct, such as **env, exit_status, and fd
+// initializes the data struct, such as **env, exit_status, and fd
 void	init(char **envp, t_data *data, int ac, char **av)
 {
 	init_minishell(&data->minishell, ac, av);
@@ -65,4 +65,24 @@ void	init(char **envp, t_data *data, int ac, char **av)
 	set_env(envp, data);
 	data->tokens = NULL;
 	data->ast_root = NULL;
+}
+
+void	print_header(void)
+{
+	printf(HEADERFONT GREEN);
+	printf("███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗");
+	printf("     \n");
+	printf("████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║");
+	printf("     \n");
+	printf("██╔████╔██║██║██╔██╗ ██║██║███████╗███████║█████╗  ██║     ██║");
+	printf("     \n");
+	printf("██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║");
+	printf("     \n");
+	printf("██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗");
+	printf("███████╗\n");
+	printf("╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝");
+	printf("╚══════╝\n");
+	printf("\n");
+	printf(CYAN BOLD "			🍎By ewu & ipuig-pa🍎\n" RESET);
+	printf(RESET "\n");
 }
