@@ -6,7 +6,7 @@
 /*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/02/01 10:08:16 by ewu              ###   ########.fr       */
+/*   Updated: 2025/02/01 11:49:23 by ewu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@
 # include <string.h>
 # include <termios.h>
 # include <unistd.h>
+
+# define BLUE "\033[0;34m"
+# define GREEN "\033[0;32m"
+# define MAGENTA "\033[0;35m"
+# define CYAN "\033[0;36m"
+# define RESET "\033[0m"
+# define BOLD "\033[1m"
+# define HEADERFONT "\033[1;4m"
+# define PROMPT "\033[0;34m\033[1m🌟Minishell> \033[0m"
 
 # define SIGINT_I 2
 # define SIGINT_H 3
