@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:38:49 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/02/01 11:07:13 by ewu              ###   ########.fr       */
+/*   Updated: 2025/02/01 13:04:38 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	main(int ac, char **av, char **envp)
 	t_data		data;
 
 	init(envp, &data, ac, av);
+	print_header();
 	while (1)
 	{
-		print_header();
 		input = readline(PROMPT);
 		if (!input)
 			return (exit_eof(&(data.minishell)), 0);
@@ -49,7 +49,6 @@ int	main(int ac, char **av, char **envp)
 // 				print_ast(data.ast_root, 0); //check parser
 // 				executor(&data);
 // 			}
-// 			reset_data(&data);
 
 // //COMPROVATIONS
 // //check lexer
