@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/02/01 12:41:55 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:47:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@
 # include <string.h>
 # include <termios.h>
 # include <unistd.h>
+
+# define BLUE "\033[0;34m"
+# define GREEN "\033[0;32m"
+# define MAGENTA "\033[0;35m"
+# define CYAN "\033[0;36m"
+# define RESET "\033[0m"
+# define BOLD "\033[1m"
+# define HEADERFONT "\033[1;4m"
+# define PROMPT "\033[0;34m\033[1m🌟Minishell> \033[0m"
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -162,6 +171,7 @@ void					reset_data(t_data *data);
 void					reset_signal(t_data *data);
 void					exit_eof(t_minishell *minishell);
 void					term_minishell(t_minishell *minishell, int rv);
+void					print_header(void);
 
 // lexer-tokenizer
 int						tokenizer(char *input, t_data *data);
