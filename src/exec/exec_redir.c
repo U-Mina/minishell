@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 20:28:11 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 11:36:25 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 10:44:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	exec_redir(t_redir *redir, t_data *data)
 	if (redir->type == HEREDOC || redir->type == HEREDOC_Q)
 	{
 		exec_heredoc(redir->left, &data->exit_status, data, is_quote(redir));
-		if (data->heredoc_fd < 0 || g_signal == SIGINT_H)
+		if (data->heredoc_fd < 0 || g_signal == SIGINT)
 			return (data->exit_status = 1, -1);
 	}
 	else if (redir->type == INPUT)

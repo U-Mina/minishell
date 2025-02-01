@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:04:25 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 12:50:09 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 10:45:37 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	reset_data(t_data *data)
 //updates the exit status depending on g_signal and restores g_signal to 0
 void	reset_signal(t_data *data)
 {
-	if (g_signal == SIGINT_I || g_signal == SIGINT_H)
+	if (g_signal == SIGINT)
 		data->exit_status = 1;
 	g_signal = 0;
 }

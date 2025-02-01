@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:35:31 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/30 16:20:34 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:43:21 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (g_signal != SIGINT_H && g_signal != SIGEOF)
-			write(STDERR_FILENO, "\n", 1);
+		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		if (g_signal != SIGINT_H && g_signal != SIGEOF)
-			g_signal = SIGINT_I;
+		g_signal = SIGINT;
 	}
 }
 
@@ -45,9 +43,10 @@ void	heredoc_signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		g_signal = SIGINT_H;
-		write(STDERR_FILENO, "\n", 1);
-		close(STDIN_FILENO);
+		g_signal = SIGINT;
+		printf("\033[A\033[K> ");
+		rl_done = 1;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:03:59 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 16:13:15 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 10:44:14 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	left_node(t_astnode *ast_node, int *fd, int *sync_fd, t_data *data)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		ast_node = handle_redir_fd(ast_node, data);
-		if (g_signal == SIGINT_H)
+		if (g_signal == SIGINT)
 		{
 			write(sync_fd[1], "sigint", 6);
 			close(sync_fd[1]);
@@ -51,7 +51,7 @@ static int	wait_left_redir(int sync_fd)
 
 	bytes_read = read(sync_fd, buffer, 7);
 	if (bytes_read == 6 && ft_strncmp(buffer, "sigint", 6) == 0)
-		g_signal = SIGINT_H;
+		g_signal = SIGINT;
 	else if (bytes_read != 4 || ft_strncmp(buffer, "done", 4) != 0)
 	{
 		perror("Pipe synchronization failed");

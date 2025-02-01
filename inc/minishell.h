@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ewu <ewu@student.42heilbronn.de>           +#+  +:+       +#+        */
+/*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 15:23:28 by ewu               #+#    #+#             */
-/*   Updated: 2025/02/01 10:08:16 by ewu              ###   ########.fr       */
+/*   Updated: 2025/02/01 12:41:55 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -29,10 +30,6 @@
 # include <string.h>
 # include <termios.h>
 # include <unistd.h>
-
-# define SIGINT_I 2
-# define SIGINT_H 3
-# define SIGEOF 4
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -89,7 +86,7 @@ typedef struct s_tokenizer
 }						t_tokenizer;
 
 //AST nodes
-struct						s_astnode;
+struct							s_astnode;
 
 typedef struct s_redir
 {

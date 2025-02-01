@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:18:06 by ipuig-pa          #+#    #+#             */
-/*   Updated: 2025/01/31 15:44:06 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:34:02 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //exits cleanly when Ctrl+D is pressed in the prompt
 void	exit_eof(t_minishell *minishell)
 {
-	printf("exit\n");
+	printf("\033[A\033[K%s exit\n", PROMPT);
 	term_minishell(minishell, 0);
 }
 

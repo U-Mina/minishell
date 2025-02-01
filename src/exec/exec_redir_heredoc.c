@@ -6,7 +6,7 @@
 /*   By: ipuig-pa <ipuig-pa@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 22:45:34 by ewu               #+#    #+#             */
-/*   Updated: 2025/01/30 12:02:52 by ipuig-pa         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:42:33 by ipuig-pa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,6 @@ static int	init_heredoc(struct sigaction *h_sa, t_data *data)
 {
 	data->fd[0] = dup(STDIN_FILENO);
 	data->fd[1] = dup(STDOUT_FILENO);
-	if (dup_err(data->o_fd[0], STDIN_FILENO) == -1)
-	{
-		data->exit_status = 1;
-		return (0);
-	}
-	if (dup_err(data->o_fd[1], STDOUT_FILENO) == -1)
-	{
-		data->exit_status = 1;
-		return (0);
-	}
 	sigemptyset(&(h_sa[0].sa_mask));
 	h_sa[0].sa_handler = &heredoc_signal_handler;
 	h_sa[0].sa_flags = 0;
@@ -34,11 +24,18 @@ static int	init_heredoc(struct sigaction *h_sa, t_data *data)
 	h_sa[1].sa_flags = 0;
 	sigaction(SIGINT, &h_sa[0], NULL);
 	sigaction(SIGQUIT, &h_sa[1], NULL);
+	if (dup_err(data->o_fd[0], STDIN_FILENO) == -1 || \
+		dup_err(data->o_fd[1], STDOUT_FILENO) == -1)
+	{
+		data->exit_status = 1;
+		return (0);
+	}
 	return (1);
 }
 
 static void	term_heredoc(t_data *data)
 {
+	tcsetattr(STDIN_FILENO, TCSANOW, &data->minishell.term);
 	sigaction(SIGINT, &data->minishell.sa[0], NULL);
 	sigaction(SIGQUIT, &data->minishell.sa[1], NULL);
 	if (dup_err(data->fd[0], STDIN_FILENO) == -1)
@@ -57,13 +54,13 @@ static char	*read_here(char *de, int *exit_status, t_data *data,
 	if (!init_heredoc(h_sa, data))
 		return (term_heredoc(data), NULL);
 	content = readline("> ");
-	if (!content && g_signal != SIGINT_H)
-		g_signal = SIGEOF;
-	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1))
+	if (!content || !ft_memcmp(content, de, ft_strlen(content) + 1) || \
+			g_signal == SIGINT)
 	{
-		if (errno != 0 && g_signal != SIGINT_H)
+		if (errno != 0 && g_signal != SIGINT)
 		{
 			print_err("readline", NULL, strerror(errno));
+			term_heredoc(data);
 			return (*exit_status = 1, NULL);
 		}
 		free(content);
